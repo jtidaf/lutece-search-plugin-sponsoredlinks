@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplate;
-import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTopic;
+import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksSetResourceIdService;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksTemplateResourceIdService;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksTopicResourceIdService;
@@ -78,7 +78,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /// Modèle de données
     //TODO: Remplacer les donnees brutes par le modele dynamique
-    private static List<SponsoredLinkTopic> listTopic;
+    private static List<SponsoredLinkGroup> listGroup;
     private static List<SponsoredLinkSet> listSet;
     private static List<SponsoredLinkTemplate> listTemplate;
     
@@ -87,7 +87,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 	    throws AccessDeniedException
 	{
 	    super.init( request, strRight );
-	    listTopic = new ArrayList<SponsoredLinkTopic>(  );
+	    listGroup = new ArrayList<SponsoredLinkGroup>(  );
 	    listSet = new ArrayList<SponsoredLinkSet>(  );
 	    listTemplate = new ArrayList<SponsoredLinkTemplate>(  );
 	    
@@ -104,8 +104,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 	    set.addSponsoredLink( "doc.mairie.fr/doc3" );
 	    listSet.add( set );
 	    
-	    listTopic.add( new SponsoredLinkTopic( "thème1", "tag1;tag2;tag3" ) );
-	    listTopic.add( new SponsoredLinkTopic( "thème2", "tag4;tag5;tag6;tag7" ) );
+	    listGroup.add( new SponsoredLinkGroup( "thème1", "tag1;tag2;tag3" ) );
+	    listGroup.add( new SponsoredLinkGroup( "thème2", "tag4;tag5;tag6;tag7" ) );
 	}
 /// \Modèle de données
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -149,9 +149,9 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         		RBAC.WILDCARD_RESOURCES_ID,	SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) );
         boolean bPermissionDeleteSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, 
         		RBAC.WILDCARD_RESOURCES_ID,	SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) );
-        boolean bPermissionCreateTopic = RBACService.isAuthorized( SponsoredLinkTopic.RESOURCE_TYPE, 
+        boolean bPermissionCreateTopic = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, 
         		RBAC.WILDCARD_RESOURCES_ID,	SponsoredLinksTopicResourceIdService.PERMISSION_CREATE_TOPIC, getUser(  ) );
-        boolean bPermissionModifyTopic = RBACService.isAuthorized( SponsoredLinkTopic.RESOURCE_TYPE, 
+        boolean bPermissionModifyTopic = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, 
         		RBAC.WILDCARD_RESOURCES_ID,	SponsoredLinksTopicResourceIdService.PERMISSION_MODIFY_TOPIC, getUser(  ) );
        
         model.put( MARK_LOCALE, request.getLocale(  ) );
@@ -184,8 +184,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     	Map<String, Object> model = new HashMap<String, Object>(  );
     	
     	model.put( MARK_TEMPLATE_LINK_LIST, listTemplate );
-    	listTopic.add( SponsoredLinkTopic.UNDEFINED_TOPIC );
-    	model.put( MARK_TOPIC_LIST, listTopic );
+    	//listGroup.add( SponsoredLinkGroup.UNDEFINED_TOPIC );
+    	model.put( MARK_TOPIC_LIST, listGroup );
     	
     	HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_SET, getLocale(  ), model );
 

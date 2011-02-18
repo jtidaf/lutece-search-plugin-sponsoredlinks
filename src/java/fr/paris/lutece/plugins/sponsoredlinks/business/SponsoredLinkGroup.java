@@ -1,30 +1,30 @@
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
-public  class SponsoredLinkTopic
+public  class SponsoredLinkGroup
 {
 	public static final String RESOURCE_TYPE = "SPONSOREDLINKS_TOPIC_TYPE";
-	public static final SponsoredLinkTopic UNDEFINED_TOPIC = new SponsoredLinkTopic( 0, "", "" );
+	//public static final SponsoredLinkTopic UNDEFINED_TOPIC = new SponsoredLinkTopic( 0, "", "" );
 	
 	private static int _nGlobalId = 0;
 	private int _nId;
 	private String _strTitle;
 	private String _strTags;
 	
-	private SponsoredLinkTopic( int id, String title, String tags )
+	private SponsoredLinkGroup( int id, String title, String tags )
 	{
 		_nId = id;
 		_strTitle = title;
 		_strTags = tags;
 	}
 	
-	public SponsoredLinkTopic( String title, String tags )
+	public SponsoredLinkGroup( String title, String tags )
 	{
 		_nId = ++_nGlobalId;
 		_strTitle = title;
 		_strTags = tags;
 	}
 	
-	public SponsoredLinkTopic(  )
+	public SponsoredLinkGroup(  )
 	{
 		this( "", "" );
 	}

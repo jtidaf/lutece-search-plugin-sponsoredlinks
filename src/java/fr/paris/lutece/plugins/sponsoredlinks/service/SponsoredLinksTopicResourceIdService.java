@@ -2,7 +2,7 @@ package fr.paris.lutece.plugins.sponsoredlinks.service;
 
 import java.util.Locale;
 
-import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTopic;
+import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
@@ -48,7 +48,7 @@ public class SponsoredLinksTopicResourceIdService extends ResourceIdService
 		ResourceType rt = new ResourceType(  );
         rt.setResourceIdServiceClass( SponsoredLinksTopicResourceIdService.class.getName(  ) );
         rt.setPluginName( PLUGIN_NAME );
-        rt.setResourceTypeKey( SponsoredLinkTopic.RESOURCE_TYPE );
+        rt.setResourceTypeKey( SponsoredLinkGroup.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
         
         Permission p = new Permission(  );
