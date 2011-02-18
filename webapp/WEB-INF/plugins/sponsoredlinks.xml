@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?><plug-in>
+
+    <!-- Plugin Informations -->
+    <name>sponsoredlinks</name>
+    <class>fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation</class>
+    <version>0.1.0</version>
+    <description>Plugin de liens valorises dans les resultats de recherche</description>
+    <documentation/>
+    <installation/>
+    <changes/>
+    <user-guide/>
+    <provider>Mairie de Paris</provider>
+    <provider-url>http://fr.lutece.paris.fr</provider-url>
+    <icon-url>images/admin/skin/plugins/sponsoredlinks/sponsoredlinks.png</icon-url>
+    <copyright>Copyright 2001-2011 Mairie de Paris</copyright>
+    <core-version-dependency>
+		<min-core-version>2.3.4</min-core-version>
+		<max-core-version/>	
+    </core-version-dependency>
+    <db-pool-required>0</db-pool-required>
+    
+    <!--Administration interface parameters-->
+    <admin-features>	
+        <admin-feature>
+            <feature-id>SPONSOREDLINKS_MANAGEMENT</feature-id>
+            <feature-title>sponsoredlinks.adminFeature.sponsoredlinks_management.name</feature-title>
+            <feature-description>sponsoredlinks.adminFeature.sponsoredlinks_management.description</feature-description>
+            <feature-level>2</feature-level>
+            <feature-url>jsp/admin/plugins/sponsoredlinks/ManageSponsoredLinks.jsp</feature-url>
+            <feature-icon-url>images/admin/skin/plugins/sponsoredlinks/sponsoredlinks.png</feature-icon-url>
+            <feature-documentation-url>jsp/admin/documentation/AdminDocumentation.jsp?doc=admin-sponsoredlinks</feature-documentation-url>
+        </admin-feature>
+    </admin-features>
+    
+     <!-- RBAC Resources -->
+    <rbac-resource-types>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksSetResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksTopicResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+		<rbac-resource-type>
+			<rbac-resource-type-class>
+				fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksTemplateResourceIdService
+			</rbac-resource-type-class>
+		</rbac-resource-type>
+	</rbac-resource-types>  
+    
+</plug-in>

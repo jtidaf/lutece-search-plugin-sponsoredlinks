@@ -1,0 +1,94 @@
+<div id="content-box-actions">
+	<#if permission_manage_advanced_parameters>
+	  	<form method="post" action="jsp/admin/plugins/sponsoredlinks/ManageAdvancedParameters.jsp">
+			<input type="submit" value="#i18n{sponsoredlinks.manage_set.button_manage_advanced_parameters}" class="button bt-toolbar" />
+	  	</form>
+	</#if>
+	<#if permission_create_set>
+	    <form method="post"  action="jsp/admin/plugins/sponsoredlinks/CreateSet.jsp">
+	        <input type="submit" value="#i18n{sponsoredlinks.manage_set.buttonAddSet}" class="button bt-toolbar" />
+	    </form>
+	</#if>
+</div>
+<div class="content-box" >
+    <h2>#i18n{sponsoredlinks.manage_set.tableLabel}</h2>
+    <form method="post" rm action="jsp/admin/plugins/sponsoredlinks/ManageSet.jsp">
+<#--      <@pagination paginator=paginator /> -->
+
+<#--        <!-- Number of contact per page selector --> 
+<#--        #i18n{sponsoredlinks.manage_set.labelItemsPerPage} :--> 
+<#--        <select name="items_per_page">--> 
+<#--            <#list [ "10" , "20" , "50" , "100" ] as nb>--> 
+<#--            <#if nb_items_per_page = nb >--> 
+<#--            <option selected="selected" value="${nb}">${nb}</option>--> 
+<#--            <#else>--> 
+<#--            <option value="${nb}">${nb}</option>--> 
+<#--            </#if>--> 
+<#--            </#list>--> 
+<#--        </select>--> 
+<#--        <input type="submit" class="button" value="#i18n{sponsoredlinks.manage_set.buttonItemsPerPage}" />--> 
+<#--    </form>  --> 
+ 	<@paginationAdmin paginator=paginator combo=1/>
+    
+    <table>
+        <tr>
+            <th width="60%">#i18n{sponsoredlinks.manage_set.columnTitleLabel}</th>
+            <th width="10%" align="center">#i18n{sponsoredlinks.manage_set.columnTitleStatusLinks}</th>
+            <th width="10%" align="center">#i18n{sponsoredlinks.manage_set.columnTitleStatusTopic}</th>
+            <th width="20%">#i18n{sponsoredlinks.manage_set.columnTitleActions}</th>
+        </tr>
+        
+        <#list set_list as sponsoredlinkset >
+        
+        <tr>
+            <td>
+            	<#if permission_modify_set>
+	                <a href="jsp/admin/plugins/sponsoredlinks/ModifySponsoredLinkSet.jsp?id_set=${sponsoredlinkset.getId()}" class="bullet-link">
+	                    ${sponsoredlinkset.title}
+	                </a>
+                <#else>
+                	 ${sponsoredlinkset.title}
+                </#if>
+            </td>
+            <td style="font-style:italic; font-size:.75em;">
+            validité des liens
+            </td>
+            <td>
+            	<#if sponsoredlinkset.topicId?exists && sponsoredlinkset.topicId != 0>
+            		<img src="images/admin/skin/actions/enable.png" alt="#i18n{sponsoredlinks.manage_set.validSet}" title="#i18n{sponsoredlinks.manage_set.validSet}" >
+            	<#else>
+            		<img src="images/admin/skin/actions/disable.png" alt="#i18n{sponsoredlinks.manage_set.invalidSet}" title="#i18n{sponsoredlinks.manage_set.invalidSet}" >
+            	</#if>
+            </td>
+            <td>
+            	<#if permission_modify_set>
+	            	<#if sponsoredlinkset.topicId?exists && sponsoredlinkset.topicId != 0>
+	            		<#if permission_modify_topic>
+		            		<a href="jsp/admin/plugins/sponsoredlinks/ModifyTopic.jsp?id_topic=${sponsoredlinkset.topicId}">
+							  	<img src="images/admin/skin/search.png" height="24px" alt="#i18n{sponsoredlinks.manage_set.actionModify_topic}" title="#i18n{sponsoredlinks.manage_set.actionModify_topic}">
+						  	</a>
+					  	</#if>
+	            	<#else>
+	            		<#if permission_create_topic>
+		            	    <a href="jsp/admin/plugins/sponsoredlinks/CreateTopic.jsp">
+							  	<img src="images/admin/skin/search.png" height="24px" alt="#i18n{sponsoredlinks.manage_set.actionCreate_topic}" title="#i18n{sponsoredlinks.manage_set.actionCreate_topic}">
+						  	</a>
+					  	</#if>
+		             </#if>
+		         </#if>
+	             <#if permission_delete_set>
+		             <a href="jsp/admin/plugins/sponsoredlinks/RemoveSet.jsp?id_set=${sponsoredlinkset.id}&title=${sponsoredlinkset.title}">
+						  	<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_set.actionDelete}" title="#i18n{sponsoredlinks.manage_set.actionDelete}">
+					 </a>  
+				 </#if> 
+            </td>
+        </tr>					
+        </#list>
+        
+    </table>
+ 	<@paginationAdmin paginator=paginator/>
+       
+</div>
+
+
+

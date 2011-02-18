@@ -1,0 +1,42 @@
+<#include "/admin/util/editor/editor.html" />
+
+<div class="content-box" >
+    
+    <h2>#i18n{sponsoredlinks.create_set.tableLabel}</h2>
+    
+    <form method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoCreateSet.jsp">
+	<div style="margin: 0px 5px;">    
+        <p>
+            <label for="title" >#i18n{sponsoredlinks.create_set.rowTitleLabel} * : </label> 
+            <input type="text" id="title" name="title" size="60" maxlength="50" />
+        </p>        
+        <p>
+            <label for="topic">#i18n{sponsoredlinks.create_set.rowTopicLabel} : </label>
+            <select name="topic" >
+                <!--<option value =""></option>-->
+                <#list topic_list as topic >
+	                <#if topic.id?exists && topic.id != 0>
+	                	<option value ="${topic.id}">${topic.title}</option>
+	                <#else>
+	                	<option selected value ="${topic.id}">${topic.title}</option>
+	                </#if>
+                </#list>
+            </select>
+        </p>
+    </div>
+    <fieldset style="-moz-border-radius: 10px 10px 10px 10px; border: 1px solid #55B4E5; margin: 0px 0px 5px;">
+    	<legend>#i18n{sponsoredlinks.create_set.linkListLabel}</legend>
+        <#list template_link_list as template_link>       
+	        <p>
+	            <label for="sponsored_link_list" > ${template_link.description} :</label>
+	            <input type="text" name="sponsored_link_list" size="60" maxlength="50" />
+	        </p>
+    	</#list>
+	 </fieldset>   	
+        <p>   
+            <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonValidate}" class="button" />
+        </p>
+        
+    </form>
+    
+</div>
