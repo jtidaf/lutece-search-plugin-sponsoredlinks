@@ -1,0 +1,52 @@
+<div id="content-box-actions">
+	<#if permission_create_group>
+	    <form method="post"  action="jsp/admin/plugins/sponsoredlinks/CreateGroup.jsp">
+	        <input type="submit" value="#i18n{sponsoredlinks.manage_group.buttonAddSet}" class="button bt-toolbar" />
+	    </form>
+	</#if>
+</div>
+<div class="content-box" >
+    <h2>#i18n{sponsoredlinks.manage_group.tableLabel}</h2>
+    
+ 	<@paginationAdmin paginator=paginator combo=1/>
+    
+    <table>
+    
+        <tr>
+            <th width="30%">#i18n{sponsoredlinks.manage_group.columnTitleTitle}</th>
+            <th width="50%">#i18n{sponsoredlinks.manage_group.columnTitleTags}</th>
+            <th width="20%">#i18n{sponsoredlinks.manage_group.columnTitleActions}</th>
+        </tr>
+        
+        <#list group_list as sponsoredlinkgroup >
+        <tr>
+            <td>
+            	<#if permission_modify_group>
+	                <a href="jsp/admin/plugins/sponsoredlinks/ModifySponsoredLinkGroup.jsp?id_set=${sponsoredlinkgroup.id}" class="bullet-link">
+	                    ${sponsoredlinkgroup.title}
+	                </a>
+                <#else>
+                	${sponsoredlinkgroup.title}
+                </#if>
+            </td>
+            <td>
+            	${sponsoredlinkgroup.tags}
+            </td>
+            <td>
+            	<#if permission_delete_group>
+			        <a href="jsp/admin/plugins/sponsoredlinks/RemoveGroup.jsp?id_group=${sponsoredlinkgroup.id}&title=${sponsoredlinkgroup.title}">
+						<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_group.actionDelete}" title="#i18n{sponsoredlinks.manage_group.actionDelete}">
+					</a>  
+				</#if> 
+            </td>
+        </tr>					
+        </#list>
+        
+    </table>
+    
+ 	<@paginationAdmin paginator=paginator/>
+       
+</div>
+
+
+

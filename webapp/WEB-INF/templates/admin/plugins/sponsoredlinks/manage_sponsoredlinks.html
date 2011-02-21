@@ -1,3 +1,10 @@
+<div id="content-box-actions">
+	<#if permission_manage_advanced_parameters>
+	  	<form method="post" action="jsp/admin/plugins/sponsoredlinks/ManageAdvancedParameters.jsp">
+			<input type="submit" value="#i18n{sponsoredlinks.manage_sponsoredlinks.button_manage_advanced_parameters}" class="button bt-toolbar" />
+	  	</form>
+	</#if>
+</div>
 <div class="content-box" >
 
     <h2>#i18n{sponsoredlinks.manage_sponsoredlinks.tableLabel}</h2>
@@ -13,10 +20,10 @@
         </tr>
         <tr>
              <td>
-                <a href="jsp/admin/plugins/sponsoredlinks/ManageTopic.jsp" class="bullet-link">#i18n{sponsoredlinks.manage_sponsoredlinks.topicManagement.label}</a>
+                <a href="jsp/admin/plugins/sponsoredlinks/ManageGroup.jsp" class="bullet-link">#i18n{sponsoredlinks.manage_sponsoredlinks.groupManagement.label}</a>
             </td>
             <td>
-                #i18n{sponsoredlinks.manage_sponsoredlinks.topicManagement.description}
+                #i18n{sponsoredlinks.manage_sponsoredlinks.groupManagement.description}
             </td>            
         </tr>			
     </table>       

@@ -3,35 +3,25 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 public  class SponsoredLinkGroup
 {
 	public static final String RESOURCE_TYPE = "SPONSOREDLINKS_TOPIC_TYPE";
-	//public static final SponsoredLinkTopic UNDEFINED_TOPIC = new SponsoredLinkTopic( 0, "", "" );
 	
-	private static int _nGlobalId = 0;
 	private int _nId;
 	private String _strTitle;
 	private String _strTags;
 	
-	private SponsoredLinkGroup( int id, String title, String tags )
-	{
-		_nId = id;
-		_strTitle = title;
-		_strTags = tags;
-	}
-	
-	public SponsoredLinkGroup( String title, String tags )
-	{
-		_nId = ++_nGlobalId;
-		_strTitle = title;
-		_strTags = tags;
-	}
 	
 	public SponsoredLinkGroup(  )
 	{
-		this( "", "" );
+		
 	}
-
+	
 	public int getId(  )
 	{
 		return _nId;
+	}
+	
+	public void setId( int id )
+	{
+		_nId = id;
 	}
 	
 	public String getTitle(  )
@@ -44,7 +34,7 @@ public  class SponsoredLinkGroup
 		this._strTitle = title;
 	}
 
-	public String getags(  )
+	public String getTags(  )
 	{
 		return _strTags;
 	}
