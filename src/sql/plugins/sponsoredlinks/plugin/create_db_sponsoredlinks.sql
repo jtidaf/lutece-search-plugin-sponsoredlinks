@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sponsoredlinks_group;
 CREATE TABLE sponsoredlinks_group (
   id_group INT DEFAULT 0 NOT NULL,
   title VARCHAR(30) DEFAULT '' NOT NULL,
-  tags VARCHAR(255), 
+  tags VARCHAR(255),
   PRIMARY KEY (id_group)
 );
 
@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS sponsoredlinks_set;
 CREATE TABLE sponsoredlinks_set (
   id_set INT DEFAULT 0 NOT NULL,
   title VARCHAR(30) DEFAULT '' NOT NULL,
-  id_group INT REFERENCES sponsoredlinks_group(id_group) ON DELETE CASCADE,
+  id_group INT,
   PRIMARY KEY (id_set)
 );
 
@@ -36,8 +36,8 @@ CREATE TABLE sponsoredlinks_template (
 --
 DROP TABLE IF EXISTS sponsoredlinks_link;
 CREATE TABLE sponsoredlinks_link (
-  id_set INT REFERENCES sponsoredlinks_set(id_set) ON DELETE CASCADE,
-  id_template INT REFERENCES sponsoredlinks_template(id_template) ON DELETE CASCADE,
-  link VARCHAR(255) DEFAULT '' NOT NULL,
+  id_set INT,
+  id_template INT,
+  url VARCHAR(255) DEFAULT '' NOT NULL,
   PRIMARY KEY (id_set, id_template)
 );

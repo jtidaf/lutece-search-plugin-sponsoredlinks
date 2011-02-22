@@ -1,0 +1,20 @@
+<div class="content-box" >
+    
+    <h2>#i18n{sponsoredlinks.modify_group.tableLabel}</h2>
+
+    <form method="post"  name="modify_group" id="modify_group" action="jsp/admin/plugins/sponsoredlinks/DoModifyGroup.jsp"> 
+        <p>
+            <label for="title" >#i18n{sponsoredlinks.modify_group.labelTitle} * : </label> 
+            <input type="hidden" name="id_group" value="${group.id}">
+            <input type="text" id="title" name="title" size="60" maxlength="50" value="${group.title}"/>
+        </p>        
+        <p>
+            <label for="tags">#i18n{sponsoredlinks.modify_group.labelTags} * : </label>
+            <input type="text" id="tags" name="tags" size="60" maxlength="50" value="${group.tags}" />
+        </p>  
+        <p>   
+            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" class="button" />
+        </p>     
+    </form>
+    
+</div>

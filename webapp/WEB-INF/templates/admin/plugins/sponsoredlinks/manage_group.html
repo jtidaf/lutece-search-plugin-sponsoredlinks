@@ -7,9 +7,7 @@
 </div>
 <div class="content-box" >
     <h2>#i18n{sponsoredlinks.manage_group.tableLabel}</h2>
-    
- 	<@paginationAdmin paginator=paginator combo=1/>
-    
+    <@paginationAdmin paginator=paginator combo=1/>
     <table>
     
         <tr>
@@ -18,23 +16,23 @@
             <th width="20%">#i18n{sponsoredlinks.manage_group.columnTitleActions}</th>
         </tr>
         
-        <#list group_list as sponsoredlinkgroup >
+        <#list group_list as group >
         <tr>
             <td>
             	<#if permission_modify_group>
-	                <a href="jsp/admin/plugins/sponsoredlinks/ModifySponsoredLinkGroup.jsp?id_set=${sponsoredlinkgroup.id}" class="bullet-link">
-	                    ${sponsoredlinkgroup.title}
+	                <a href="jsp/admin/plugins/sponsoredlinks/ModifyGroup.jsp?id_group=${group.id}" class="bullet-link">
+	                    ${group.title}
 	                </a>
                 <#else>
-                	${sponsoredlinkgroup.title}
+                	${group.title}
                 </#if>
             </td>
             <td>
-            	${sponsoredlinkgroup.tags}
+            	${group.tags}
             </td>
             <td>
             	<#if permission_delete_group>
-			        <a href="jsp/admin/plugins/sponsoredlinks/RemoveGroup.jsp?id_group=${sponsoredlinkgroup.id}&title=${sponsoredlinkgroup.title}">
+			        <a href="jsp/admin/plugins/sponsoredlinks/RemoveGroup.jsp?id_group=${group.id}&title=${group.title}">
 						<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_group.actionDelete}" title="#i18n{sponsoredlinks.manage_group.actionDelete}">
 					</a>  
 				</#if> 
@@ -43,7 +41,6 @@
         </#list>
         
     </table>
-    
  	<@paginationAdmin paginator=paginator/>
        
 </div>

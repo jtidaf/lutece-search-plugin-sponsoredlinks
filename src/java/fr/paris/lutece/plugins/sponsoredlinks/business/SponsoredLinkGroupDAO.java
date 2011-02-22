@@ -12,12 +12,13 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO {
     private static final String SQL_QUERY_NEWPK = "SELECT max( id_group ) FROM sponsoredlinks_group ";
     private static final String SQL_QUERY_SELECT = "SELECT id_group, title, tags FROM sponsoredlinks_group WHERE id_group = ? ";
     private static final String SQL_QUERY_SELECTALL = "SELECT id_group, title, tags FROM sponsoredlinks_group ORDER BY title, id_group DESC";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_group ( id_group, title, tags )  VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_group ( id_group, title, tags )  VALUES ( ?, ?, ? )";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_group WHERE id_group = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_group SET title = ? , tags = ?  WHERE id_group = ?  ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_group SET title = ? , tags = ?  WHERE id_group = ? ";
     
-    private static final String SQL_QUERY_SELECT_USED = "SELECT id_group, title, tags FROM sponsoredlinks_group a WHERE EXIST ( SELECT 1 FROM sponsoredlink_set b WHERE a.id_group = b.id_group )";
-    private static final String SQL_QUERY_SELECT_UNUSED = "SELECT id_group, title, tags FROM sponsoredlinks_group a WHERE NOT EXIST ( SELECT 1 FROM sponsoredlink_set b WHERE a.id_group = b.id_group )";
+    private static final String SQL_QUERY_SELECT_USED_LIST = "SELECT id_group, title, tags FROM sponsoredlinks_group a WHERE EXISTS ( SELECT 1 FROM sponsoredlinks_set b WHERE a.id_group = b.id_group )";
+    private static final String SQL_QUERY_SELECT_UNUSED_LIST = "SELECT id_group, title, tags FROM sponsoredlinks_group a WHERE NOT EXISTS ( SELECT 1 FROM sponsoredlinks_set b WHERE a.id_group = b.id_group )";
+    private static final String SQL_QUERY_SELECT_USED = "SELECT id_group, title, tags FROM sponsoredlinks_group a WHERE EXISTS ( SELECT 1 FROM sponsoredlinks_set b WHERE b.id_group = ? )";
 
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
@@ -115,11 +116,10 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO {
     public void store( SponsoredLinkGroup group, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        int nGroupId = group.getId(  );
 
         daoUtil.setString( 1, group.getTitle(  ) );
         daoUtil.setString( 2, group.getTags(  ) );
-        daoUtil.setInt( 6, nGroupId );
+        daoUtil.setInt( 3, group.getId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -158,7 +158,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO {
     public Collection<SponsoredLinkGroup> selectUsedGroupList( Plugin plugin )
     {
     	Collection<SponsoredLinkGroup> groupList = new ArrayList<SponsoredLinkGroup>(  );
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_USED, plugin );
+    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_USED_LIST, plugin );
     	daoUtil.executeQuery(  );
     	
     	while ( daoUtil.next(  ) )
@@ -183,7 +183,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO {
     public Collection<SponsoredLinkGroup> selectUnusedGroupList( Plugin plugin )
     {
     	Collection<SponsoredLinkGroup> groupList = new ArrayList<SponsoredLinkGroup>(  );
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_UNUSED, plugin );
+    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_UNUSED_LIST, plugin );
     	daoUtil.executeQuery(  );
     	
     	while ( daoUtil.next(  ) )
@@ -198,5 +198,30 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO {
         daoUtil.free(  );
 
         return groupList;
+    }
+    
+    /**
+     * Load the SponsoredLinkGroup specified by its id if used in a set
+     * @param nGroupId The SponsoredLinkGroup id
+     * @param plugin The Plugin object
+     * @return The SponsoredLink group if used
+     */
+    public SponsoredLinkGroup selectUsedGroup( int nGroupId, Plugin plugin )
+    {
+    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_USED, plugin );
+    	daoUtil.setInt( 1, nGroupId );
+    	daoUtil.executeQuery(  );
+    	
+    	SponsoredLinkGroup group = null;
+    	
+    	if( daoUtil.next(  ) )
+    	{
+    		group = new SponsoredLinkGroup(  );
+    		group.setId( daoUtil.getInt( 1 ) );
+    		group.setTitle( daoUtil.getString( 2 ) );
+    		group.setTags( daoUtil.getString( 3 ) );
+    	}
+    	
+    	return group;
     }
 }

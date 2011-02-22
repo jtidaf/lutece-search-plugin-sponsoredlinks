@@ -22,7 +22,7 @@ public class SponsoredLinkGroupHome
      *  
      * @param group The instance of SponsoredLinkGroup which contains the data to store
      * @param plugin The Plugin object
-     * @return The instance of SponsoredLinkGroup wwhich has been created with its primary key
+     * @return The instance of SponsoredLinkGroup which has been created with its primary key
      */
     public static SponsoredLinkGroup create( SponsoredLinkGroup group, Plugin plugin)
     {
@@ -103,6 +103,18 @@ public class SponsoredLinkGroupHome
     public static Collection<SponsoredLinkGroup> findUnusedGroupList( Plugin plugin )
     {
     	return _dao.selectUnusedGroupList( plugin );
+    }
+    
+    /**
+     * Returns the the SponsoredLinkGroup specified by its id if used in a set
+     * 
+     * @param nKey The primary key of the group
+     * @param plugin The Plugin object
+     * @return An instance of the group if it is used
+     */
+    public static SponsoredLinkGroup findUsedGroup( int nKey, Plugin plugin )
+    {
+    	return _dao.selectUsedGroup( nKey, plugin );
     }
     
 

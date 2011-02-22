@@ -2,44 +2,50 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class SponsoredLinkSet
 {
 	public static final String RESOURCE_TYPE = "SPONSOREDLINKS_SET_TYPE";
 	
-	private static int _nGlobalId = 0;
-		
+
 	private int _nId;
 	private String _strTitle;
 	private List<SponsoredLink> _sponsoredLinkSet;
-	private int _nTopicId;
+	private int _nGroupId;
 	
-	public SponsoredLinkSet( String title, int topicId )
+	public SponsoredLinkSet(  )
 	{
-		this._nId = ++_nGlobalId;
-		this._strTitle = title;
-		this._nTopicId = topicId;
-		this._sponsoredLinkSet = new ArrayList<SponsoredLink>(  );
+		_sponsoredLinkSet = new ArrayList<SponsoredLink>(  );
+	}
+	
+	
+	/**
+	 * Appends a list of SponsoredLink in the set
+	 * @param linkList The list of link
+	 * @return true if this set changed as a result of the call
+	 */
+	public boolean addAllLink( Collection<SponsoredLink> linkList )
+	{
+		boolean bResult = false; 
+		if ( _sponsoredLinkSet.addAll( linkList ) )
+		{
+			Collections.sort(_sponsoredLinkSet);
+			bResult = true;
+		}
 		
+		return bResult;
 	}
-	
-	
-	public void addSponsoredLink( String url )
-	{
-		SponsoredLink sponsoredLink = new SponsoredLink( _sponsoredLinkSet.size(), url );
-		_sponsoredLinkSet.add( sponsoredLink );
-	}
-	
-	public void removeSponsoredLink( int index )
-	{
-		this._sponsoredLinkSet.remove( index );
-	}
-	
-	
+		
 	public int getId(  )
 	{
 		return _nId;
+	}
+	
+	public void setId( int id )
+	{
+		_nId = id;
 	}
 
 	
@@ -63,14 +69,14 @@ public class SponsoredLinkSet
 		this._sponsoredLinkSet = (List<SponsoredLink>)sponsoredLinkSet;
 	}
 
-	public int getTopicId(  )
+	public int getGroupId(  )
 	{
-		return _nTopicId;
+		return _nGroupId;
 	}
 
-	public void setTopicId( int topicId )
+	public void setGroupId( int groupId )
 	{
-		this._nTopicId = topicId;
+		this._nGroupId = groupId;
 	}
 
 }

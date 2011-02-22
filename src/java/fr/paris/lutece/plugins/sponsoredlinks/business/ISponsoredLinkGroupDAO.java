@@ -57,5 +57,13 @@ public interface ISponsoredLinkGroupDAO {
      * @return The Collection of found SponsoredLinkGroup
      */
     Collection<SponsoredLinkGroup> selectUnusedGroupList( Plugin plugin );
+    
+    /**
+     * Load the SponsoredLinkGroup specified by its id if used in a set
+     * @param nGroupId The SponsoredLinkGroup id
+     * @param plugin The Plugin object
+     * @return The SponsoredLink group if used
+     */
+    SponsoredLinkGroup selectUsedGroup( int nGroupId, Plugin plugin );
 
 }
