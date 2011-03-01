@@ -13,7 +13,6 @@ function linkservice( content_id, insert_service_id, plugin_name )
 	fen.focus();
 }
 </script>
-</script>
 <style type="text/css">
 
 div.set-form
@@ -71,11 +70,11 @@ fieldset.set-form legend
     
     <h2>#i18n{sponsoredlinks.create_set.tableLabel}</h2>
     
-    <form method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoCreateSet.jsp">
+    <form method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoModifySet.jsp">
 	<div class="set-form">    
         <p>
             <label for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label> 
-            <input type="text" id="title" name="title" size="60" maxlength="50" />
+            <input type="text" id="title" name="title" size="60" maxlength="50" value="${set.title}" />
         </p>        
         <p>
             <label for="id_group">#i18n{sponsoredlinks.create_set.labelGroup} * : </label>
@@ -84,16 +83,21 @@ fieldset.set-form legend
                 <#list group_list as group >
 	                <option value="${group.id}">${group.title}</option>
                 </#list>
+                <option selected value="${set.group.id}">${set.group.title}</option>
             </select>
         </p>
     </div>
     <fieldset class="set-form">
     	<legend>#i18n{sponsoredlinks.create_set.labelLinkList}</legend>
-    	<#list link_list as link>       
+    	<#list set.link_list as link>       
 	        <p>
-	            <label for="link_list" style="margin-top: 4px;">${link_index + 1}. ${link.template.description} :</label>
+	            <label for="link_list">${link_index + 1}. ${link.template.description} :</label>
 	            <#if link.template.resource?exists>
-		            <textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
+	            	<#if link.url?exists>
+	            		<textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">${link.url}</textarea>
+	            	<#else/>
+	            		<textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
+	            	</#if>
 		            <a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}');">
 		            	<img src="images/admin/skin/plugins/sponsoredlinks/action/linkservice.png" alt="#i18n{sponsoredlinks.create_set.actionLink}" title="#i18n{sponsoredlinks.create_set.actionLink}" />
 		            </a>
@@ -101,7 +105,7 @@ fieldset.set-form legend
 	        	<p>
 	        		<label>&nbsp;</label><p id="advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}</p>
 	        	<#else>
-		        	<textarea disabled id="link_list_${link_index + 1}" name="link_list"  rows="2" cols="57">&nbsp;</textarea>
+		        	<textarea disabled type="text" id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
 		        </p>
 	        	<p>
 	        		<label>&nbsp;</label><p id="warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}</p>
@@ -110,7 +114,8 @@ fieldset.set-form legend
     	</#list>
 	 	<p id="advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
 	</fieldset>   	
-        <p>   
+        <p>
+        	<input type="hidden" name="id_set" value="${set.id}" />
             <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonValidate}" class="button" />
         </p>
         

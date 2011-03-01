@@ -24,7 +24,7 @@ INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id
 INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id,permission) VALUES 
  (1101,'sponsoredlinks_manager','SPONSOREDLINKS_SET_TYPE','*','*');
 INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id,permission) VALUES 
- (1102,'sponsoredlinks_manager','SPONSOREDLINKS_TOPIC_TYPE','*','*');
+ (1102,'sponsoredlinks_manager','SPONSOREDLINKS_GROUP_TYPE','*','*');
 
 --
 -- Dumping data for table core_user_role

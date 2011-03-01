@@ -17,14 +17,14 @@ INSERT INTO sponsoredlinks_template VALUES (1, 'fiche élu', 'document/fiche_elu
 INSERT INTO sponsoredlinks_template VALUES (2, 'comarquage', 'comarquage');
 INSERT INTO sponsoredlinks_template VALUES (3, 'article', 'document/article');
 
-INSERT INTO sponsoredlinks_set VALUES(1, 'bloc1', 1);
-INSERT INTO sponsoredlinks_set VALUES(2, 'bloc2', 2);
-INSERT INTO sponsoredlinks_set VALUES(3, 'bloc3', 3);
-INSERT INTO sponsoredlinks_set VALUES(4, 'bloc4', 4);
-INSERT INTO sponsoredlinks_set VALUES(5, 'bloc5', 5);
-INSERT INTO sponsoredlinks_set VALUES(6, 'bloc6', 6);
-INSERT INTO sponsoredlinks_set VALUES(7, 'bloc7', 7);
-INSERT INTO sponsoredlinks_set VALUES(8, 'bloc8', 8);
+INSERT INTO sponsoredlinks_set VALUES(1, 'bloc01', 1);
+INSERT INTO sponsoredlinks_set VALUES(2, 'bloc02', 2);
+INSERT INTO sponsoredlinks_set VALUES(3, 'bloc03', 3);
+INSERT INTO sponsoredlinks_set VALUES(4, 'bloc04', 4);
+INSERT INTO sponsoredlinks_set VALUES(5, 'bloc05', 5);
+INSERT INTO sponsoredlinks_set VALUES(6, 'bloc06', 6);
+INSERT INTO sponsoredlinks_set VALUES(7, 'bloc07', 7);
+INSERT INTO sponsoredlinks_set VALUES(8, 'bloc08', 8);
 INSERT INTO sponsoredlinks_set VALUES(11, 'bloc11', 11);
 INSERT INTO sponsoredlinks_set VALUES(12, 'bloc12', 12);
 INSERT INTO sponsoredlinks_set VALUES(13, 'bloc13', 13);

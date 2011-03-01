@@ -4,5 +4,5 @@
 
 <% 
    sponsoredlinks.init( request, sponsoredlinks.RIGHT_MANAGE_SPONSOREDLINKS );
-   response.sendRedirect( sponsoredlinks.doModifyGroup( request ) );
+   response.sendRedirect( sponsoredlinks.doCreateSet( request ) );
 %>

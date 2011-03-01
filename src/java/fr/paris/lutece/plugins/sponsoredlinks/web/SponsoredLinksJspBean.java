@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2011, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.sponsoredlinks.web;
 
 import java.util.ArrayList;
@@ -8,6 +41,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroupHome;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSetHome;
@@ -18,6 +52,8 @@ import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksTemplateReso
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksGroupResourceIdService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.admin.AccessDeniedException;
+import fr.paris.lutece.portal.service.insert.InsertService;
+import fr.paris.lutece.portal.service.insert.InsertServiceManager;
 import fr.paris.lutece.portal.service.message.AdminMessage;
 import fr.paris.lutece.portal.service.message.AdminMessageService;
 import fr.paris.lutece.portal.service.plugin.PluginService;
@@ -36,7 +72,8 @@ import fr.paris.lutece.util.url.UrlItem;
 
 public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 {
-    public static final String RIGHT_MANAGE_SPONSOREDLINKS = "SPONSOREDLINKS_MANAGEMENT";
+	/** Unique name for the right to manage this plugin */
+	public static final String RIGHT_MANAGE_SPONSOREDLINKS = "SPONSOREDLINKS_MANAGEMENT";
 
     //jsp definition
     private static final String JSP_DO_REMOVE_SET = "jsp/admin/plugins/sponsoredlinks/DoRemoveSet.jsp";
@@ -57,10 +94,21 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String MARK_PERMISSION_DELETE_GROUP = "permission_delete_group";
     private static final String MARK_SET_LIST = "set_list";
     private static final String MARK_GROUP_LIST = "group_list";
-    private static final String MARK_TEMPLATE_LINK_LIST = "template_link_list";
+    private static final String MARK_LINK_LIST = "link_list";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
     private static final String MARK_PAGINATOR = "paginator";
-    private static final String MARK_SPONSOREDLINKGROUP = "group";
+    private static final String MARK_GROUP = "group";
+    private static final String MARK_SET = "set";
+    private static final String MARK_SET_ID = "id";
+    private static final String MARK_SET_TITLE = "title";
+    private static final String MARK_SET_GROUP = "group";
+    private static final String MARK_LINK_URL = "url";
+    private static final String MARK_LINK_TEMPLATE = "template";
+    private static final String MARK_LINK_TEMPLATE_RESOURCE = "resource";
+	//private static final String MARK_LINK_TEMPLATE_RESOURCE_PLUGIN = "plugin";
+	//private static final String MARK_LINK_TEMPLATE_RESOURCE_LABEL = "label";
+	//private static final String MARK_LINK_TEMPLATE_RESOURCE_ID = "id";
+	private static final String MARK_LINK_TEMPLATE_DESCRIPTION = "description";
     
     //messages
     private static final String MESSAGE_CONFIRM_REMOVE_USED_GROUP = "sponsoredlinks.message.confirmRemove.group.used";
@@ -69,13 +117,16 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_TEMPLATE = "sponsoredlinks.message.confirmRemove.template";
     
     //parameters
-    private static final String PARAMETER_SPONSOREDLINKGROUP_ID = "id_group";
-    private static final String PARAMETER_SPONSOREDLINKGROUP_TITLE = "title";
-    private static final String PARAMETER_SPONSOREDLINKGROUP_TAGS = "tags";
+    private static final String PARAMETER_GROUP_ID = "id_group";
+    private static final String PARAMETER_GROUP_TITLE = "title";
+    private static final String PARAMETER_GROUP_TAGS = "tags";
+    private static final String PARAMETER_SET_ID = "id_set";
+	private static final String PARAMETER_SET_LINK_LIST = "link_list";
+	private static final String PARAMETER_SET_TITLE = "title";
 
     //properties
     private static final String PROPERTY_ITEM_PER_PAGE = "sponsoredlinks.itemsPerPage";
-	private static final String PROPERTY_PAGE_TITLE_MANAGE_SPONSOREDLINKS = "sponsoredlinks.manage_sponsoredlinks.title";
+	//private static final String PROPERTY_PAGE_TITLE_MANAGE_SPONSOREDLINKS = "sponsoredlinks.manage_sponsoredlinks.title";
 	private static final String PROPERTY_PAGE_TITLE_MANAGE_SET = "sponsoredlinks.manage_set.title";
 	private static final String PROPERTY_PAGE_TITLE_CREATE_SET = "sponsoredlinks.create_set.title";
 	private static final String PROPERTY_PAGE_TITLE_MODIFY_SET = "sponsoredlinks.modify_set.title";
@@ -116,9 +167,21 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 	    super.init( request, strRight );
 	    listTemplate = new ArrayList<SponsoredLinkTemplate>(  );
 	    
-	    listTemplate.add( new SponsoredLinkTemplate( listTemplate.size(), "fiche élu", "document/fiche_elu" ) );
-	    listTemplate.add( new SponsoredLinkTemplate( listTemplate.size(), "comarquage", "comarquage" ) );
-	    listTemplate.add( new SponsoredLinkTemplate( listTemplate.size(), "article", "document/article" ) );
+	    SponsoredLinkTemplate linkTemplate = new SponsoredLinkTemplate(  );
+	    linkTemplate.setOrder( 1 );
+	    linkTemplate.setDescription( "fiche élu" );
+	    linkTemplate.setLinkedResourceType( "DOCUMENT_INSERT_SERVICE" );
+	    listTemplate.add( linkTemplate );
+	    linkTemplate = new SponsoredLinkTemplate(  );
+	    linkTemplate.setOrder( 2 );
+	    linkTemplate.setDescription( "évènenement" );
+	    linkTemplate.setLinkedResourceType( "CALENDAR_INSERT_SERVICE" );
+	    listTemplate.add( linkTemplate );
+	    linkTemplate = new SponsoredLinkTemplate(  );
+	    linkTemplate.setOrder( 3 );
+	    linkTemplate.setDescription( "article" );
+	    linkTemplate.setLinkedResourceType( "PAGE_INSERT_SERVICE" );
+	    listTemplate.add( linkTemplate );
 	}
 /// \Modèle de données
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -168,7 +231,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         
         Map<String, Object> model = new HashMap<String, Object>(  );
         
-        LocalizedPaginator paginator = new LocalizedPaginator( (List<SponsoredLinkSet>) listSet, _nItemsPerPageSet, getHomeUrl( request ),
+        LocalizedPaginator paginator = new LocalizedPaginator( (List<SponsoredLinkSet>) listSet, _nItemsPerPageSet, request.getRequestURI(  ),
                 LocalizedPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexSet, getLocale(  ) );
         
         boolean bPermissionCreateSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, 
@@ -211,8 +274,37 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     	
     	Map<String, Object> model = new HashMap<String, Object>(  );
     	
-    	model.put( MARK_TEMPLATE_LINK_LIST, listTemplate );
-    	//listGroup.add( SponsoredLinkGroup.UNDEFINED_TOPIC );
+    	List<Map<String, Object>> listLinks = new ArrayList<Map<String, Object>>(  );
+    	
+    	Map<String, Object> modelLink;
+    	Map<String, Object> modelLinkTemplate;
+    	//Map<String, Object> resource;
+    	InsertService insertService;
+    	
+    	for( SponsoredLinkTemplate linkTemplate : listTemplate )
+    	{
+    		modelLinkTemplate = new HashMap<String, Object>( );
+    		insertService = InsertServiceManager.getInsertService( linkTemplate.getLinkedResourceType(  ) );
+    		
+    		if( insertService != null && insertService.isEnabled(  ) )
+    		{
+    			//resource = new HashMap<String, Object>( );
+        		insertService.setLocale( getLocale(  ) );
+        		//resource.put( MARK_LINK_TEMPLATE_RESOURCE_ID , insertService.getId(  ) );
+        		//resource.put( MARK_LINK_TEMPLATE_RESOURCE_LABEL , insertService.getLabel(  ) );
+        		//resource.put( MARK_LINK_TEMPLATE_RESOURCE_PLUGIN , insertService.getPluginName(  ) );
+        		modelLinkTemplate.put( MARK_LINK_TEMPLATE_RESOURCE, insertService );
+    		}
+    		modelLinkTemplate.put( MARK_LINK_TEMPLATE_DESCRIPTION , linkTemplate.getDescription(  ) );
+
+    		modelLink = new HashMap<String, Object>( );
+    		modelLink.put( MARK_LINK_TEMPLATE, modelLinkTemplate );
+    		listLinks.add( modelLink );
+    	}
+    	
+    	model.put( MARK_LOCALE, request.getLocale(  ) );
+    	model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+    	model.put( MARK_LINK_LIST, listLinks );
     	model.put( MARK_GROUP_LIST, listUnusedGroup );
     	
     	HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_SET, getLocale(  ), model );
@@ -220,6 +312,217 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         return getAdminPage( template.getHtml(  ) );
     	
     }
+    
+    /**
+     * Process the data capture form of a new sponsoredlinks set
+     *
+     * @param request The Http Request
+     * @return The Jsp URL of the process result
+     */
+    public String doCreateSet( HttpServletRequest request )
+    {
+        String strTitle = request.getParameter( PARAMETER_SET_TITLE );
+        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
+        String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
+
+        // Mandatory fields
+        if ( ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
+        		( strGroupId == null ) || strGroupId.trim(  ).equals( "" ) ||
+        		( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
+        {
+            return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+        }
+        
+        int nGroupId = Integer.parseInt( strGroupId );
+
+        SponsoredLinkSet set = new SponsoredLinkSet(  );
+        Collection<SponsoredLink> linkList = new ArrayList<SponsoredLink>(  );
+        SponsoredLink currentLink;
+        
+        for( int i = strArrayLinks.length -1; i >= 0; --i )
+        {
+        	if( !strArrayLinks[i].trim(  ).equals( "\u00A0" ) )
+        	{
+        		currentLink = new SponsoredLink(  );
+        		currentLink.setOrder( i + 1 );
+        		currentLink.setUrl( strArrayLinks[i] );
+        		linkList.add( currentLink );
+        	}
+        }
+
+        set.setTitle( strTitle );
+        set.setGroupId( nGroupId );
+        set.setSponsoredLinkList( linkList );
+        
+        SponsoredLinkSetHome.create( set, getPlugin(  ) );
+
+        // if the operation occurred well, redirects towards the list of the sets
+        return JSP_REDIRECT_TO_MANAGE_SET;
+    }
+    
+    /**
+     * Returns the modify Sponsoredlinks set page
+     * @param request The HTTP request
+     * @return The HTML page
+     */
+    public String getModifySet( HttpServletRequest request )
+    {
+    	if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID, 
+    			SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) )
+    	{
+    		return getManageSet( request );
+    	}
+    	
+    	setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_SET );
+    	
+    	int nSetId = Integer.parseInt( request.getParameter( PARAMETER_SET_ID ) );
+    	SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( nSetId, getPlugin(  ) );
+    	
+    	SponsoredLinkGroup usedGroup = SponsoredLinkGroupHome.findByPrimaryKey( set.getGroupId(  ), getPlugin(  ) );
+    	
+    	Collection<SponsoredLinkGroup> listUnusedGroup = SponsoredLinkGroupHome.findUnusedGroupList( getPlugin(  ) );
+    	
+    	Map<String, Object> model = new HashMap<String, Object>(  );
+
+    	Map<String, Object> modelSet = new HashMap<String, Object>(  );
+    	Map<String, Object> modelLink;
+    	Map<String, Object> modelLinkTemplate;
+    	
+    	List<Map<String, Object>> listLinks = new ArrayList<Map<String, Object>>(  );
+    	
+    	//Map<String, Object> resource;
+    	InsertService insertService;
+    	
+    	for( SponsoredLinkTemplate linkTemplate : listTemplate )
+    	{
+    		modelLinkTemplate = new HashMap<String, Object>(  );
+    		insertService = InsertServiceManager.getInsertService( linkTemplate.getLinkedResourceType(  ) );
+    		
+    		if( insertService != null && insertService.isEnabled(  ) )
+    		{
+    			//resource = new HashMap<String, Object>( );
+        		insertService.setLocale( getLocale(  ) );
+        		//resource.put( MARK_LINK_TEMPLATE_RESOURCE_ID , insertService.getId(  ) );
+        		//resource.put( MARK_LINK_TEMPLATE_RESOURCE_LABEL , insertService.getLabel(  ) );
+        		//resource.put( MARK_LINK_TEMPLATE_RESOURCE_PLUGIN , insertService.getPluginName(  ) );
+        		modelLinkTemplate.put( MARK_LINK_TEMPLATE_RESOURCE, insertService );
+    		}
+    		modelLinkTemplate.put( MARK_LINK_TEMPLATE_DESCRIPTION , linkTemplate.getDescription(  ) );
+
+    		modelLink = new HashMap<String, Object>( );
+    		modelLink.put( MARK_LINK_TEMPLATE, modelLinkTemplate );
+    		listLinks.add( modelLink );
+    	}
+    	
+    	for( SponsoredLink link : set.getSponsoredLinkList(  ) )
+    	{
+    		listLinks.get( link.getOrder(  ) - 1 ).put( MARK_LINK_URL , link.getUrl(  ) );
+    	}
+    	
+    	modelSet.put( MARK_SET_ID, set.getId(  ) );
+    	modelSet.put( MARK_SET_TITLE, set.getTitle(  ) );
+    	modelSet.put( MARK_SET_GROUP, usedGroup );
+    	modelSet.put( MARK_LINK_LIST, listLinks );
+    	
+    	model.put( MARK_LOCALE, request.getLocale(  ) );
+    	model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+    	model.put( MARK_GROUP_LIST, listUnusedGroup );
+    	model.put( MARK_SET, modelSet );
+    	
+    	HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_SET, getLocale(  ), model );
+
+        return getAdminPage( template.getHtml(  ) );
+    	
+    }
+    
+    /**
+     * Process the data capture form of a modified sponsoredlinks set
+     *
+     * @param request The Http Request
+     * @return The Jsp URL of the process result
+     */
+    public String doModifySet( HttpServletRequest request )
+    {
+    	String strSetId = request.getParameter( PARAMETER_SET_ID );
+        String strTitle = request.getParameter( PARAMETER_SET_TITLE );
+        String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
+        String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
+
+        // Mandatory fields
+        if ( ( strSetId == null ) || strSetId.trim(  ).equals( "" ) ||
+        		( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
+        		( strGroupId == null ) || strGroupId.trim(  ).equals( "" ) ||
+        		( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
+        {
+            return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
+        }
+        
+        int nSetId = Integer.parseInt( strSetId );
+        int nGroupId = Integer.parseInt( strGroupId );
+
+        SponsoredLinkSet set = new SponsoredLinkSet(  );
+        Collection<SponsoredLink> linkList = new ArrayList<SponsoredLink>(  );
+        SponsoredLink currentLink;
+        
+        for( int i = strArrayLinks.length -1; i >= 0; --i )
+        {
+    		currentLink = new SponsoredLink(  );
+    		currentLink.setOrder( i + 1 );
+    		if( !strArrayLinks[i].trim(  ).equals( "\u00A0" ) )
+        	{
+    			currentLink.setUrl( strArrayLinks[i] );
+        	}
+    		linkList.add( currentLink );
+        }
+        
+        set.setId( nSetId );
+        set.setTitle( strTitle );
+        set.setGroupId( nGroupId );
+        set.setSponsoredLinkList( linkList );
+        
+        SponsoredLinkSetHome.update( set, getPlugin(  ) );
+
+        // if the operation occurred well, redirects towards the list of the sets
+        return JSP_REDIRECT_TO_MANAGE_SET;
+    }
+    
+    /**
+     * Manages the removal form of a sponsoredlink set whose identifier is in the http request
+    *
+    * @param request The Http request
+    * @return the html code to confirm
+    */
+   public String getConfirmRemoveSet ( HttpServletRequest request )
+   {
+   	int nId = Integer.parseInt( request.getParameter( PARAMETER_SET_ID ) );
+   	
+   	UrlItem url = new UrlItem( JSP_DO_REMOVE_SET );
+   	url.addParameter( PARAMETER_SET_ID, nId );
+   	
+   	Object[] args = { request.getParameter( PARAMETER_SET_TITLE ) };
+   	
+   	String strMessageKey = MESSAGE_CONFIRM_REMOVE_SET;
+   	
+   return AdminMessageService.getMessageUrl( request, strMessageKey, args, url.getUrl(  ),
+               AdminMessage.TYPE_CONFIRMATION );
+   	
+   }
+   
+   /**
+    * Treats the removal form of a SponsoredLinkSet
+    * 
+    * @param request The http request
+    * @return The jsp URL to display the manage set page
+    */
+   public String doRemoveSet( HttpServletRequest request )
+   {
+   	int nId = Integer.parseInt( request.getParameter( PARAMETER_SET_ID ) );
+   	 	
+   	SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( nId, getPlugin(  ) );
+   	SponsoredLinkSetHome.remove( set, getPlugin(  ) );
+   	   	
+   	return JSP_REDIRECT_TO_MANAGE_SET;
+   }
     
 ////////////////////////////////////////////////////////////////////////////////
 /// Group management
@@ -241,7 +544,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Collection<SponsoredLinkGroup> listGroup = SponsoredLinkGroupHome.findAll( getPlugin(  ) );
     	
         LocalizedPaginator paginator = new LocalizedPaginator( (List<SponsoredLinkGroup>) listGroup, _nItemsPerPageGroup, request.getRequestURI(  ),
-                LocalizedPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexSet, getLocale(  ) );
+                LocalizedPaginator.PARAMETER_PAGE_INDEX, _strCurrentPageIndexGroup, getLocale(  ) );
     	
         Map<String, Object> model = new HashMap<String, Object>(  );
         
@@ -301,8 +604,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateGroup( HttpServletRequest request )
     {
-        String strTitle = request.getParameter( PARAMETER_SPONSOREDLINKGROUP_TITLE );
-        String strTags = request.getParameter( PARAMETER_SPONSOREDLINKGROUP_TAGS );
+        String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
+        String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
 
         // Mandatory fields
         if ( ( strTitle == null ) || strTitle.trim(  ).equals( "" ) || ( strTags == null ) || strTags.trim(  ).equals( "" ) )
@@ -337,13 +640,13 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     	
     	setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_GROUP );
     	
-    	int nId =  Integer.parseInt( request.getParameter( PARAMETER_SPONSOREDLINKGROUP_ID ) );
+    	int nId =  Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
     	
     	SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
     	
     	Map<String, Object> model = new HashMap<String, Object>(  );
     	
-    	model.put( MARK_SPONSOREDLINKGROUP , group );
+    	model.put( MARK_GROUP , group );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
     	model.put( MARK_LOCALE, getLocale(  ) );
     	    	
@@ -360,9 +663,9 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifyGroup( HttpServletRequest request )
     {
-    	int nId = Integer.parseInt( request.getParameter( PARAMETER_SPONSOREDLINKGROUP_ID ) );
-        String strTitle = request.getParameter( PARAMETER_SPONSOREDLINKGROUP_TITLE );
-        String strTags = request.getParameter( PARAMETER_SPONSOREDLINKGROUP_TAGS );
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
+        String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
+        String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
 
         // Mandatory fields
         if ( ( strTitle == null ) || strTitle.trim(  ).equals( "" ) || ( strTags == null ) || strTags.trim(  ).equals( "" ) )
@@ -389,12 +692,12 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String getConfirmRemoveGroup ( HttpServletRequest request )
     {
-    	int nId = Integer.parseInt( request.getParameter( PARAMETER_SPONSOREDLINKGROUP_ID ) );
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
     	
     	UrlItem url = new UrlItem( JSP_DO_REMOVE_GROUP );
-    	url.addParameter( PARAMETER_SPONSOREDLINKGROUP_ID, nId );
+    	url.addParameter( PARAMETER_GROUP_ID, nId );
     	
-    	Object[] args = { request.getParameter( PARAMETER_SPONSOREDLINKGROUP_TITLE ) };
+    	Object[] args = { request.getParameter( PARAMETER_GROUP_TITLE ) };
     	
     	String strMessageKey;
     	
@@ -419,7 +722,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doRemoveGroup( HttpServletRequest request )
     {
-    	int nId = Integer.parseInt( request.getParameter( PARAMETER_SPONSOREDLINKGROUP_ID ) );
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
     	 	
     	SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
     	SponsoredLinkGroupHome.remove( group, getPlugin(  ) );

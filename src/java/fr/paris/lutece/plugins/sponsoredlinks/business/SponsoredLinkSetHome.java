@@ -1,3 +1,36 @@
+/*
+ * Copyright (c) 2002-2011, Mairie de Paris
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *  1. Redistributions of source code must retain the above copyright notice
+ *     and the following disclaimer.
+ *
+ *  2. Redistributions in binary form must reproduce the above copyright notice
+ *     and the following disclaimer in the documentation and/or other materials
+ *     provided with the distribution.
+ *
+ *  3. Neither the name of 'Mairie de Paris' nor 'Lutece' nor the names of its
+ *     contributors may be used to endorse or promote products derived from
+ *     this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * License 1.0
+ */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
 import java.util.Collection;
@@ -5,7 +38,12 @@ import java.util.Collection;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
-public class SponsoredLinkSetHome
+/**
+ * 
+ * This class provides instances management methods (create, find, ...) for SponsoredLinkSet objects
+ *
+ */
+public final class SponsoredLinkSetHome
 {
 	// Static variable pointed at the DAO instance
 	private static ISponsoredLinkSetDAO _daoSet = (ISponsoredLinkSetDAO) SpringContextService.getPluginBean( "sponsoredlinks", "sponsoredLinkSetDAO" );
@@ -19,21 +57,22 @@ public class SponsoredLinkSetHome
     }
     
     /**
-     * Creation of an instance of SponsoredLinkGroup
+     * Creation of an instance of SponsoredLinkSet
      *  
      * @param set The instance of SponsoredLinkSet which contains the data to store
      * @param plugin The Plugin object
-     * @return The instance of SponsoredLinkset which has been created with its primary key
+     * @return The instance of SponsoredLinkSet which has been created with its primary key
      */
-    public static SponsoredLinkSet create( SponsoredLinkSet set, Plugin plugin)
+    public static SponsoredLinkSet create( SponsoredLinkSet set, Plugin plugin )
     {
     	_daoSet.insert( set, plugin );
     	
     	int nSetId = set.getId(  );
-    	Collection<SponsoredLink> linkList = set.getSponsoredLinkSet(  );
+    	Collection<SponsoredLink> linkList = set.getSponsoredLinkList(  );
     	
     	for( SponsoredLink link : linkList )
     	{
+    		//TODO : Gestion des exceptions (rollback de la requête précédante)
     		_daoLink.insert( nSetId, link, plugin );
     	}
     	
@@ -43,7 +82,7 @@ public class SponsoredLinkSetHome
     /**
      * Update of the specified SponsoredLinkSet
      * 
-     * @param set The instance of SposnsoredLinkSet which contains the data to store
+     * @param set The instance of SponsoredLinkSet which contains the data to store
      * @param plugin The Plugin object
      * @return The instance of SponsoredLinkSet which has been updated
      */
@@ -52,10 +91,11 @@ public class SponsoredLinkSetHome
     	_daoSet.store( set, plugin );
     	
     	int nSetId = set.getId(  );
-    	Collection<SponsoredLink> linkList = set.getSponsoredLinkSet(  );
+    	Collection<SponsoredLink> linkList = set.getSponsoredLinkList(  );
     	
     	for( SponsoredLink link : linkList )
     	{
+    		//TODO : Gestion des exceptions (rollback)
     		_daoLink.store( nSetId, link, plugin );
     	}
     	
@@ -88,7 +128,7 @@ public class SponsoredLinkSetHome
     public static SponsoredLinkSet findByPrimaryKey( int nKey, Plugin plugin )
     {
     	SponsoredLinkSet set = _daoSet.load( nKey, plugin );
-    	set.addAllLink( _daoLink.selectAllBySet( nKey, plugin ) );
+    	set.setSponsoredLinkList( _daoLink.selectAllBySet( nKey, plugin ) );
     	return set;
     }
     
@@ -104,10 +144,10 @@ public class SponsoredLinkSetHome
     }
     
     /**
-     * Returns all stored SponsoredLinkSet objects
-     * 
+     * Returns sets that are linked to the specified group
+     * @param groupId The id of the referenced SponsoredLinkGroup object
      * @param plugin The Plugin object
-     * @return A collection of all sets
+     * @return A collection of found SponsoredLinkSet objects
      */
     public static Collection<SponsoredLinkSet> findByGroupId( int groupId, Plugin plugin )
     {

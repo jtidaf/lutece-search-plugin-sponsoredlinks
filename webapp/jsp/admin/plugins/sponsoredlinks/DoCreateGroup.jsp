@@ -1,3 +1,5 @@
+<%@ page errorPage="../../ErrorPage.jsp" %>
+
 <jsp:useBean id="sponsoredlinks" scope="session" class="fr.paris.lutece.plugins.sponsoredlinks.web.SponsoredLinksJspBean" />
 
 <% 
