@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,6 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class SponsoredLinkSet
 	 * 
 	 * @return the list of links in this set
 	 */
-	public Collection<SponsoredLink> getSponsoredLinkList(  )
+	public List<SponsoredLink> getSponsoredLinkList(  )
 	{
 		return _sponsoredLinkList;
 	}
@@ -101,10 +100,10 @@ public class SponsoredLinkSet
 	 * Sets the list of links in this set
 	 * @param links A Collection of SponsoredLink
 	 */
-	public void setSponsoredLinkList( Collection<SponsoredLink> links )
+	public void setSponsoredLinkList( List<SponsoredLink> links )
 	{
 		
-		_sponsoredLinkList = (List<SponsoredLink>) links;
+		_sponsoredLinkList = links;
 		Collections.sort( _sponsoredLinkList );
 	}
 

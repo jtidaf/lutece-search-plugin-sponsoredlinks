@@ -48,12 +48,12 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
 {
 	//Constants
 	private static final String SQL_QUERY_NEWPK = "SELECT max( id_template ) FROM sponsoredlinks_template";
-	private static final String SQL_QUERY_SELECT = "SELECT id_template, description, id_resource FROM sponsoredlinks_template WHERE id_template = ? ";
-	private static final String SQL_QUERY_SELECTALL = "SELECT id_template, description, id_resource FROM sponsoredlinks_template ORDER BY id_template ASC";
-    private static final String SQL_QUERY_SELECT_BY_RESOURCE_TYPE = "SELECT id_template, description, id_resource FROM sponsoredlinks_template WHERE id_resource = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_template ( id_template, description, id_resource )  VALUES ( ?, ?, ? ) ";
+	private static final String SQL_QUERY_SELECT = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_template = ? ";
+	private static final String SQL_QUERY_SELECTALL = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template ORDER BY id_template ASC";
+    private static final String SQL_QUERY_SELECT_BY_RESOURCE_TYPE = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_insertservice = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_template ( id_template, description, id_insertservice )  VALUES ( ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_template WHERE id_template = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_template SET description = ? , id_resource = ?  WHERE id_template= ?  ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_template SET description = ? , id_insertservice = ?  WHERE id_template= ?  ";
 
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
@@ -92,7 +92,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         template.setOrder( newPrimaryKey( plugin ) );
         daoUtil.setInt( 1, template.getOrder(  ) );
         daoUtil.setString( 2, template.getDescription(  ) );
-        daoUtil.setString( 3, template.getLinkedResourceType(  ) );
+        daoUtil.setString( 3, template.getInsertService(  ).getId(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -114,7 +114,15 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             template = new SponsoredLinkTemplate(  );
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
-            template.setLinkedResourceType( daoUtil.getString( 3 ) );
+            template.setInsertService( daoUtil.getString( 3 ) );
+            //TODO: manage unavailable insertService
+            /*
+            if( template.setInsertService( daoUtil.getString( 3 ) ) == null)
+            {
+            	daoUtil.free(  );
+            	throw new InsertServiceNotAvailable( template );
+            }
+            */
         }
 
         daoUtil.free(  );
@@ -142,7 +150,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         int nSetId = template.getOrder(  );
 
         daoUtil.setString( 1, template.getDescription(  ) );
-        daoUtil.setString( 2, template.getLinkedResourceType(  ) );
+        daoUtil.setString( 2, template.getInsertService(  ).getId(  ) );
         daoUtil.setInt( 3, nSetId );
 
         daoUtil.executeUpdate(  );
@@ -163,7 +171,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             SponsoredLinkTemplate template = new SponsoredLinkTemplate(  );
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
-            template.setLinkedResourceType( daoUtil.getString( 3 ) );
+            template.setInsertService( daoUtil.getString( 3 ) );
             templateList.add( template );
         }
 
@@ -187,7 +195,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             SponsoredLinkTemplate template = new SponsoredLinkTemplate(  );
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
-            template.setLinkedResourceType( daoUtil.getString( 3 ) );
+            template.setInsertService( daoUtil.getString( 3 ) );
             templateList.add( template );
         }
 

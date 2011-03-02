@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -46,7 +46,6 @@ import fr.paris.lutece.util.sql.DAOUtil;
  */
 public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
 {
-	
 	// Constants
     private static final String SQL_QUERY_NEWPK = "SELECT max( id_group ) FROM sponsoredlinks_group ";
     private static final String SQL_QUERY_SELECT = "SELECT id_group, title, tags FROM sponsoredlinks_group WHERE id_group = ? ";

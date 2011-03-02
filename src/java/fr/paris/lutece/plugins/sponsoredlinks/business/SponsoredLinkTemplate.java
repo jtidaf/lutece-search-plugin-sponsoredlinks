@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,6 +33,9 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
+import fr.paris.lutece.portal.service.insert.InsertService;
+import fr.paris.lutece.portal.service.insert.InsertServiceManager;
+
 /**
  * 
  * class SponsoredLinkTemplate
@@ -45,7 +48,7 @@ public class SponsoredLinkTemplate
 	
 	private int _nOrder;
 	private String _strDescription;
-	private String _strLinkedResourceType;
+	private InsertService _insertService;
 	
 	/**
 	 * 
@@ -85,20 +88,44 @@ public class SponsoredLinkTemplate
 
 	/**
 	 * 
-	 * @return the name of the type of resource to link
+	 * @return the InsertService
 	 */
-	public String getLinkedResourceType(  )
+	public InsertService getInsertService(  )
 	{
-		return _strLinkedResourceType;
+		return _insertService;
 	}
 
 	/**
-	 * Sets the type of resource to link
-	 * @param linkedResourceType The name of the type of resource
+	 * Sets the InsertService of this template
+	 * @param insertService the InsertService to associate with this template
 	 */
-	public void setLinkedResourceType( String linkedResourceType )
+	public void setInsertService( InsertService insertService )
 	{
-		_strLinkedResourceType = linkedResourceType;
+		_insertService = insertService;
 	}
+	
+	/**
+	 * Sets the InsertService of this template from its identifier.
+	 * Sets null if there is no matching InsertService or if the InsertService 
+	 * is not enable 
+	 * @param strId the id of the InsertService to associate with this template
+	 * @return the InsertService if found and enabled, null otherwise
+	 */
+	public InsertService setInsertService( String strId )
+	{
+		InsertService insertService = InsertServiceManager.getInsertService( strId );
+				
+		if( insertService != null && insertService.isEnabled(  ) )
+		{
+    		 _insertService = insertService;
+		}
+		else
+		{
+			_insertService = null;
+		}
+		return _insertService;
+	}
+
+
 
 }

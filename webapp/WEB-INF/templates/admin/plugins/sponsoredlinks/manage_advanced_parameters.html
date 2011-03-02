@@ -1,0 +1,55 @@
+<div class="content-box" >
+    <h2>#i18n{sponsoredlinks.manage_advanced_parameters.tableLabel}</h2>
+
+    <table>
+    
+        <tr>
+            <th width="25%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleDescription}</th>
+            <th width="45%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleResourceType}</th>
+            <th width="20%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleOrder</th>
+            <th width="10%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleActions}</th>
+        </tr>
+        
+        <#list template_list as template >
+        <tr>
+            <td>
+                <a href="jsp/admin/plugins/sponsoredlinks/ModifyTemplate.jsp?id_template=${template.order}" class="bullet-link">
+                    ${template.description}
+                </a>
+            </td>
+            <td>
+            	${template.insertService.label}
+            </td>
+            <td>
+            	<form method="post" action="jsp/admin/plugins/sponsoredlinks/ModifyOrder.jsp">
+						<select id="new_order" name="new_order" >
+							<#list 1..template_list?size as i>
+								<#if template.order == i>
+					  				<option selected="selected" value="${i}" >${i}</option>
+					  			<#else>
+					  				<option value="${i}" >${i}</option>
+					  			</#if>
+							</#list>
+						</select>		        	
+	            	<input type="hidden" name="id_template" value="${template.order}" />
+		            <input class="button" type="submit" value="#i18n{sponsoredlinks.manage_advanced_parameters.actionModifyOrder}" />
+		         </form>
+            </td>
+            <td>
+		        <a href="jsp/admin/plugins/sponsoredlinks/RemoveTemplate.jsp?id_template=${template.order}">
+					<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}" title="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}">
+				</a>  
+            </td>
+        </tr>					
+        </#list>
+        
+    </table>
+    
+    <form method="post"  action="jsp/admin/plugins/sponsoredlinks/CreateTemplate.jsp">
+        <input type="submit" value="#i18n{sponsoredlinks.manage_group.buttonAddSet}" class="button bt-toolbar" />
+    </form>
+       
+</div>
+
+
+

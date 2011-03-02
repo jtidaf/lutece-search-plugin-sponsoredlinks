@@ -1,0 +1,26 @@
+<div class="content-box" >
+    
+    <h2>#i18n{sponsoredlinks.modify_group.tableLabel}</h2>
+    
+    <form method="post"  name="modify_group" id="modify_group" action="jsp/admin/plugins/sponsoredlinks/DoModifyTemplate.jsp"> 
+        <p>
+            <label for="description" >#i18n{sponsoredlinks.modify_template.labelDescription} * : </label> 
+            <input type="text" id="description" name="description" size="60" maxlength="50" value="${template.description}" />
+        </p>        
+        <p>
+            <label for="id_insertservice">#i18n{sponsoredlinks.modify_template.labelInsertService} * : </label>
+            <#list insertservice_list as insertservice>
+            	<#if ${insertservice.id} == ${template.id_insertservice}>
+            		<input checked type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id} />${insertservice.label}<#if insertservice_has_next><br /></#if>
+            	<#else/>
+            		<input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id} />${insertservice.label}<#if insertservice_has_next><br /></#if>
+            	</#if>
+            </#list>
+        </p>  
+        <p>
+        	<input type="hidden" id="order" name="order" value="${template.order}" />   
+            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" class="button" />
+        </p>     
+    </form>
+    
+</div>

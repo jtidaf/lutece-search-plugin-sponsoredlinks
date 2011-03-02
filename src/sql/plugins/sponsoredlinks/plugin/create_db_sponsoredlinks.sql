@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS sponsoredlinks_template;
 CREATE TABLE sponsoredlinks_template (
   id_template INT DEFAULT 0 NOT NULL,
   description VARCHAR(50) DEFAULT '' NOT NULL,
-  resource_type VARCHAR(100) DEFAULT '' NOT NULL,
+  id_insertservice VARCHAR(100) DEFAULT '' NOT NULL,
   PRIMARY KEY (id_template)
 );
 

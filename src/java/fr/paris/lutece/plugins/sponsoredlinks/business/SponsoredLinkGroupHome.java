@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,7 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 
 import java.util.Collection;
 
+import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -46,7 +47,10 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class SponsoredLinkGroupHome
 {
 	// Static variable pointed at the DAO instance
-    private static ISponsoredLinkGroupDAO _dao = (ISponsoredLinkGroupDAO) SpringContextService.getPluginBean( "sponsoredlinks", "sponsoredLinkGroupDAO" );
+    private static ISponsoredLinkGroupDAO _dao = 
+    	(ISponsoredLinkGroupDAO) SpringContextService.getPluginBean(
+    			SponsoredLinksPlugin.PLUGIN_NAME,
+    			ISponsoredLinkGroupDAO.SPRING_BEAN_ID );
     
     /**
      * Private constructor - this class need not be instantiated

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,7 +35,9 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 
 /**
  * 
- * class SponsoredLink
+ * class SponsoredLink.
+ * Note: this class has a natural ordering that is inconsistent with equals.
+ * See {@link #compareTo(SponsoredLink) compareTo}
  *
  */
 public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
@@ -80,6 +82,7 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 	}
 
 	/**
+	 * Defines the ordering of SponsoredLink object based on their {@link #getOrder() order}
 	 * @param otherLink the SponsoredLink to be compared
 	 * @return -1 if otherLink is greater, 0 if equal 1 otherwise
 	 */

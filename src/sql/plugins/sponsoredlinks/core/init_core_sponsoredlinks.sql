@@ -32,13 +32,3 @@ INSERT INTO core_admin_role_resource (rbac_id,role_key,resource_type,resource_id
 INSERT INTO core_user_role (role_key,id_user) VALUES ('sponsoredlinks_manager_admin',1);
 INSERT INTO core_user_role (role_key,id_user) VALUES ('sponsoredlinks_manager',1);
 INSERT INTO core_user_role (role_key,id_user) VALUES ('sponsoredlinks_manager',2);
-
---
--- Init  table core_admin_dashboard
---
-INSERT INTO core_admin_dashboard(dashboard_name, dashboard_column, dashboard_order) VALUES('sponsoredlinksAdminDashboardComponent', 1, 1);
-
---
--- Init  table core_dashboard
---
-INSERT INTO core_dashboard(dashboard_name, dashboard_column, dashboard_order) VALUES('SPONSOREDLINKS', 3, 1);

@@ -1,0 +1,21 @@
+<div class="content-box" >
+    
+    <h2>#i18n{sponsoredlinks.create_group.tableLabel}</h2>
+    
+    <form method="post"  name="create_group" id="create_group" action="jsp/admin/plugins/sponsoredlinks/DoCreateTemplate.jsp"> 
+        <p>
+            <label for="description" >#i18n{sponsoredlinks.create_template.labelDescription} * : </label> 
+            <input type="text" id="description" name="description" size="60" maxlength="50" />
+        </p>        
+        <p>
+            <label for="id_insertservice">#i18n{sponsoredlinks.create_template.labelInsertService} * : </label>
+            <#list insertservice_list as insertservice>
+            	<input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id} />${insertservice.label}<#if insertservice_has_next><br/></#if>
+            </#list>
+        </p>  
+        <p>   
+            <input type="submit" value="#i18n{sponsoredlinks.create_group.buttonValidate}" class="button" />
+        </p>     
+    </form>
+    
+</div>

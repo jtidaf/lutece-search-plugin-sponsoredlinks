@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,7 +47,10 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
 public final class SponsoredLinkTemplateHome
 {
 	//Static variable pointed at the DAO instance
-	private static ISponsoredLinkTemplateDAO _dao = (ISponsoredLinkTemplateDAO) SpringContextService.getPluginBean( "sponsoredlinks", "sponsoredLinkTemplateDAO" );
+	private static ISponsoredLinkTemplateDAO _dao = 
+		(ISponsoredLinkTemplateDAO) SpringContextService.getPluginBean( 
+				SponsoredLinksPlugin.PLUGIN_NAME,
+				ISponsoredLinkTemplateDAO.SPRING_BEAN_ID );
 
 	/**
 	 * Private constructor - this class need not be instantiated
@@ -92,7 +95,7 @@ public final class SponsoredLinkTemplateHome
      * 
      * @param template The template to update order
      * @param nNewOrder the new order for the template
-     * @param plugin
+     * @param plugin the Plugin object
      * @return the template updated to the new order
      * @throws IndexOutOfBoundsException if  the new order parameter is less than 1 or greater than the current max order
      */
@@ -131,7 +134,7 @@ public final class SponsoredLinkTemplateHome
     	template.setOrder( nNewOrder );
     	_dao.store( template, plugin );
     	
-    	//TODO: update of link sets consequently
+    	//TODO: update link sets consequently
     	
     	return template;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2002-2011, Mairie de Paris
+ * Copyright (c) 2002-2010, Mairie de Paris
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,9 @@
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
 import java.util.Collection;
+import java.util.List;
 
+import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksPlugin;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 
@@ -45,9 +47,15 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public final class SponsoredLinkSetHome
 {
-	// Static variable pointed at the DAO instance
-	private static ISponsoredLinkSetDAO _daoSet = (ISponsoredLinkSetDAO) SpringContextService.getPluginBean( "sponsoredlinks", "sponsoredLinkSetDAO" );
-	private static ISponsoredLinkDAO _daoLink = (ISponsoredLinkDAO) SpringContextService.getPluginBean( "sponsoredlinks", "sponsoredLinkDAO" );
+	// Static variables pointed at the DAO instances
+	private static ISponsoredLinkSetDAO _daoSet = 
+		(ISponsoredLinkSetDAO) SpringContextService.getPluginBean(
+				SponsoredLinksPlugin.PLUGIN_NAME,
+				ISponsoredLinkSetDAO.SPRING_BEAN_ID );
+	private static ISponsoredLinkDAO _daoLink =
+		(ISponsoredLinkDAO) SpringContextService.getPluginBean(
+				SponsoredLinksPlugin.PLUGIN_NAME,
+				ISponsoredLinkDAO.SPRING_BEAN_ID );
 
 	/**
      * Private constructor - this class need not be instantiated
@@ -128,7 +136,7 @@ public final class SponsoredLinkSetHome
     public static SponsoredLinkSet findByPrimaryKey( int nKey, Plugin plugin )
     {
     	SponsoredLinkSet set = _daoSet.load( nKey, plugin );
-    	set.setSponsoredLinkList( _daoLink.selectAllBySet( nKey, plugin ) );
+    	set.setSponsoredLinkList( (List<SponsoredLink>) _daoLink.selectAllBySet( nKey, plugin ) );
     	return set;
     }
     
