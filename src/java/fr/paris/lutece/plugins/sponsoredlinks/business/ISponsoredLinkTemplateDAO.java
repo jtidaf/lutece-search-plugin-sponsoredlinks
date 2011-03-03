@@ -37,10 +37,15 @@ import java.util.Collection;
 
 import fr.paris.lutece.portal.service.plugin.Plugin;
 
+/**
+ * 
+ * ISponsoredLinkTemplateDAO
+ *
+ */
 public interface ISponsoredLinkTemplateDAO
 {
 	/** Unique id for spring bean declaration in the plugin context */
-	public static final String SPRING_BEAN_ID = "sponsoredLinkTemplateDAO";
+	static final String SPRING_BEAN_ID = "sponsoredLinkTemplateDAO";
 	
 	/**
      * Generates a new primary key

@@ -6,7 +6,7 @@
         <tr>
             <th width="25%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleDescription}</th>
             <th width="45%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleResourceType}</th>
-            <th width="20%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleOrder</th>
+            <th width="20%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleOrder}</th>
             <th width="10%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleActions}</th>
         </tr>
         
@@ -21,7 +21,7 @@
             	${template.insertService.label}
             </td>
             <td>
-            	<form method="post" action="jsp/admin/plugins/sponsoredlinks/ModifyOrder.jsp">
+            	<form method="post" action="jsp/admin/plugins/sponsoredlinks/DoModifyTemplateOrder.jsp">
 						<select id="new_order" name="new_order" >
 							<#list 1..template_list?size as i>
 								<#if template.order == i>
@@ -36,7 +36,7 @@
 		         </form>
             </td>
             <td>
-		        <a href="jsp/admin/plugins/sponsoredlinks/RemoveTemplate.jsp?id_template=${template.order}">
+		        <a href="jsp/admin/plugins/sponsoredlinks/RemoveTemplate.jsp?id_template=${template.order}&description=${template.description}">
 					<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}" title="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}">
 				</a>  
             </td>
@@ -46,7 +46,7 @@
     </table>
     
     <form method="post"  action="jsp/admin/plugins/sponsoredlinks/CreateTemplate.jsp">
-        <input type="submit" value="#i18n{sponsoredlinks.manage_group.buttonAddSet}" class="button bt-toolbar" />
+        <input type="submit" value="#i18n{sponsoredlinks.manage_advanced_parameters.buttonAddTemplate}" class="button bt-toolbar" />
     </form>
        
 </div>

@@ -58,9 +58,11 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#newPrimaryKey(fr.paris.lutece.portal.service.plugin.Plugin)
-	 */
+    /**
+     * Generates a new primary key
+     * @param plugin the Plugin using this data access service
+     * @return the new primary key
+     */
     public int newPrimaryKey( Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_NEWPK, plugin );
@@ -83,8 +85,10 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     
     ////////////////////////////////////////////////////////////////////////
     // Methods using a dynamic pool
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#insert(fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplate, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+	 * Insert a new record in the table.
+	 * @param template the SponsoredLinkTemplate object to insert
+	 * @param plugin the Plugin using this data access service
 	 */
     public void insert( SponsoredLinkTemplate template, Plugin plugin )
     {
@@ -98,8 +102,11 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.free(  );
     }
     
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#load(int, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+	 * Load the data of the template whose id is specified
+	 * @param nId the identifier of the SponsoredLinkTemplate object to load
+	 * @param plugin the Plugin using this data access service
+	 * @return the instance of the loaded SponsoredLinkTemplate object
 	 */
     public SponsoredLinkTemplate load( int nId, Plugin plugin )
     {
@@ -130,8 +137,10 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         return template;
     }
     
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#delete(fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplate, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+	 * Delete a record from the table
+	 * @param template the SponsoredLinkTemplate object to delete form table
+	 * @param plugin the Plugin using this data access service
 	 */
     public void delete( SponsoredLinkTemplate template, Plugin plugin )
     {
@@ -141,8 +150,10 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.free(  );
     }
     
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#store(fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplate, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+	 * Update the record in the table
+	 * @param template the reference of the SponsoredLinkTemplate object to store
+	 * @param plugin The Plugin object
 	 */
     public void store( SponsoredLinkTemplate template, Plugin plugin )
     {
@@ -157,8 +168,10 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.free(  );
     }
     
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#selectAll(fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+	 * Load the list of templates
+	 * @param plugin The Plugin object
+	 * @return A Collection of SponsoredLinkTemplate objects
 	 */
     public Collection<SponsoredLinkTemplate> selectAll( Plugin plugin )
     {
@@ -180,8 +193,11 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         return templateList;
     }
 
-    /* (non-Javadoc)
-	 * @see fr.paris.lutece.plugins.sponsoredlinks.business.ISponsoredLinkTemplateDAO#selectByResourceType(java.lang.String, fr.paris.lutece.portal.service.plugin.Plugin)
+    /**
+	 * Select template linked to the specified resource type
+	 * @param strResourceType The id of the linked resource type
+	 * @param plugin The Plugin
+	 * @return A Collection of found SponsoredLinkTemplate objects
 	 */
     public Collection<SponsoredLinkTemplate> selectByResourceType( String strResourceType , Plugin plugin )
     {

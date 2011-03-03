@@ -45,7 +45,7 @@ import fr.paris.lutece.portal.service.plugin.Plugin;
 public interface ISponsoredLinkGroupDAO
 {
 	/** Unique id for spring bean declaration in the plugin context */
-	public static final String SPRING_BEAN_ID = "sponsoredLinkGroupDAO";
+	static final String SPRING_BEAN_ID = "sponsoredLinkGroupDAO";
 	
 	/**
 	 * Insert a new record in the table.

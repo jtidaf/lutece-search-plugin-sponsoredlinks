@@ -124,18 +124,19 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 	private static final String PARAMETER_TEMPLATE_DESCRIPTION = "description";
 	private static final String PARAMETER_TEMPLATE_ID = "id_template";
 	private static final String PARAMETER_TEMPLATE_INSERTSERVICE_ID = "id_insertservice";
+	private static final String PARAMETER_TEMPLATE_NEWORDER = "new_order";
 	
 	//properties
 	private static final String PROPERTY_ITEM_PER_PAGE = "sponsoredlinks.itemsPerPage";
 	private static final String PROPERTY_PAGE_TITLE_CREATE_GROUP = "sponsoredlinks.create_group.title";
 	private static final String PROPERTY_PAGE_TITLE_CREATE_SET = "sponsoredlinks.create_set.title";
-	private static final String PROPERTY_PAGE_TITLE_MODIFY_TEMPLATE = "sponsoredlinks.create_template.title";
 	private static final String PROPERTY_PAGE_TITLE_CREATE_TEMPLATE = "sponsoredlinks.create_template.title";
 	private static final String PROPERTY_PAGE_TITLE_MANAGE_ADVANCED_PARAMETERS = "sponsoredlinks.manage_advanced_parameters.title";
 	private static final String PROPERTY_PAGE_TITLE_MANAGE_GROUP = "sponsoredlinks.manage_group.title";
 	private static final String PROPERTY_PAGE_TITLE_MANAGE_SET = "sponsoredlinks.manage_set.title";
 	private static final String PROPERTY_PAGE_TITLE_MODIFY_GROUP = "sponsoredlinks.modify_group.title";
 	private static final String PROPERTY_PAGE_TITLE_MODIFY_SET = "sponsoredlinks.modify_set.title";
+	private static final String PROPERTY_PAGE_TITLE_MODIFY_TEMPLATE = "sponsoredlinks.modify_template.title";
 	    
 	//templates
 	private static final String TEMPLATE_CREATE_GROUP = "admin/plugins/sponsoredlinks/create_group.html";
@@ -888,6 +889,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         
         SponsoredLinkTemplateHome.create( linkTemplate, getPlugin(  ) );
         
+        //TODO: Add a empty link in every set
+        
 		return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
     }
     
@@ -925,8 +928,19 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 		catch ( NullPointerException e )
 		{
 		}
-
+		
     	Collection<InsertService> listInsertService = InsertServiceManager.getInsertServicesList(  );
+    	
+    	for( InsertService insertService : listInsertService )
+    	{
+    		try
+    		{
+    			insertService.setLocale( getLocale(  ) );
+    		}
+    		catch ( NullPointerException e )
+    		{
+    		}
+    	}
     	
     	Map<String, Object> model = new HashMap<String, Object>(  );
     	  	
@@ -968,6 +982,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         }
     	
         SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( Integer.parseInt( strTemplateId ), getPlugin(  ) );
+        //TODO: If InsertServiceId has changed delete matching link in sets
         linkTemplate.setDescription( strDescription );
         linkTemplate.setInsertService( strInsertServiceId );
         
@@ -975,6 +990,105 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         
 		return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
     }
+    
+    /**
+     * Ask a confirmation for link template removal
+     *
+     * @param request The Http request
+     * @return the html code of the confirmation page 
+     */
+    public String getConfirmRemoveTemplate ( HttpServletRequest request )
+    {
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_TEMPLATE_ID ) );
+    	
+    	UrlItem url = new UrlItem( JSP_DO_REMOVE_TEMPLATE );
+    	url.addParameter( PARAMETER_TEMPLATE_ID, nId );
+    	
+    	Object[] args = { request.getParameter( PARAMETER_TEMPLATE_DESCRIPTION ) };
+    	
+    	String strMessageKey = MESSAGE_CONFIRM_REMOVE_TEMPLATE;
+
+    	return AdminMessageService.getMessageUrl( request, strMessageKey, args, url.getUrl(  ),
+                AdminMessage.TYPE_CONFIRMATION );
+    	
+    }
+    
+    /**
+     * Treats the removal of a sponsoredlinktemplate
+     * 
+     * @param request The http request
+     * @return The jsp URL to display the manage advanced parameters page
+     */
+    public String doRemoveTemplate( HttpServletRequest request )
+    {
+    	if ( !RBACService.isAuthorized( 
+    			SponsoredLinkGroup.RESOURCE_TYPE,
+    			RBAC.WILDCARD_RESOURCES_ID, 
+    			SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS,
+    			getUser(  ) ) )
+    	{
+    		return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
+    	}
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_TEMPLATE_ID ) );
+    	 	
+    	SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( nId, getPlugin(  ) );
+    	
+    	//TODO: update sets
+    	SponsoredLinkTemplateHome.remove( linkTemplate, getPlugin(  ) );
+    	    	
+    	return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
+    }
+    
+    /**
+     * Ask a confirmation for link template order modification
+     *
+     * @param request The Http request
+     * @return the html code of the confirmation page 
+     */
+    public String getConfirmChangeTemplateOrder ( HttpServletRequest request )
+    {
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_TEMPLATE_ID ) );
+    	
+    	UrlItem url = new UrlItem( JSP_DO_REMOVE_TEMPLATE );
+    	url.addParameter( PARAMETER_TEMPLATE_ID, nId );
+    	
+    	Object[] args = { request.getParameter( PARAMETER_TEMPLATE_DESCRIPTION ) };
+    	
+    	String strMessageKey = MESSAGE_CONFIRM_REMOVE_TEMPLATE;
+
+    	return AdminMessageService.getMessageUrl( request, strMessageKey, args, url.getUrl(  ),
+                AdminMessage.TYPE_CONFIRMATION );
+    	
+    }
+    
+    /**
+     * Treats the removal of a sponsoredlinktemplate
+     * 
+     * @param request The http request
+     * @return The jsp URL to display the manage advanced parameters page
+     */
+    public String doModifyTemplateOrder( HttpServletRequest request )
+    {
+    	if ( !RBACService.isAuthorized( 
+    			SponsoredLinkGroup.RESOURCE_TYPE,
+    			RBAC.WILDCARD_RESOURCES_ID, 
+    			SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS,
+    			getUser(  ) ) )
+    	{
+    		return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
+    	}
+    	int nId = Integer.parseInt( request.getParameter( PARAMETER_TEMPLATE_ID ) );
+    	int nNeworder = Integer.parseInt( request.getParameter( PARAMETER_TEMPLATE_NEWORDER ) );
+    	 	
+    	SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( nId, getPlugin(  ) );
+    	
+    	//TODO: update sets
+    	SponsoredLinkTemplateHome.updateOrder( linkTemplate, nNeworder, getPlugin(  ) );
+    	    	
+    	return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
+    }
+    
+    
 }
 
 
