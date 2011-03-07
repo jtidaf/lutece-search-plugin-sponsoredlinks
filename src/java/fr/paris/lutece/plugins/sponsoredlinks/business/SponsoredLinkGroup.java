@@ -33,72 +33,71 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
+
 /**
- * 
+ *
  * class SponsoredLinkGroup
  *
  */
 public class SponsoredLinkGroup
 {
-	/** Unique name of the resource type implemented by this class */
-	public static final String RESOURCE_TYPE = "SPONSOREDLINKS_GROUP_TYPE";
-	
-	private int _nId;
-	private String _strTitle;
-	private String _strTags;
-	
-	
-	/**
-	 * 
-	 * @return the id of this group
-	 */
-	public int getId(  )
-	{
-		return _nId;
-	}
-	
-	/**
-	 * Sets the id of this group
-	 * @param id The id
-	 */
-	public void setId( int id )
-	{
-		_nId = id;
-	}
-	
-	/**
-	 * 
-	 * @return the title of this group
-	 */
-	public String getTitle(  )
-	{
-		return _strTitle;
-	}
+    /** Unique name of the resource type implemented by this class */
+    public static final String RESOURCE_TYPE = "SPONSOREDLINKS_GROUP_TYPE";
+    private int _nId;
+    private String _strTitle;
+    private String _strTags;
 
-	/**
-	 * Sets the title of this group
-	 * @param title The title
-	 */
-	public void setTitle( String title )
-	{
-		this._strTitle = title;
-	}
+    /**
+     *
+     * @return the id of this group
+     */
+    public int getId(  )
+    {
+        return _nId;
+    }
 
-	/**
-	 * 
-	 * @return the tags of this group
-	 */
-	public String getTags(  )
-	{
-		return _strTags;
-	}
+    /**
+     * Sets the id of this group
+     * @param id The id
+     */
+    public void setId( int id )
+    {
+        _nId = id;
+    }
 
-	/**
-	 * Sets the tags of this group
-	 * @param tags The tags
-	 */
-	public void setTags( String tags )
-	{
-		this._strTags = tags;
-	}
+    /**
+     *
+     * @return the title of this group
+     */
+    public String getTitle(  )
+    {
+        return _strTitle;
+    }
+
+    /**
+     * Sets the title of this group
+     * @param title The title
+     */
+    public void setTitle( String title )
+    {
+        this._strTitle = title;
+    }
+
+    /**
+     *
+     * @return the tags of this group
+     */
+    public String getTags(  )
+    {
+        return _strTags;
+    }
+
+    /**
+     * Sets the tags of this group
+     * @param tags The tags
+     */
+    public void setTags( String tags )
+    {
+        this._strTags = tags;
+    }
 }

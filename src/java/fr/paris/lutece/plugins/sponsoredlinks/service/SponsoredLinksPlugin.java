@@ -35,14 +35,14 @@ package fr.paris.lutece.plugins.sponsoredlinks.service;
 
 import fr.paris.lutece.portal.service.plugin.PluginDefaultImplementation;
 
+
 /**
- * 
+ *
  * class for the sponsoredlinks plugin
  *
  */
 public class SponsoredLinksPlugin extends PluginDefaultImplementation
 {
-	/** Unique name of the plugin */
+    /** Unique name of the plugin */
     public static final String PLUGIN_NAME = "sponsoredlinks";
-
 }

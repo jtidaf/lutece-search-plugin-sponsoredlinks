@@ -33,30 +33,34 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.service;
 
-import java.util.Locale;
-
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet;
+import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSetHome;
+import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.rbac.Permission;
 import fr.paris.lutece.portal.service.rbac.ResourceIdService;
 import fr.paris.lutece.portal.service.rbac.ResourceType;
 import fr.paris.lutece.portal.service.rbac.ResourceTypeManager;
+import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.util.ReferenceList;
 
+import java.util.Locale;
+
+
 /**
- * 
+ *
  * class SponsoredLinksSetResourceIdService
  *
  */
 public class SponsoredLinksSetResourceIdService extends ResourceIdService
 {
-	
-	/** Permission to create a set */
+    /** Permission to create a set */
     public static final String PERMISSION_CREATE_SET = "CREATE_SET";
+
     /** Permission to modify a set */
     public static final String PERMISSION_MODIFY_SET = "MODIFY_SET";
+
     /** Permission to delete a set */
     public static final String PERMISSION_DELETE_SET = "DELETE_SET";
-    
 
     /**Labels*/
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "sponsoredlinks.permission.label.resourceType.set";
@@ -67,49 +71,79 @@ public class SponsoredLinksSetResourceIdService extends ResourceIdService
     /** Creates a new instance of SponsoredLinksSetResourceIdService */
     public SponsoredLinksSetResourceIdService(  )
     {
-    	setPluginName( SponsoredLinksPlugin.PLUGIN_NAME );
+        setPluginName( SponsoredLinksPlugin.PLUGIN_NAME );
     }
-    
-	@Override
-	public ReferenceList getResourceIdList(Locale arg0) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public String getTitle(String arg0, Locale arg1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
-     * Initializes the service
+    /**
+     * Returns a list of SponsoredLinkSet resource ids
+     * @param locale the current locale
+     * @return a ReferenceList of resource ids
      */
-	public void register(  )
-	{
-		ResourceType rt = new ResourceType(  );
+    public ReferenceList getResourceIdList( Locale locale )
+    {
+        return SponsoredLinkSetHome.findReferenceList( PluginService.getPlugin( getPluginName(  ) ) );
+    }
+
+    /**
+     * Returns the title of a given resource
+     * @param strId the id of the requested resource
+     * @param locale the current locale
+     * @return the requested title
+     */
+    public String getTitle( String strId, Locale locale )
+    {
+        int nSetId;
+
+        try
+        {
+            nSetId = Integer.parseInt( strId );
+        }
+        catch ( NumberFormatException ne )
+        {
+            AppLogService.error( ne );
+
+            return null;
+        }
+
+        SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( nSetId,
+                PluginService.getPlugin( getPluginName(  ) ) );
+
+        if ( set == null )
+        {
+            return null;
+        }
+        else
+        {
+            return set.getTitle(  );
+        }
+    }
+
+    /**
+    * Initializes the service
+    */
+    public void register(  )
+    {
+        ResourceType rt = new ResourceType(  );
         rt.setResourceIdServiceClass( SponsoredLinksSetResourceIdService.class.getName(  ) );
         rt.setPluginName( SponsoredLinksPlugin.PLUGIN_NAME );
         rt.setResourceTypeKey( SponsoredLinkSet.RESOURCE_TYPE );
         rt.setResourceTypeLabelKey( PROPERTY_LABEL_RESOURCE_TYPE );
-        
+
         Permission p = new Permission(  );
         p.setPermissionKey( PERMISSION_CREATE_SET );
         p.setPermissionTitleKey( PROPERTY_LABEL_CREATE_SET );
         rt.registerPermission( p );
-        
+
         p = new Permission(  );
         p.setPermissionKey( PERMISSION_MODIFY_SET );
         p.setPermissionTitleKey( PROPERTY_LABEL_MODIFY_SET );
         rt.registerPermission( p );
-        
+
         p = new Permission(  );
         p.setPermissionKey( PERMISSION_DELETE_SET );
         p.setPermissionTitleKey( PROPERTY_LABEL_DELETE_SET );
         rt.registerPermission( p );
-        
-        ResourceTypeManager.registerResourceType( rt );
-		
-	}
 
+        ResourceTypeManager.registerResourceType( rt );
+    }
 }

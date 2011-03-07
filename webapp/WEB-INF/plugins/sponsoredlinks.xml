@@ -28,7 +28,7 @@
             <feature-level>2</feature-level>
             <feature-url>jsp/admin/plugins/sponsoredlinks/ManageSponsoredLinks.jsp</feature-url>
             <feature-icon-url>images/admin/skin/plugins/sponsoredlinks/sponsoredlinks.png</feature-icon-url>
-            <feature-documentation-url>jsp/admin/documentation/AdminDocumentation.jsp?doc=admin-sponsoredlinks</feature-documentation-url>
+<!--            <feature-documentation-url>jsp/admin/documentation/AdminDocumentation.jsp?doc=admin-sponsoredlinks</feature-documentation-url>-->
         </admin-feature>
     </admin-features>
     
@@ -58,5 +58,10 @@
                 fr.paris.lutece.plugins.sponsoredlinks.service.search.SponsoredLinkGroupIndexer
             </search-indexer-class>
         </search-indexer>
-    </search-indexers>    
+    </search-indexers>   
+    
+    <!--  Specific plugin CSS stylesheet   --> 
+    <css-stylesheets>
+<!--          <css-stylesheet>sponsoredlinks/sponsoredlinks.css</css-stylesheet>-->
+    </css-stylesheets> 
 </plug-in>

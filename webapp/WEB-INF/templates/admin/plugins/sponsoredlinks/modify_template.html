@@ -5,7 +5,7 @@ div.form-entry
 	margin: 0 0 0 10px;
 }
 
-.form-entry ul
+div.form-entry ul
 {
 	margin: 0 0 0 30%;
 	padding: 0 0 0 5px;
@@ -23,11 +23,11 @@ div.form-entry
             <label for="description" >#i18n{sponsoredlinks.modify_template.labelDescription} * : </label> 
             <input type="text" id="description" name="description" size="60" maxlength="50" value="${template.description}" />
         </p>        
-        <div class="form-entry">
+        <div class="sponsoredlinks-form-entry">
             <label for="id_insertservice">#i18n{sponsoredlinks.modify_template.labelInsertService} * : </label>
             <ul>
             <#list insertservice_list as insertservice>
-            	<#if template.insertservice?exists && insertservice.id == template.insertservice.id>
+            	<#if template.insertService?exists && insertservice.id == template.insertService.id>
             		<li><input checked type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}" />&nbsp;${insertservice.label}</li>
             	<#else/>
             		<li><input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}" />&nbsp;${insertservice.label}</li>

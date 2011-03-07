@@ -36,96 +36,94 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 import fr.paris.lutece.portal.service.insert.InsertService;
 import fr.paris.lutece.portal.service.insert.InsertServiceManager;
 
+
 /**
- * 
+ *
  * class SponsoredLinkTemplate
  *
  */
 public class SponsoredLinkTemplate
 {
-	/** Unique name of the resource type implemented by this class */
-	public static final String RESOURCE_TYPE = "SPONSOREDLINKS_TEMPLATE_TYPE";
-	
-	private int _nOrder;
-	private String _strDescription;
-	private InsertService _insertService;
-	
-	/**
-	 * 
-	 * @return the order of the link in the set
-	 */
-	public int getOrder(  )
-	{
-		return _nOrder;
-	}
+    /** Unique name of the resource type implemented by this class */
+    public static final String RESOURCE_TYPE = "SPONSOREDLINKS_TEMPLATE_TYPE";
+    private int _nOrder;
+    private String _strDescription;
+    private InsertService _insertService;
 
-	/**
-	 * Sets the order of the link in the set
-	 * @param order The order
-	 */
-	public void setOrder( int order )
-	{
-		_nOrder = order;
-	}
+    /**
+     *
+     * @return the order of the link in the set
+     */
+    public int getOrder(  )
+    {
+        return _nOrder;
+    }
 
-	/**
-	 * 
-	 * @return a description of the link
-	 */
-	public String getDescription(  )
-	{
-		return _strDescription;
-	}
+    /**
+     * Sets the order of the link in the set
+     * @param order The order
+     */
+    public void setOrder( int order )
+    {
+        _nOrder = order;
+    }
 
-	/**
-	 * Sets a description of the link
-	 * @param description A description
-	 */
-	public void setDescription( String description )
-	{
-		_strDescription = description;
-	}
+    /**
+     *
+     * @return a description of the link
+     */
+    public String getDescription(  )
+    {
+        return _strDescription;
+    }
 
-	/**
-	 * 
-	 * @return the InsertService
-	 */
-	public InsertService getInsertService(  )
-	{
-		return _insertService;
-	}
+    /**
+     * Sets a description of the link
+     * @param description A description
+     */
+    public void setDescription( String description )
+    {
+        _strDescription = description;
+    }
 
-	/**
-	 * Sets the InsertService of this template
-	 * @param insertService the InsertService to associate with this template
-	 */
-	public void setInsertService( InsertService insertService )
-	{
-		_insertService = insertService;
-	}
-	
-	/**
-	 * Sets the InsertService of this template from its identifier.
-	 * Sets null if there is no matching InsertService or if the InsertService 
-	 * is not enable 
-	 * @param strId the id of the InsertService to associate with this template
-	 * @return the InsertService if found and enabled, null otherwise
-	 */
-	public InsertService setInsertService( String strId )
-	{
-		InsertService insertService = InsertServiceManager.getInsertService( strId );
-				
-		if( insertService != null && insertService.isEnabled(  ) )
-		{
-    		 _insertService = insertService;
-		}
-		else
-		{
-			_insertService = null;
-		}
-		return _insertService;
-	}
+    /**
+     *
+     * @return the InsertService
+     */
+    public InsertService getInsertService(  )
+    {
+        return _insertService;
+    }
 
+    /**
+     * Sets the InsertService of this template
+     * @param insertService the InsertService to associate with this template
+     */
+    public void setInsertService( InsertService insertService )
+    {
+        _insertService = insertService;
+    }
 
+    /**
+     * Sets the InsertService of this template from its identifier.
+     * Sets null if there is no matching InsertService or if the InsertService
+     * is not enable
+     * @param strId the id of the InsertService to associate with this template
+     * @return the InsertService if found and enabled, null otherwise
+     */
+    public InsertService setInsertService( String strId )
+    {
+        InsertService insertService = InsertServiceManager.getInsertService( strId );
 
+        if ( ( insertService != null ) && insertService.isEnabled(  ) )
+        {
+            _insertService = insertService;
+        }
+        else
+        {
+            _insertService = null;
+        }
+
+        return _insertService;
+    }
 }

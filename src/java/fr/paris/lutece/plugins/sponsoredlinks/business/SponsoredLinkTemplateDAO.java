@@ -33,23 +33,24 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+
 /**
- * 
+ *
  * This class provides Data Access methods for SponsoredLinkTemplate objects
  *
  */
 public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
 {
-	//Constants
-	private static final String SQL_QUERY_NEWPK = "SELECT max( id_template ) FROM sponsoredlinks_template";
-	private static final String SQL_QUERY_SELECT = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_template = ? ";
-	private static final String SQL_QUERY_SELECTALL = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template ORDER BY id_template ASC";
+    //Constants
+    private static final String SQL_QUERY_NEWPK = "SELECT max( id_template ) FROM sponsoredlinks_template";
+    private static final String SQL_QUERY_SELECT = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_template = ? ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template ORDER BY id_template ASC";
     private static final String SQL_QUERY_SELECT_BY_RESOURCE_TYPE = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_insertservice = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_template ( id_template, description, id_insertservice )  VALUES ( ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_template WHERE id_template = ? ";
@@ -82,14 +83,14 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
 
         return nKey;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////
     // Methods using a dynamic pool
     /**
-	 * Insert a new record in the table.
-	 * @param template the SponsoredLinkTemplate object to insert
-	 * @param plugin the Plugin using this data access service
-	 */
+         * Insert a new record in the table.
+         * @param template the SponsoredLinkTemplate object to insert
+         * @param plugin the Plugin using this data access service
+         */
     public void insert( SponsoredLinkTemplate template, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -101,13 +102,13 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
-	 * Load the data of the template whose id is specified
-	 * @param nId the identifier of the SponsoredLinkTemplate object to load
-	 * @param plugin the Plugin using this data access service
-	 * @return the instance of the loaded SponsoredLinkTemplate object
-	 */
+         * Load the data of the template whose id is specified
+         * @param nId the identifier of the SponsoredLinkTemplate object to load
+         * @param plugin the Plugin using this data access service
+         * @return the instance of the loaded SponsoredLinkTemplate object
+         */
     public SponsoredLinkTemplate load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -122,12 +123,13 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
             template.setInsertService( daoUtil.getString( 3 ) );
+
             //TODO: manage unavailable insertService
             /*
             if( template.setInsertService( daoUtil.getString( 3 ) ) == null)
             {
-            	daoUtil.free(  );
-            	throw new InsertServiceNotAvailable( template );
+                    daoUtil.free(  );
+                    throw new InsertServiceNotAvailable( template );
             }
             */
         }
@@ -136,12 +138,12 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
 
         return template;
     }
-    
+
     /**
-	 * Delete a record from the table
-	 * @param template the SponsoredLinkTemplate object to delete form table
-	 * @param plugin the Plugin using this data access service
-	 */
+         * Delete a record from the table
+         * @param template the SponsoredLinkTemplate object to delete form table
+         * @param plugin the Plugin using this data access service
+         */
     public void delete( SponsoredLinkTemplate template, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -149,12 +151,12 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
-	 * Update the record in the table
-	 * @param template the reference of the SponsoredLinkTemplate object to store
-	 * @param plugin The Plugin object
-	 */
+         * Update the record in the table
+         * @param template the reference of the SponsoredLinkTemplate object to store
+         * @param plugin The Plugin object
+         */
     public void store( SponsoredLinkTemplate template, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -167,12 +169,12 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
-	 * Load the list of templates
-	 * @param plugin The Plugin object
-	 * @return A Collection of SponsoredLinkTemplate objects
-	 */
+         * Load the list of templates
+         * @param plugin The Plugin object
+         * @return A Collection of SponsoredLinkTemplate objects
+         */
     public Collection<SponsoredLinkTemplate> selectAll( Plugin plugin )
     {
         Collection<SponsoredLinkTemplate> templateList = new ArrayList<SponsoredLinkTemplate>(  );
@@ -194,14 +196,14 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     }
 
     /**
-	 * Select template linked to the specified resource type
-	 * @param strResourceType The id of the linked resource type
-	 * @param plugin The Plugin
-	 * @return A Collection of found SponsoredLinkTemplate objects
-	 */
-    public Collection<SponsoredLinkTemplate> selectByResourceType( String strResourceType , Plugin plugin )
+         * Select template linked to the specified resource type
+         * @param strResourceType The id of the linked resource type
+         * @param plugin The Plugin
+         * @return A Collection of found SponsoredLinkTemplate objects
+         */
+    public Collection<SponsoredLinkTemplate> selectByResourceType( String strResourceType, Plugin plugin )
     {
-    	Collection<SponsoredLinkTemplate> templateList = new ArrayList<SponsoredLinkTemplate>(  );
+        Collection<SponsoredLinkTemplate> templateList = new ArrayList<SponsoredLinkTemplate>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_RESOURCE_TYPE, plugin );
         daoUtil.setString( 1, strResourceType );
         daoUtil.executeQuery(  );
@@ -216,8 +218,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         }
 
         daoUtil.free(  );
-        
+
         return templateList;
     }
-    
 }

@@ -33,8 +33,9 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
+
 /**
- * 
+ *
  * class SponsoredLink.
  * Note: this class has a natural ordering that is inconsistent with equals.
  * See {@link #compareTo(SponsoredLink) compareTo}
@@ -42,69 +43,68 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
  */
 public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 {
-	private int _nOrder;
-	private String _strUrl;
-	
-	/**
-	 * 
-	 * @return the order of the link in the set
-	 */
-	public int getOrder(  )
-	{
-		return _nOrder;
-	}
-	
-	/**
-	 * Sets the order of the link in the set
-	 * @param order The order in the set
-	 */
-	public void setOrder( int order )
-	{
-		_nOrder = order;
-	}
+    private int _nOrder;
+    private String _strUrl;
 
-	/**
-	 * 
-	 * @return the url of the link
-	 */
-	public String getUrl(  )
-	{
-		return _strUrl;
-	}
-	
-	/**
-	 * Sets the url of the link
-	 * @param url The url
-	 */
-	public void setUrl( String url )
-	{
-		this._strUrl = url;
-	}
+    /**
+     *
+     * @return the order of the link in the set
+     */
+    public int getOrder(  )
+    {
+        return _nOrder;
+    }
 
-	/**
-	 * Defines the ordering of SponsoredLink object based on their {@link #getOrder() order}
-	 * @param otherLink the SponsoredLink to be compared
-	 * @return -1 if otherLink is greater, 0 if equal 1 otherwise
-	 */
-	public int compareTo( SponsoredLink otherLink )
-	{
-		int otherOrder = otherLink.getOrder(  );
-		if ( otherOrder > _nOrder )
-		{
-			return -1;
-		}
-	    else
-	    {
-	    	if( otherOrder == _nOrder )
-	    	{
-	    		return 0;
-	    	} 
-		    else
-		    {
-		    	return 1;
-		    }
-	    }
-	    	
-	}
-		
+    /**
+     * Sets the order of the link in the set
+     * @param order The order in the set
+     */
+    public void setOrder( int order )
+    {
+        _nOrder = order;
+    }
+
+    /**
+     *
+     * @return the url of the link
+     */
+    public String getUrl(  )
+    {
+        return _strUrl;
+    }
+
+    /**
+     * Sets the url of the link
+     * @param url The url
+     */
+    public void setUrl( String url )
+    {
+        this._strUrl = url;
+    }
+
+    /**
+     * Defines the ordering of SponsoredLink object based on their {@link #getOrder() order}
+     * @param otherLink the SponsoredLink to be compared
+     * @return -1 if otherLink is greater, 0 if equal 1 otherwise
+     */
+    public int compareTo( SponsoredLink otherLink )
+    {
+        int otherOrder = otherLink.getOrder(  );
+
+        if ( otherOrder > _nOrder )
+        {
+            return -1;
+        }
+        else
+        {
+            if ( otherOrder == _nOrder )
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
+    }
 }

@@ -71,7 +71,7 @@ fieldset.set-form legend
     <h2>#i18n{sponsoredlinks.create_set.tableLabel}</h2>
     
     <form method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoModifySet.jsp">
-	<div class="set-form">    
+	<div class="sponsoredlinks-form">    
         <p>
             <label for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label> 
             <input type="text" id="title" name="title" size="60" maxlength="50" value="${set.title}" />
@@ -87,7 +87,7 @@ fieldset.set-form legend
             </select>
         </p>
     </div>
-    <fieldset class="set-form">
+    <fieldset class="sponsoredlinks-form">
     	<legend>#i18n{sponsoredlinks.create_set.labelLinkList}</legend>
     	<#list set.link_list as link>       
 	        <p>
@@ -103,16 +103,16 @@ fieldset.set-form legend
 		            </a>
 		        </p>
 	        	<p>
-	        		<label>&nbsp;</label><p id="advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}</p>
+	        		<label>&nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}</p>
 	        	<#else>
 		        	<textarea disabled type="text" id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
 		        </p>
 	        	<p>
-	        		<label>&nbsp;</label><p id="warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}</p>
+	        		<label>&nbsp;</label><p id="sponsoredlinks-warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}</p>
 		        </#if>
 	        </p>
     	</#list>
-	 	<p id="advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
+	 	<p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
 	</fieldset>   	
         <p>
         	<input type="hidden" name="id_set" value="${set.id}" />

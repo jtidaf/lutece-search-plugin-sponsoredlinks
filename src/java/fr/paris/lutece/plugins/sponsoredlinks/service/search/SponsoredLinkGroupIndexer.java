@@ -33,14 +33,6 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.service.search;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroupHome;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksPlugin;
@@ -52,51 +44,61 @@ import fr.paris.lutece.portal.service.search.SearchIndexer;
 import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+
 /**
- * 
+ *
  * Indexer Service for SponsoredLinks group of tags
  *
  */
 public class SponsoredLinkGroupIndexer implements SearchIndexer
 {
-	public static final String SHORT_NAME = "slg";
-	public static final String PROPERTY_INDEXER_NAME = "sponsoredLinksGroup.indexer.name";
-	private static final String ENABLE_VALUE_TRUE = "1";
-	
-    private static final String PROPERTY_INDEXER_DESCRIPTION = "sponsoredLinksGroup.indexer.description";
-    private static final String PROPERTY_INDEXER_VERSION = "sponsoredLinksGroup.indexer.version";
-    private static final String PROPERTY_INDEXER_ENABLE = "sponsoredLinksGroup.indexer.enable";
-    
+    public static final String PROPERTY_ITEM_TYPE = "sponsoredLinkGroup.type";
+    public static final String PROPERTY_INDEXER_NAME = "sponsoredLinkGroup.indexer.name";
+    private static final String ENABLE_VALUE_TRUE = "1";
+    private static final String PROPERTY_INDEXER_DESCRIPTION = "sponsoredLinkGroup.indexer.description";
+    private static final String PROPERTY_INDEXER_VERSION = "sponsoredLinkGroup.indexer.version";
+    private static final String PROPERTY_INDEXER_ENABLE = "sponsoredLinkGroup.indexer.enable";
+
     /**
      * Returns the indexer service description
-     * 
+     *
      * @return The indexer service description
      */
-	public String getDescription(  )
-	{
-		return AppPropertiesService.getProperty( PROPERTY_INDEXER_DESCRIPTION );
-	}
-	
-	/**
-     * {@inheritDoc}
-     */
-	public List<Document> getDocuments( String strId )
-			throws IOException, InterruptedException, SiteMessageException
-	{
-		ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<Document>(  );
+    public String getDescription(  )
+    {
+        return AppPropertiesService.getProperty( PROPERTY_INDEXER_DESCRIPTION );
+    }
+
+    /**
+    * {@inheritDoc}
+    */
+    public List<Document> getDocuments( String strId )
+        throws IOException, InterruptedException, SiteMessageException
+    {
+        ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<Document>(  );
         Plugin plugin = PluginService.getPlugin( SponsoredLinksPlugin.PLUGIN_NAME );
 
         SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( Integer.parseInt( strId ), plugin );
-        if( group != null )
+
+        if ( group != null )
         {
-            
             org.apache.lucene.document.Document docGroup = getDocument( group );
 
             listDocuments.add( docGroup );
         }
+
         return listDocuments;
-	}
-	
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -116,9 +118,8 @@ public class SponsoredLinkGroupIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-	public void indexDocuments() 
-			throws IOException, InterruptedException, SiteMessageException
-	{
+    public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
+    {
         Plugin plugin = PluginService.getPlugin( SponsoredLinksPlugin.PLUGIN_NAME );
 
         Collection<SponsoredLinkGroup> listGroups = SponsoredLinkGroupHome.findUsedGroupList( plugin );
@@ -128,15 +129,14 @@ public class SponsoredLinkGroupIndexer implements SearchIndexer
             Document docGroup = getDocument( group );
             IndexationService.write( docGroup );
         }
-		
-	}
-	
+    }
+
     /**
      * {@inheritDoc}
-     */	
-	public boolean isEnable(  )
-	{
-		boolean bReturn = false;
+     */
+    public boolean isEnable(  )
+    {
+        boolean bReturn = false;
         String strEnable = AppPropertiesService.getProperty( PROPERTY_INDEXER_ENABLE );
 
         if ( ( strEnable != null ) &&
@@ -147,27 +147,31 @@ public class SponsoredLinkGroupIndexer implements SearchIndexer
         }
 
         return bReturn;
-	}
-	
-	
-	/**
-	 * Builds an indexable document from the specified group (stores id indexes tags)
-	 * @param group The SponsoredLinkGroup to turn into a document
-	 * @return the built Document
-	 */
-	private Document getDocument( SponsoredLinkGroup group )
-	{
-		// make a new, empty document
-		Document doc = new Document(  );
-		
-		// Add the uid as a field, so that index can be incrementally maintained.
+    }
+
+    /**
+     * Builds an indexable document from the specified group (stores id indexes tags)
+     * @param group The SponsoredLinkGroup to turn into a document
+     * @return the built Document
+     */
+    private Document getDocument( SponsoredLinkGroup group )
+    {
+        // make a new, empty document
+        Document doc = new Document(  );
+
+        // Add the uid as a field, so that index can be incrementally maintained.
         // Use an UnIndexed field, so that the uid is just stored with the 
-		//question/answer, but is not searchable.
-		String strUidValue = group.getId(  ) + "_" + SHORT_NAME;
-		doc.add( new Field( SearchItem.FIELD_UID, strUidValue, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
-		doc.add( new Field( SearchItem.FIELD_CONTENTS, group.getTags(  ), Field.Store.NO, Field.Index.ANALYZED ) );
-		
-		//return the document	
-		return doc;
-	}
+        //question/answer, but is not searchable.
+        doc.add( new Field( SearchItem.FIELD_UID, String.valueOf( group.getId(  ) ), Field.Store.YES,
+                Field.Index.NOT_ANALYZED ) );
+
+        String strType = AppPropertiesService.getProperty( PROPERTY_ITEM_TYPE );
+        doc.add( new Field( SearchItem.FIELD_TYPE, strType, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TITLE, group.getTitle(  ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, group.getTags(  ), Field.Store.NO, Field.Index.ANALYZED ) );
+
+        //return the document	
+        return doc;
+    }
 }

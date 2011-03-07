@@ -33,27 +33,28 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+
 /**
- * 
+ *
  * This class provides Data Access methods for SponsoredLink objects
  *
  */
 public class SponsoredLinkDAO implements ISponsoredLinkDAO
 {
-	//Constants
-	private static final String SQL_QUERY_SELECTALL_BY_SET = "SELECT id_template, url FROM sponsoredlinks_link WHERE id_set = ? ORDER BY id_template ASC";
+    //Constants
+    private static final String SQL_QUERY_SELECTALL_BY_SET = "SELECT id_template, url FROM sponsoredlinks_link WHERE id_set = ? ORDER BY id_template ASC";
     private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_link ( id_set, id_template, url )  VALUES ( ?, ?, ? )";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_link WHERE id_set = ? and id_template = ? ";
     private static final String SQL_QUERY_DELETE_BY_SET = "DELETE FROM sponsoredlinks_link WHERE id_set = ? ";
     private static final String SQL_QUERY_DELETE_BY_TEMPLATE = "DELETE FROM sponsoredlinks_link WHERE id_template = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_link SET url = ? WHERE id_set = ? and id_template = ? ";
-    
+
     /**
      * Insert a new record in the table.
      * @param setId The id of the owning SponsoredLinkSet
@@ -70,7 +71,7 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Delete a record from the table
      * @param setId The id of the owning SponsoredLinkSet
@@ -85,7 +86,7 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Delete links owned by the specified SponsoredLinkSet
      * @param setId The id of the set
@@ -93,12 +94,12 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
      */
     public void deleteBySet( int setId, Plugin plugin )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_SET, plugin );
-    	daoUtil.setInt( 1, setId );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_SET, plugin );
+        daoUtil.setInt( 1, setId );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Delete links matching the specified SponsoredLinkTemplate
      * @param templateId The id of the template
@@ -106,8 +107,8 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
      */
     public void deleteByTemplate( int templateId, Plugin plugin )
     {
-    	DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_TEMPLATE, plugin );
-    	daoUtil.setInt( 1, templateId );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE_BY_TEMPLATE, plugin );
+        daoUtil.setInt( 1, templateId );
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
@@ -121,7 +122,6 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
     public void store( int setId, SponsoredLink link, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
-        
 
         daoUtil.setString( 1, link.getUrl(  ) );
         daoUtil.setInt( 2, setId );
@@ -156,5 +156,4 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
 
         return linkList;
     }
-
 }

@@ -36,93 +36,91 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
- * 
+ *
  * class SponsoredLinkSet
  *
  */
 public class SponsoredLinkSet
 {
-	/** Unique name of the resource type implemented by this class */
-	public static final String RESOURCE_TYPE = "SPONSOREDLINKS_SET_TYPE";
-	
-	private int _nId;
-	private String _strTitle;
-	private List<SponsoredLink> _sponsoredLinkList;
-	private int _nGroupId;
-	
-	/**
-	 * 
-	 * @return the id of this set
-	 */
-	public int getId(  )
-	{
-		return _nId;
-	}
-	
-	/**
-	 * Sets the id of this set
-	 * @param id The id
-	 */
-	public void setId( int id )
-	{
-		_nId = id;
-	}
+    /** Unique name of the resource type implemented by this class */
+    public static final String RESOURCE_TYPE = "SPONSOREDLINKS_SET_TYPE";
+    private int _nId;
+    private String _strTitle;
+    private List<SponsoredLink> _sponsoredLinkList;
+    private int _nGroupId;
 
-	/**
-	 * 
-	 * @return the title of this set
-	 */
-	public String getTitle(  )
-	{
-		return _strTitle;
-	}
+    /**
+     *
+     * @return the id of this set
+     */
+    public int getId(  )
+    {
+        return _nId;
+    }
 
-	/**
-	 * Sets the title of this set
-	 * @param title The title
-	 */
-	public void setTitle( String title )
-	{
-		_strTitle = title;
-	}
+    /**
+     * Sets the id of this set
+     * @param id The id
+     */
+    public void setId( int id )
+    {
+        _nId = id;
+    }
 
-	/**
-	 * 
-	 * @return the list of links in this set
-	 */
-	public List<SponsoredLink> getSponsoredLinkList(  )
-	{
-		return _sponsoredLinkList;
-	}
+    /**
+     *
+     * @return the title of this set
+     */
+    public String getTitle(  )
+    {
+        return _strTitle;
+    }
 
-	/**
-	 * Sets the list of links in this set
-	 * @param links A Collection of SponsoredLink
-	 */
-	public void setSponsoredLinkList( List<SponsoredLink> links )
-	{
-		
-		_sponsoredLinkList = links;
-		Collections.sort( _sponsoredLinkList );
-	}
+    /**
+     * Sets the title of this set
+     * @param title The title
+     */
+    public void setTitle( String title )
+    {
+        _strTitle = title;
+    }
 
-	/**
-	 * 
-	 * @return the id of the associated group of tags
-	 */
-	public int getGroupId(  )
-	{
-		return _nGroupId;
-	}
+    /**
+     *
+     * @return the list of links in this set
+     */
+    public List<SponsoredLink> getSponsoredLinkList(  )
+    {
+        return _sponsoredLinkList;
+    }
 
-	/**
-	 * Sets the id of the associated group of tags
-	 * @param groupId The id of a SponsoredLinkGroup
-	 */
-	public void setGroupId( int groupId )
-	{
-		_nGroupId = groupId;
-	}
+    /**
+     * Sets the list of links in this set
+     * @param links A Collection of SponsoredLink
+     */
+    public void setSponsoredLinkList( List<SponsoredLink> links )
+    {
+        _sponsoredLinkList = links;
+        Collections.sort( _sponsoredLinkList );
+    }
 
+    /**
+     *
+     * @return the id of the associated group of tags
+     */
+    public int getGroupId(  )
+    {
+        return _nGroupId;
+    }
+
+    /**
+     * Sets the id of the associated group of tags
+     * @param groupId The id of a SponsoredLinkGroup
+     */
+    public void setGroupId( int groupId )
+    {
+        _nGroupId = groupId;
+    }
 }

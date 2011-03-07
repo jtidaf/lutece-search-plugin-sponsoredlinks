@@ -33,28 +33,29 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.util.sql.DAOUtil;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+
 /**
- * 
+ *
  * This class provides Data Access methods for SponsoredLinkSet objects
  *
  */
 public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
 {
-	// Constants 
-	private static final String SQL_QUERY_NEWPK = "SELECT max( id_set ) FROM sponsoredlinks_set";
-	private static final String SQL_QUERY_SELECT = "SELECT id_set, title, id_group FROM sponsoredlinks_set WHERE id_set = ? ";
-	private static final String SQL_QUERY_SELECTALL = "SELECT id_set, title, id_group FROM sponsoredlinks_set ORDER BY title, id_set DESC";
+    // Constants 
+    private static final String SQL_QUERY_NEWPK = "SELECT max( id_set ) FROM sponsoredlinks_set";
+    private static final String SQL_QUERY_SELECT = "SELECT id_set, title, id_group FROM sponsoredlinks_set WHERE id_set = ? ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_set, title, id_group FROM sponsoredlinks_set ORDER BY title, id_set DESC";
     private static final String SQL_QUERY_SELECT_BY_GROUP = "SELECT id_set, title, id_group FROM sponsoredlinks_set WHERE id_group = ? ";
     private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_set ( id_set, title, id_group )  VALUES ( ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_set WHERE id_set = ? ";
     private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_set SET title = ? , id_group = ?  WHERE id_set= ?  ";
-    
+
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
 
@@ -82,7 +83,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
 
         return nKey;
     }
-    
+
     ////////////////////////////////////////////////////////////////////////
     // Methods using a dynamic pool
     /**
@@ -101,7 +102,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Load the data of SponsoredLinkSet from the table
      * @param nSetId The id of SponsoredLinkSet
@@ -128,7 +129,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
 
         return set;
     }
-    
+
     /**
      * Delete a record from the table
      * @param set The SponsoredLinkSet object
@@ -141,7 +142,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Update the record in the table
      * @param set The reference of the SponsoredLinkSet object to store
@@ -159,7 +160,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
-    
+
     /**
      * Load the list of sets
      * @param plugin The Plugin object
@@ -191,9 +192,9 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
      * @param plugin The Plugin
      * @return A Collection of found SponsoredLinkSet objects
      */
-    public Collection<SponsoredLinkSet> selectByGroup( int groupId , Plugin plugin )
+    public Collection<SponsoredLinkSet> selectByGroup( int groupId, Plugin plugin )
     {
-    	Collection<SponsoredLinkSet> setList = new ArrayList<SponsoredLinkSet>(  );
+        Collection<SponsoredLinkSet> setList = new ArrayList<SponsoredLinkSet>(  );
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT_BY_GROUP, plugin );
         daoUtil.setInt( 1, groupId );
         daoUtil.executeQuery(  );
@@ -208,8 +209,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
         }
 
         daoUtil.free(  );
-        
+
         return setList;
     }
-    
 }
