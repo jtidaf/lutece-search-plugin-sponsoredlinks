@@ -13,58 +13,6 @@ function linkservice( content_id, insert_service_id, plugin_name )
 	fen.focus();
 }
 </script>
-<style type="text/css">
-
-div.set-form
-{
-	margin: 0px 5px;
-}
-fieldset.set-form
-{
-	-moz-border-radius: 10px 10px 10px 10px;
-	border: 1px solid #55B4E5;
-	margin: 0px 0px 5px;
-}
-
-fieldset.set-form textarea
-{
-    border: 1px solid #55B4E5;
-    font-family: Arial,Tahoma,Helvetica,sans-serif;
-    font-size: 100%;
-    margin: 2px 0;
-    padding-left: 4px;
-}
-
-fieldset.set-form legend
-{
-	color: #444444;
-    display: block;
-    font-weight: bold;
-    margin-left: 10px;
-    padding: 0 4px;
-}
-
-#advice
-{
-	color: #888888;
-	font-style: italic;
-	margin: 0 10px -7px;
-}
-
-#advice-caption
-{
-	color: #888888;
-	font-style: italic;
-	margin: -4px 0 4px 10px;
-}
-
-#warning-caption
-{
-	color: #E5576F;
-	margin: -4px 0 4px 10px;
-}
-
-</style>
 
 <div class="content-box" >
     
@@ -73,16 +21,22 @@ fieldset.set-form legend
     <form method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoModifySet.jsp">
 	<div class="sponsoredlinks-form">    
         <p>
-            <label for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label> 
-            <input type="text" id="title" name="title" size="60" maxlength="50" value="${set.title}" />
+            <label for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label>
+            <#if permission_modify_set>
+                <input type="text" id="title" name="title" size="60" maxlength="50" value="${set.title}" />
+            <#else />
+                <input disabled size="60" maxlength="50" value="${set.title}" />
+            </#if>
         </p>        
         <p>
             <label for="id_group">#i18n{sponsoredlinks.create_set.labelGroup} * : </label>
             <select name="id_group" >
                 <!--<option value =""></option>-->
-                <#list group_list as group >
-	                <option value="${group.id}">${group.title}</option>
-                </#list>
+                <#if permission_modify_set>
+	                <#list group_list as group >
+		                <option value="${group.id}">${group.title}</option>
+	                </#list>
+                </#if>
                 <option selected value="${set.group.id}">${set.group.title}</option>
             </select>
         </p>
@@ -92,33 +46,37 @@ fieldset.set-form legend
     	<#list set.link_list as link>       
 	        <p>
 	            <label for="link_list">${link_index + 1}. ${link.template.description} :</label>
-	            <#if link.template.resource?exists>
-	            	<#if link.url?exists>
-	            		<textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">${link.url}</textarea>
-	            	<#else/>
-	            		<textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
-	            	</#if>
+	            <#if link.template.resource?exists && permission_modify_set>
+	                <textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
 		            <a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}');">
 		            	<img src="images/admin/skin/plugins/sponsoredlinks/action/linkservice.png" alt="#i18n{sponsoredlinks.create_set.actionLink}" title="#i18n{sponsoredlinks.create_set.actionLink}" />
 		            </a>
 		        </p>
 	        	<p>
 	        		<label>&nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}</p>
-	        	<#else>
-		        	<textarea disabled type="text" id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
+	        	<#elseif link.template.resource?exists && !permission_modify_set />
+	        	    <textarea disabled rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
+                </p>
+                <p>
+                    <label>&nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}</p>
+	        	<#else />
+		        	<textarea disabled type="text" rows="2" cols="57">&nbsp;</textarea>
 		        </p>
 	        	<p>
 	        		<label>&nbsp;</label><p id="sponsoredlinks-warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}</p>
 		        </#if>
 	        </p>
     	</#list>
-	 	<p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
-	</fieldset>   	
+    	<#if permission_modify_set>
+	 	     <p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
+	 	</#if>
+	</fieldset> 
+	    <#if permission_modify_set>  	
         <p>
         	<input type="hidden" name="id_set" value="${set.id}" />
             <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonValidate}" class="button" />
         </p>
-        
+        </#if>
     </form>
     
 </div>

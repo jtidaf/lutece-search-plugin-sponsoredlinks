@@ -20,13 +20,9 @@
         <#list set_list as sponsoredlinkset >
         <tr>
             <td>
-            	<#if permission_modify_set>
-	                <a href="jsp/admin/plugins/sponsoredlinks/ModifySet.jsp?id_set=${sponsoredlinkset.getId()}" class="bullet-link">
-	                    ${sponsoredlinkset.title}
-	                </a>
-                <#else>
-                	${sponsoredlinkset.title}
-                </#if>
+                <a href="jsp/admin/plugins/sponsoredlinks/ModifySet.jsp?id_set=${sponsoredlinkset.getId()}" class="bullet-link">
+                    ${sponsoredlinkset.title}
+                </a>
             </td>
             <td>
             	<#if permission_delete_set>

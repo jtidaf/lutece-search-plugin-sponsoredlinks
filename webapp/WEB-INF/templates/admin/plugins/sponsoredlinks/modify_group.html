@@ -5,15 +5,25 @@
     <form method="post"  name="modify_group" id="modify_group" action="jsp/admin/plugins/sponsoredlinks/DoModifyGroup.jsp"> 
         <p>
             <label for="title" >#i18n{sponsoredlinks.modify_group.labelTitle} * : </label> 
-            <input type="text" id="title" name="title" size="60" maxlength="50" value="${group.title}" />
+            <#if permission_modify_group>
+                <input type="text" id="title" name="title" size="60" maxlength="50" value="${group.title}" />
+            <#else />
+                <input disabled type="text" size="60" maxlength="50" value="${group.title}" />
+            </#if>
         </p>        
         <p>
             <label for="tags">#i18n{sponsoredlinks.modify_group.labelTags} * : </label>
-            <input type="text" id="tags" name="tags" size="60" maxlength="50" value="${group.tags}" />
+            <#if permission_modify_group>
+                <input type="text" id="tags" name="tags" size="60" maxlength="50" value="${group.tags}" />
+            <#else />
+                <input disabled type="text" size="60" maxlength="50" value="${group.tags}" />
+            </#if>
         </p>  
         <p>
-        	<input type="hidden" name="id_group" value="${group.id}" />   
-            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" class="button" />
+            <#if permission_modify_group>
+	        	<input type="hidden" name="id_group" value="${group.id}" />   
+	            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" class="button" />
+	        </#if>
         </p>     
     </form>
     

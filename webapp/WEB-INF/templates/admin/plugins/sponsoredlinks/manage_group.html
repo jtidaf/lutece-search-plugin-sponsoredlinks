@@ -19,13 +19,9 @@
         <#list group_list as group >
         <tr>
             <td>
-            	<#if permission_modify_group>
-	                <a href="jsp/admin/plugins/sponsoredlinks/ModifyGroup.jsp?id_group=${group.id}" class="bullet-link">
-	                    ${group.title}
-	                </a>
-                <#else>
-                	${group.title}
-                </#if>
+                <a href="jsp/admin/plugins/sponsoredlinks/ModifyGroup.jsp?id_group=${group.id}" class="bullet-link">
+                    ${group.title}
+                </a>
             </td>
             <td>
             	${group.tags}

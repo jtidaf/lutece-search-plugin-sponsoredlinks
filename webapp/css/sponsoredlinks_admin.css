@@ -13,24 +13,24 @@
 /**************************** back-office *************************************/
 div.sponsoredlinks-form-entry
 {
-	margin: 0 0 0 10px;
+    margin: 0 0 0 10px;
 }
 
 div.sponsoredlinks-form-entry ul
 {
 	margin: 0 0 0 30%;
-	padding: 0 0 0 5px;
+    padding: 0 0 0 5px;
 }
 
 div.sponsoredlinks-form
 {
-	margin: 0px 5px;
+    margin: 0px 5px;
 }
 fieldset.sponsoredlinks-form
 {
-	-moz-border-radius: 10px 10px 10px 10px;
-	border: 1px solid #55B4E5;
-	margin: 0px 0px 5px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    border: 1px solid #55B4E5;
+    margin: 0px 0px 5px;
 }
 
 fieldset.sponsoredlinks-form textarea
@@ -44,7 +44,7 @@ fieldset.sponsoredlinks-form textarea
 
 fieldset.sponsoredlinks-form legend
 {
-	color: #444444;
+    color: #444444;
     display: block;
     font-weight: bold;
     margin-left: 10px;
@@ -53,20 +53,26 @@ fieldset.sponsoredlinks-form legend
 
 #sponsoredlinks-advice
 {
-	color: #888888;
-	font-style: italic;
-	margin: 0 10px -7px;
+    color: #888888;
+    font-style: italic;
+    margin: 0 10px -7px;
 }
 
 #sponsoredlinks-advice-caption
 {
-	color: #888888;
-	font-style: italic;
-	margin: -4px 0 4px 10px;
+    color: #888888;
+    font-style: italic;
+    margin: -4px 0 4px 10px;
 }
 
 #sponsoredlinks-warning-caption
 {
-	color: #E5576F;
-	margin: -4px 0 4px 10px;
+    color: #E5576F;
+    margin: -4px 0 4px 10px;
+}
+
+[disabled]
+{
+    background-color: #DEDEDE;
+    color: #444444;
 }

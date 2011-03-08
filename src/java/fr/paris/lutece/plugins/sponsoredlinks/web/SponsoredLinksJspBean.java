@@ -138,6 +138,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String PROPERTY_PAGE_TITLE_MODIFY_GROUP = "sponsoredlinks.modify_group.title";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_SET = "sponsoredlinks.modify_set.title";
     private static final String PROPERTY_PAGE_TITLE_MODIFY_TEMPLATE = "sponsoredlinks.modify_template.title";
+    private static final String PROPERTY_PAGE_TITLE_SHOW_GROUP = "sponsoredlinks.show_group.title";
+    private static final String PROPERTY_PAGE_TITLE_SHOW_SET = "sponsoredlinks.show_set.title";
 
     //templates
     private static final String TEMPLATE_CREATE_GROUP = "admin/plugins/sponsoredlinks/create_group.html";
@@ -214,14 +216,11 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         boolean bPermissionCreateSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_CREATE_SET, getUser(  ) );
-        boolean bPermissionModifySet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-                RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) );
         boolean bPermissionDeleteSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) );
 
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_PERMISSION_CREATE_SET, bPermissionCreateSet );
-        model.put( MARK_PERMISSION_MODIFY_SET, bPermissionModifySet );
         model.put( MARK_PERMISSION_DELETE_SET, bPermissionDeleteSet );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPageSet );
@@ -322,15 +321,19 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String getModifySet( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) )
+    	String strSetId = request.getParameter( PARAMETER_SET_ID );
+    	boolean bPermissionModifySet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
+                strSetId, SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) );
+        if ( bPermissionModifySet )
         {
-            return getManageSet( request );
+        	setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_SET );
+        }
+        else
+        {
+        	setPageTitleProperty( PROPERTY_PAGE_TITLE_SHOW_SET );
         }
 
-        setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_SET );
-
-        int nSetId = Integer.parseInt( request.getParameter( PARAMETER_SET_ID ) );
+        int nSetId = Integer.parseInt( strSetId );
         SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( nSetId, getPlugin(  ) );
 
         SponsoredLinkGroup usedGroup = SponsoredLinkGroupHome.findByPrimaryKey( set.getGroupId(  ), getPlugin(  ) );
@@ -347,7 +350,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         {
             listLinks.get( link.getOrder(  ) - 1 ).put( MARK_LINK_URL, link.getUrl(  ) );
         }
-
+        
         modelSet.put( MARK_SET_ID, set.getId(  ) );
         modelSet.put( MARK_SET_TITLE, set.getTitle(  ) );
         modelSet.put( MARK_SET_GROUP, usedGroup );
@@ -355,6 +358,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
+        model.put( MARK_PERMISSION_MODIFY_SET, bPermissionModifySet );
         model.put( MARK_GROUP_LIST, listUnusedGroup );
         model.put( MARK_SET, modelSet );
 
@@ -371,14 +375,16 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifySet( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+    	String strSetId = request.getParameter( PARAMETER_SET_ID );
+    	if ( ( strSetId != null ) && !strSetId.trim(  ).equals( "" ) &&
+    		 !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
                     SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) )
         {
             // if the user is not authorized, redirects quietly towards the list of sets
             return JSP_REDIRECT_TO_MANAGE_SET;
         }
 
-        String strSetId = request.getParameter( PARAMETER_SET_ID );
+        
         String strTitle = request.getParameter( PARAMETER_SET_TITLE );
         String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
@@ -451,14 +457,15 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doRemoveSet( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        String strId = request.getParameter( PARAMETER_SET_ID );
+    	if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strId,
                     SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ) )
         {
             // if the user is not authorized, redirects quietly towards the list of sets
             return JSP_REDIRECT_TO_MANAGE_SET;
         }
 
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_SET_ID ) );
+        int nId = Integer.parseInt( strId );
 
         SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( nId, getPlugin(  ) );
         SponsoredLinkSetHome.remove( set, getPlugin(  ) );
@@ -523,16 +530,13 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         Map<String, Object> model = new HashMap<String, Object>(  );
 
-        boolean bPermissionCreateGroup = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
+        boolean bPermissionCreateGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksGroupResourceIdService.PERMISSION_CREATE_GROUP, getUser(  ) );
-        boolean bPermissionModifyGroup = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-                RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) );
-        boolean bPermissionDeleteGroup = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
+        boolean bPermissionDeleteGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) );
 
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_PERMISSION_CREATE_GROUP, bPermissionCreateGroup );
-        model.put( MARK_PERMISSION_MODIFY_GROUP, bPermissionModifyGroup );
         model.put( MARK_PERMISSION_DELETE_GROUP, bPermissionDeleteGroup );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPageGroup );
@@ -612,20 +616,25 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String getModifyGroup( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
-                    SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) )
+    	String strId = request.getParameter( PARAMETER_GROUP_ID );
+    	boolean bPermissionModifyGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
+                strId, SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) );
+    	if ( bPermissionModifyGroup )
         {
-            return getManageGroup( request );
+    		setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_GROUP );
         }
+    	else
+    	{
+    		setPageTitleProperty( PROPERTY_PAGE_TITLE_SHOW_GROUP );
+    	}
 
-        setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_GROUP );
-
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
+        int nId = Integer.parseInt( strId );
 
         SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-
+        
+        model.put( MARK_PERMISSION_MODIFY_GROUP, bPermissionModifyGroup );
         model.put( MARK_GROUP, group );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, getLocale(  ) );
@@ -643,13 +652,15 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifyGroup( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+    	String strId = request.getParameter( PARAMETER_GROUP_ID );
+        if ( ( strId != null ) && !strId.trim(  ).equals( "" ) && 
+        	 !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
         }
 
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
+        int nId = Integer.parseInt( strId );
         String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
         String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
 
@@ -709,13 +720,14 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doRemoveGroup( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+    	String strId = request.getParameter( PARAMETER_GROUP_ID );
+        if ( !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
         }
 
-        int nId = Integer.parseInt( request.getParameter( PARAMETER_GROUP_ID ) );
+        int nId = Integer.parseInt( strId );
 
         SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
         SponsoredLinkGroupHome.remove( group, getPlugin(  ) );
