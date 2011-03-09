@@ -355,7 +355,14 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         for ( SponsoredLink link : set.getSponsoredLinkList(  ) )
         {
-            listLinks.get( link.getOrder(  ) - 1 ).put( MARK_LINK_URL, link.getUrl(  ) );
+            try
+            {
+            	listLinks.get( link.getOrder(  ) - 1 ).put( MARK_LINK_URL, link.getUrl(  ) );
+            }
+            catch( IndexOutOfBoundsException ie )
+            {
+            	AppLogService.error( ie );
+            }
         }
         
         modelSet.put( MARK_SET_ID, set.getId(  ) );
