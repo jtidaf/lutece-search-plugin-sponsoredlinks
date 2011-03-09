@@ -17,18 +17,20 @@
             <th width="20%">#i18n{sponsoredlinks.manage_set.columnTitleActions}</th>
         </tr>
         
-        <#list set_list as sponsoredlinkset >
+        <#list set_list as set >
         <tr>
             <td>
-                <a href="jsp/admin/plugins/sponsoredlinks/ModifySet.jsp?id_set=${sponsoredlinkset.getId()}" class="bullet-link">
-                    ${sponsoredlinkset.title}
+                <a href="jsp/admin/plugins/sponsoredlinks/ModifySet.jsp?id_set=${set.getId()}" class="bullet-link">
+                    ${set.title}
                 </a>
             </td>
             <td>
-            	<#if permission_delete_set>
-			        <a href="jsp/admin/plugins/sponsoredlinks/RemoveSet.jsp?id_set=${sponsoredlinkset.id}&title=${sponsoredlinkset.title}">
+            	<#if permission_delete_set["${set.id}"]>
+			        <a href="jsp/admin/plugins/sponsoredlinks/RemoveSet.jsp?id_set=${set.id}&title=${set.title}">
 						<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_set.actionDelete}" title="#i18n{sponsoredlinks.manage_set.actionDelete}">
 					</a>  
+				<#else />
+				    <img src="images/admin/skin/actions/delete.png" class="disabled">
 				</#if> 
             </td>
         </tr>					

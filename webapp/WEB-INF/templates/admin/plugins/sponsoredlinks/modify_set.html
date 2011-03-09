@@ -70,13 +70,14 @@ function linkservice( content_id, insert_service_id, plugin_name )
     	<#if permission_modify_set>
 	 	     <p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
 	 	</#if>
-	</fieldset> 
-	    <#if permission_modify_set>  	
-        <p>
+	</fieldset>
+	    <p> 
+	    <#if permission_modify_set>        
         	<input type="hidden" name="id_set" value="${set.id}" />
-            <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonValidate}" class="button" />
-        </p>
+            <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonValidate}" name="submit" class="button" />
         </#if>
+            <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonCancel}" name="cancel" class="button" />
+        </p>        
     </form>
     
 </div>

@@ -116,6 +116,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String MESSAGE_CONFIRM_REMOVE_USED_GROUP = "sponsoredlinks.message.confirmRemove.group.used";
 
     //parameters
+    private static final String PARAMETER_CANCEL = "cancel";
     private static final String PARAMETER_GROUP_ID = "id_group";
     private static final String PARAMETER_GROUP_TAGS = "tags";
     private static final String PARAMETER_GROUP_TITLE = "title";
@@ -209,19 +210,25 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Collection<SponsoredLinkSet> listSet = SponsoredLinkSetHome.findAll( getPlugin(  ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-
+        Map<String, Object>  bPermissionDeleteSetModel = new HashMap<String, Object>(  );
+        for( SponsoredLinkSet set : listSet )
+        {
+        	bPermissionDeleteSetModel.put(String.valueOf( set.getId(  ) ), 
+        			RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
+        	                String.valueOf( set.getId(  ) ), SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ));
+        }
         LocalizedPaginator<SponsoredLinkSet> paginator = new LocalizedPaginator<SponsoredLinkSet>( (List<SponsoredLinkSet>) listSet,
                 _nItemsPerPageSet, request.getRequestURI(  ), LocalizedPaginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexSet, getLocale(  ) );
 
         boolean bPermissionCreateSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_CREATE_SET, getUser(  ) );
-        boolean bPermissionDeleteSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-                RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) );
+//        boolean bPermissionDeleteSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
+//                RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) );
 
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_PERMISSION_CREATE_SET, bPermissionCreateSet );
-        model.put( MARK_PERMISSION_DELETE_SET, bPermissionDeleteSet );
+        model.put( MARK_PERMISSION_DELETE_SET, bPermissionDeleteSetModel );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPageSet );
         model.put( MARK_PAGINATOR, paginator );
@@ -269,11 +276,11 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateSet( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
+        	 !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksSetResourceIdService.PERMISSION_CREATE_SET, getUser(  ) ) )
         {
-            // if the user is not authorized, redirects quietly towards the list of sets
-            return JSP_REDIRECT_TO_MANAGE_SET;
+        	return JSP_REDIRECT_TO_MANAGE_SET;
         }
 
         String strTitle = request.getParameter( PARAMETER_SET_TITLE );
@@ -376,12 +383,12 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     public String doModifySet( HttpServletRequest request )
     {
     	String strSetId = request.getParameter( PARAMETER_SET_ID );
-    	if ( ( strSetId != null ) && !strSetId.trim(  ).equals( "" ) &&
-    		 !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
-                    SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) )
+    	if ( request.getParameter( PARAMETER_CANCEL ) != null ||
+    		 ( ( strSetId != null ) && !strSetId.trim(  ).equals( "" ) &&
+    		   !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
+                    SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) ) )
         {
-            // if the user is not authorized, redirects quietly towards the list of sets
-            return JSP_REDIRECT_TO_MANAGE_SET;
+    		return JSP_REDIRECT_TO_MANAGE_SET;
         }
 
         
@@ -523,6 +530,14 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
                 _nItemsPerPageGroup, _nDefaultItemsPerPage );
 
         Collection<SponsoredLinkGroup> listGroup = SponsoredLinkGroupHome.findAll( getPlugin(  ) );
+        
+        Map<String, Object>  bPermissionDeleteGroupModel = new HashMap<String, Object>(  );
+        for( SponsoredLinkGroup group : listGroup )
+        {
+        	bPermissionDeleteGroupModel.put(String.valueOf( group.getId(  ) ), 
+        			RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
+        	                String.valueOf( group.getId(  ) ), SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ));
+        }
 
         LocalizedPaginator<SponsoredLinkGroup> paginator = new LocalizedPaginator<SponsoredLinkGroup>( (List<SponsoredLinkGroup>) listGroup,
                 _nItemsPerPageGroup, request.getRequestURI(  ), LocalizedPaginator.PARAMETER_PAGE_INDEX,
@@ -532,12 +547,10 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         boolean bPermissionCreateGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksGroupResourceIdService.PERMISSION_CREATE_GROUP, getUser(  ) );
-        boolean bPermissionDeleteGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
-                RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) );
 
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_PERMISSION_CREATE_GROUP, bPermissionCreateGroup );
-        model.put( MARK_PERMISSION_DELETE_GROUP, bPermissionDeleteGroup );
+        model.put( MARK_PERMISSION_DELETE_GROUP, bPermissionDeleteGroupModel );
 
         model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPageGroup );
         model.put( MARK_PAGINATOR, paginator );
@@ -581,7 +594,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateGroup( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
+        	 !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksGroupResourceIdService.PERMISSION_CREATE_GROUP, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
@@ -653,9 +667,10 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     public String doModifyGroup( HttpServletRequest request )
     {
     	String strId = request.getParameter( PARAMETER_GROUP_ID );
-        if ( ( strId != null ) && !strId.trim(  ).equals( "" ) && 
-        	 !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
-                    SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) )
+        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
+        	 ( ( strId != null ) && !strId.trim(  ).equals( "" ) && 
+        	   !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
+                    SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
         }
@@ -832,7 +847,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateTemplate( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
+        	 !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
@@ -925,7 +941,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifyTemplate( HttpServletRequest request )
     {
-        if ( !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
+        	 !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;

@@ -55,7 +55,7 @@ fieldset.sponsoredlinks-form legend
 {
     color: #888888;
     font-style: italic;
-    margin: 0 10px -7px;
+    margin: 0 10px;
 }
 
 #sponsoredlinks-advice-caption
@@ -75,4 +75,10 @@ fieldset.sponsoredlinks-form legend
 {
     background-color: #DEDEDE;
     color: #444444;
+}
+
+img.disabled
+{
+	opacity:0.4;
+	filter:alpha(opacity=40);
 }

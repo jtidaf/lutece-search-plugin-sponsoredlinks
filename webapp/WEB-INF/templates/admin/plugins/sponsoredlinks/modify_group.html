@@ -22,8 +22,9 @@
         <p>
             <#if permission_modify_group>
 	        	<input type="hidden" name="id_group" value="${group.id}" />   
-	            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" class="button" />
+	            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" name="submit" class="button" />
 	        </#if>
+	        <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonCancel}" name="cancel" class="button" />
         </p>     
     </form>
     

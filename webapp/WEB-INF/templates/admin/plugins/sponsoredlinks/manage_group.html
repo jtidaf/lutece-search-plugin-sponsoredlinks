@@ -27,11 +27,13 @@
             	${group.tags}
             </td>
             <td>
-            	<#if permission_delete_group>
+            	<#if permission_delete_group["${group.id}"]>
 			        <a href="jsp/admin/plugins/sponsoredlinks/RemoveGroup.jsp?id_group=${group.id}&title=${group.title}">
 						<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_group.actionDelete}" title="#i18n{sponsoredlinks.manage_group.actionDelete}">
-					</a>  
-				</#if> 
+					</a>
+			    <#else />
+			        <img src="images/admin/skin/actions/delete.png" class="disabled">  
+				</#if>
             </td>
         </tr>					
         </#list>
