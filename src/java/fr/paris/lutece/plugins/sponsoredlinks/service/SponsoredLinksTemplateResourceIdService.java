@@ -60,6 +60,7 @@ public class SponsoredLinksTemplateResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_RESOURCE_TYPE = "sponsoredlinks.permission.label.resourceType.template";
     private static final String PROPERTY_LABEL_MANAGE_ADVANCED_PARAMETERS = "sponsoredlinks.permission.label.manage_advanced_parameters";
 
+    /** Creates a new instance of SponsoredLinksTemplateResourceIdService with initialized plugin name */
     public SponsoredLinksTemplateResourceIdService(  )
     {
         setPluginName( SponsoredLinksPlugin.PLUGIN_NAME );

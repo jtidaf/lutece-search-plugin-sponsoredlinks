@@ -68,7 +68,7 @@ public class SponsoredLinksSetResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MODIFY_SET = "sponsoredlinks.permission.label.modify_set";
     private static final String PROPERTY_LABEL_DELETE_SET = "sponsoredlinks.permission.label.delete_set";
 
-    /** Creates a new instance of SponsoredLinksSetResourceIdService */
+    /** Creates a new instance of SponsoredLinksSetResourceIdService with initialized plugin name */
     public SponsoredLinksSetResourceIdService(  )
     {
         setPluginName( SponsoredLinksPlugin.PLUGIN_NAME );

@@ -68,7 +68,9 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * This class provides the user interface to manage SponsoredLinks features.
+ */
 public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 {
     /** Unique name for the right to manage this plugin */
@@ -213,9 +215,9 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Map<String, Object>  bPermissionDeleteSetModel = new HashMap<String, Object>(  );
         for( SponsoredLinkSet set : listSet )
         {
-        	bPermissionDeleteSetModel.put(String.valueOf( set.getId(  ) ), 
+        	bPermissionDeleteSetModel.put( String.valueOf( set.getId(  ) ), 
         			RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-        	                String.valueOf( set.getId(  ) ), SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ));
+        	                String.valueOf( set.getId(  ) ), SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ) );
         }
         LocalizedPaginator<SponsoredLinkSet> paginator = new LocalizedPaginator<SponsoredLinkSet>( (List<SponsoredLinkSet>) listSet,
                 _nItemsPerPageSet, request.getRequestURI(  ), LocalizedPaginator.PARAMETER_PAGE_INDEX,
@@ -541,9 +543,9 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Map<String, Object>  bPermissionDeleteGroupModel = new HashMap<String, Object>(  );
         for( SponsoredLinkGroup group : listGroup )
         {
-        	bPermissionDeleteGroupModel.put(String.valueOf( group.getId(  ) ), 
-        			RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-        	                String.valueOf( group.getId(  ) ), SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ));
+        	bPermissionDeleteGroupModel.put( String.valueOf( group.getId(  ) ), 
+        			RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
+        	                String.valueOf( group.getId(  ) ), SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) ) );
         }
 
         LocalizedPaginator<SponsoredLinkGroup> paginator = new LocalizedPaginator<SponsoredLinkGroup>( (List<SponsoredLinkGroup>) listGroup,
@@ -796,6 +798,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
             }
             catch ( NullPointerException e )
             {
+            	AppLogService.error( e );
             }
         }
 

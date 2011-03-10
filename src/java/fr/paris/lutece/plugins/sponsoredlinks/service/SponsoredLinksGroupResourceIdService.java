@@ -68,7 +68,7 @@ public class SponsoredLinksGroupResourceIdService extends ResourceIdService
     private static final String PROPERTY_LABEL_MODIFY_GROUP = "sponsoredlinks.permission.label.modify_group";
     private static final String PROPERTY_LABEL_DELETE_GROUP = "sponsoredlinks.permission.label.delete_group";
 
-    /** Creates a new instance of SponsoredLinksGroupResourceIdService */
+    /** Creates a new instance of SponsoredLinksGroupResourceIdService with initialized plugin name */
     public SponsoredLinksGroupResourceIdService(  )
     {
         setPluginName( SponsoredLinksPlugin.PLUGIN_NAME );

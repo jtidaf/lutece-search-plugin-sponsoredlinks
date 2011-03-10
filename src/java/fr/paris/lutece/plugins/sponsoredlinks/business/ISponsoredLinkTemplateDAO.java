@@ -46,7 +46,7 @@ import java.util.Collection;
 public interface ISponsoredLinkTemplateDAO
 {
     /** Unique id for spring bean declaration in the plugin context */
-    static final String SPRING_BEAN_ID = "sponsoredLinkTemplateDAO";
+    String SPRING_BEAN_ID = "sponsoredLinkTemplateDAO";
 
     /**
     * Generates a new primary key
