@@ -60,9 +60,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     //Access methods to data
 
     /**
-     * Generates a new primary key
-     * @param plugin The plugin
-     * @return The new primary key
+     * {@inheritDoc}
      */
     private int newPrimaryKey( Plugin plugin )
     {
@@ -87,9 +85,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     ////////////////////////////////////////////////////////////////////////
     // Methods using a dynamic pool
     /**
-     * Insert a new record in the table.
-     * @param set The SponsoredLinkSet object to insert
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void insert( SponsoredLinkSet set, Plugin plugin )
     {
@@ -104,10 +100,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     }
 
     /**
-     * Load the data of SponsoredLinkSet from the table
-     * @param nSetId The id of SponsoredLinkSet
-     * @param plugin The plugin
-     * @return the instance of the SponsoredLinkSet
+     * {@inheritDoc}
      */
     public SponsoredLinkSet load( int nSetId, Plugin plugin )
     {
@@ -131,9 +124,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     }
 
     /**
-     * Delete a record from the table
-     * @param set The SponsoredLinkSet object
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void delete( SponsoredLinkSet set, Plugin plugin )
     {
@@ -144,9 +135,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     }
 
     /**
-     * Update the record in the table
-     * @param set The reference of the SponsoredLinkSet object to store
-     * @param plugin The Plugin object
+     * {@inheritDoc}
      */
     public void store( SponsoredLinkSet set, Plugin plugin )
     {
@@ -162,9 +151,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     }
 
     /**
-     * Load the list of sets
-     * @param plugin The Plugin object
-     * @return A Collection of SponsoredLinkSet objects
+     * {@inheritDoc}
      */
     public Collection<SponsoredLinkSet> selectAll( Plugin plugin )
     {
@@ -187,10 +174,7 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     }
 
     /**
-     * Select sets owned by the specified group
-     * @param groupId The id of the owning SponsoredLinkGroup
-     * @param plugin The Plugin
-     * @return A Collection of found SponsoredLinkSet objects
+     * {@inheritDoc}
      */
     public Collection<SponsoredLinkSet> selectByGroup( int groupId, Plugin plugin )
     {

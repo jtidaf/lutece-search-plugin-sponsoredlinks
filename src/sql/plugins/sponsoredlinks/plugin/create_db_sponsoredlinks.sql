@@ -38,6 +38,6 @@ DROP TABLE IF EXISTS sponsoredlinks_link;
 CREATE TABLE sponsoredlinks_link (
   id_set INT,
   id_template INT,
-  url VARCHAR(255) DEFAULT '' NOT NULL,
+  link VARCHAR(255) DEFAULT '' NOT NULL,
   PRIMARY KEY (id_set, id_template)
 );

@@ -62,9 +62,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     //Access methods to data
 
     /**
-     * Generates a new primary key
-     * @param plugin The plugin
-     * @return The new primary key
+     * {@inheritDoc}
      */
     private int newPrimaryKey( Plugin plugin )
     {
@@ -90,9 +88,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     // Methods using a dynamic pool
 
     /**
-     * Insert a new record in the table.
-     * @param group The SponsoredLinkGroup object
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void insert( SponsoredLinkGroup group, Plugin plugin )
     {
@@ -107,10 +103,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Load the data of SponsoredLinkGroup from the table
-     * @param nGroupId The identifier of SponsoredLinkGroup
-     * @param plugin The plugin
-     * @return the instance of the SponsoredLinkGroup
+     * {@inheritDoc}
      */
     public SponsoredLinkGroup load( int nGroupId, Plugin plugin )
     {
@@ -134,9 +127,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Delete a record from the table
-     * @param group The SponsoredLinkGroup object
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void delete( SponsoredLinkGroup group, Plugin plugin )
     {
@@ -147,9 +138,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Update the record in the table
-     * @param group The reference of SponsoredLinkGroup
-     * @param plugin The Plugin object
+     * {@inheritDoc}
      */
     public void store( SponsoredLinkGroup group, Plugin plugin )
     {
@@ -164,9 +153,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Load the list of groups
-     * @param plugin The Plugin object
-     * @return The Collection of the SponsoredLinkGroup objects
+     * {@inheritDoc}
      */
     public Collection<SponsoredLinkGroup> selectAll( Plugin plugin )
     {
@@ -189,9 +176,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Load the list of SponsoredLinkGroup object referenced in a SponsoredLinkSet
-     * @param plugin The Plugin object
-     * @return The Collection of found SponsoredLinkGroup
+     * {@inheritDoc}
      */
     public Collection<SponsoredLinkGroup> selectUsedGroupList( Plugin plugin )
     {
@@ -214,9 +199,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Load the list of SponsoredLinkGroup object not referenced in a SponsoredLinkSet
-     * @param plugin The Plugin object
-     * @return The Collection of found SponsoredLinkGroup
+     * {@inheritDoc}
      */
     public Collection<SponsoredLinkGroup> selectUnusedGroupList( Plugin plugin )
     {
@@ -239,10 +222,7 @@ public class SponsoredLinkGroupDAO implements ISponsoredLinkGroupDAO
     }
 
     /**
-     * Load the SponsoredLinkGroup specified by its id if used in a set
-     * @param nGroupId The SponsoredLinkGroup id
-     * @param plugin The Plugin object
-     * @return The SponsoredLink group if used
+     * {@inheritDoc}
      */
     public SponsoredLinkGroup selectUsedGroup( int nGroupId, Plugin plugin )
     {

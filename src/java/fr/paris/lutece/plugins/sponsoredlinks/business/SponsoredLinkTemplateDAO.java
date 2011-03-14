@@ -60,9 +60,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     //Access methods to data
 
     /**
-     * Generates a new primary key
-     * @param plugin the Plugin using this data access service
-     * @return the new primary key
+     * {@inheritDoc}
      */
     public int newPrimaryKey( Plugin plugin )
     {
@@ -87,10 +85,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     ////////////////////////////////////////////////////////////////////////
     // Methods using a dynamic pool
     /**
-         * Insert a new record in the table.
-         * @param template the SponsoredLinkTemplate object to insert
-         * @param plugin the Plugin using this data access service
-         */
+     * {@inheritDoc}
+     */
     public void insert( SponsoredLinkTemplate template, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -104,11 +100,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     }
 
     /**
-         * Load the data of the template whose id is specified
-         * @param nId the identifier of the SponsoredLinkTemplate object to load
-         * @param plugin the Plugin using this data access service
-         * @return the instance of the loaded SponsoredLinkTemplate object
-         */
+     * {@inheritDoc}
+     */
     public SponsoredLinkTemplate load( int nId, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -140,10 +133,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     }
 
     /**
-         * Delete a record from the table
-         * @param template the SponsoredLinkTemplate object to delete form table
-         * @param plugin the Plugin using this data access service
-         */
+     * {@inheritDoc}
+     */
     public void delete( SponsoredLinkTemplate template, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -153,10 +144,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     }
 
     /**
-         * Update the record in the table
-         * @param template the reference of the SponsoredLinkTemplate object to store
-         * @param plugin The Plugin object
-         */
+     * {@inheritDoc}
+     */
     public void store( SponsoredLinkTemplate template, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
@@ -171,10 +160,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     }
 
     /**
-         * Load the list of templates
-         * @param plugin The Plugin object
-         * @return A Collection of SponsoredLinkTemplate objects
-         */
+     * {@inheritDoc}
+     */
     public Collection<SponsoredLinkTemplate> selectAll( Plugin plugin )
     {
         Collection<SponsoredLinkTemplate> templateList = new ArrayList<SponsoredLinkTemplate>(  );
@@ -196,11 +183,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
     }
 
     /**
-         * Select template linked to the specified resource type
-         * @param strResourceType The id of the linked resource type
-         * @param plugin The Plugin
-         * @return A Collection of found SponsoredLinkTemplate objects
-         */
+     * {@inheritDoc}
+     */
     public Collection<SponsoredLinkTemplate> selectByResourceType( String strResourceType, Plugin plugin )
     {
         Collection<SponsoredLinkTemplate> templateList = new ArrayList<SponsoredLinkTemplate>(  );

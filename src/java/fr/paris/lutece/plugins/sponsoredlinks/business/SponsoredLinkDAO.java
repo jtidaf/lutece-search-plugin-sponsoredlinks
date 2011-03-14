@@ -48,35 +48,29 @@ import java.util.Collection;
 public class SponsoredLinkDAO implements ISponsoredLinkDAO
 {
     //Constants
-    private static final String SQL_QUERY_SELECTALL_BY_SET = "SELECT id_template, url FROM sponsoredlinks_link WHERE id_set = ? ORDER BY id_template ASC";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_link ( id_set, id_template, url )  VALUES ( ?, ?, ? )";
+    private static final String SQL_QUERY_SELECTALL_BY_SET = "SELECT id_template, link FROM sponsoredlinks_link WHERE id_set = ? ORDER BY id_template ASC";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_link ( id_set, id_template, link )  VALUES ( ?, ?, ? )";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_link WHERE id_set = ? and id_template = ? ";
     private static final String SQL_QUERY_DELETE_BY_SET = "DELETE FROM sponsoredlinks_link WHERE id_set = ? ";
     private static final String SQL_QUERY_DELETE_BY_TEMPLATE = "DELETE FROM sponsoredlinks_link WHERE id_template = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_link SET url = ? WHERE id_set = ? and id_template = ? ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_link SET link = ? WHERE id_set = ? and id_template = ? ";
 
     /**
-     * Insert a new record in the table.
-     * @param setId The id of the owning SponsoredLinkSet
-     * @param link The SponsoredLink object
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void insert( int setId, SponsoredLink link, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
         daoUtil.setInt( 1, setId );
         daoUtil.setInt( 2, link.getOrder(  ) );
-        daoUtil.setString( 3, link.getUrl(  ) );
+        daoUtil.setString( 3, link.getLink(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
     }
 
     /**
-     * Delete a record from the table
-     * @param setId The id of the owning SponsoredLinkSet
-     * @param link The SponsoredLink object
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void delete( int setId, SponsoredLink link, Plugin plugin )
     {
@@ -88,9 +82,7 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
     }
 
     /**
-     * Delete links owned by the specified SponsoredLinkSet
-     * @param setId The id of the set
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void deleteBySet( int setId, Plugin plugin )
     {
@@ -101,9 +93,7 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
     }
 
     /**
-     * Delete links matching the specified SponsoredLinkTemplate
-     * @param templateId The id of the template
-     * @param plugin The plugin
+     * {@inheritDoc}
      */
     public void deleteByTemplate( int templateId, Plugin plugin )
     {
@@ -114,16 +104,13 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
     }
 
     /**
-     * Update the record in the table
-     * @param setId The id of the SponsoredLinkSet
-     * @param link The SponsoredLink object to store
-     * @param plugin The Plugin object
+     * {@inheritDoc}
      */
     public void store( int setId, SponsoredLink link, Plugin plugin )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
 
-        daoUtil.setString( 1, link.getUrl(  ) );
+        daoUtil.setString( 1, link.getLink(  ) );
         daoUtil.setInt( 2, setId );
         daoUtil.setInt( 3, link.getOrder(  ) );
 
@@ -132,10 +119,7 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
     }
 
     /**
-     * Load the list of link owned by the specified SponsoredLinkSet
-     * @param setId The id of the set
-     * @param plugin The Plugin object
-     * @return The Collection of the SponsoredLink objects
+     * {@inheritDoc}
      */
     public Collection<SponsoredLink> selectAllBySet( int setId, Plugin plugin )
     {
@@ -148,7 +132,7 @@ public class SponsoredLinkDAO implements ISponsoredLinkDAO
         {
             SponsoredLink link = new SponsoredLink(  );
             link.setOrder( daoUtil.getInt( 1 ) );
-            link.setUrl( daoUtil.getString( 2 ) );
+            link.setLink( daoUtil.getString( 2 ) );
             linkList.add( link );
         }
 
