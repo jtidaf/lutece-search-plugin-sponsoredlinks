@@ -33,45 +33,19 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 
-import fr.paris.lutece.portal.service.search.SearchItem;
-
-import org.apache.lucene.document.Document;
+import java.util.List;
 
 
 /**
- * SponsoredLinksSearchItem
+ * SearchEngine
  */
-public class SponsoredLinksSearchItem extends SearchItem
+public interface SponsoredLinksSearchEngine
 {
-    public static final String FIELD_TARGET_TYPE = "target_type";
-
-    // Variables declarations
-    private String _strTargetType;
-
-
     /**
-     * @param document a document
+     * Return search results
+     * @param strQuery The search query
+     * @param filter The filter
+     * @return Results as a collection of SearchResult
      */
-    public SponsoredLinksSearchItem( Document document )
-    {
-        super( document );
-        _strTargetType = document.get( FIELD_TARGET_TYPE ) ;
-    }
-
-    /**
-     * @return the type of the targeted resource
-     */
-    public String getTargetType(  )
-    {
-        return  _strTargetType;
-    }
-
-    /**
-     * @param strTargetType the type of the targeted resource
-     */
-    public void setTargetType( String strTargetType )
-    {
-    	_strTargetType = strTargetType;
-    }
-
+    public List<SponsoredLinksSearchItem> getSearchResults( String strQuery );
 }

@@ -46,6 +46,16 @@ import java.util.regex.Pattern;
  */
 public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 {
+	// Number of the capturing group according to the regex
+	/** Key for the href attribute in the link */
+	public static final int HREF = 1;
+	/** Key for the title attribute in the link */
+	public static final int TITLE = 2;
+	/** Key for the alt attribute in the link */
+	public static final int ALT = 3;
+	/** Key for the content in the link */
+	public static final int CONTENT = 4;
+	
 	//Regex used to validate a link and capture data from it
 	//<a\b(?:href="([^>]*?)"|title="([^>]*?)"|alt="([^>]*?)"|[^>]*?)*>(.*?)</a>
 	private static final String SPONSORED_LINK_REGEX = 
@@ -60,16 +70,6 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 	
 	//Pre-compiled representation of the regex.
 	private static final Pattern _pattern = Pattern.compile( SPONSORED_LINK_REGEX, Pattern.CASE_INSENSITIVE );
-	
-	// Number of the capturing group according to the regex
-	/** Key for the href attribute in the link */
-	public static final int HREF = 1;
-	/** Key for the title attribute in the link */
-	public static final int TITLE = 2;
-	/** Key for the alt attribute in the link */
-	public static final int ALT = 3;
-	/** Key for the content in the link */
-	public static final int CONTENT = 4;
 	
     private int _nOrder;
     private String _strLink;
@@ -176,8 +176,8 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 	public String getLinkAttribute( int nAttr )
 	{
 		if( ( _strLink == null ) || 
-				( nAttr != HREF ) || ( nAttr != ALT ) ||
-				( nAttr != TITLE ) || ( nAttr != CONTENT ) )
+			  (	( nAttr != HREF ) && ( nAttr != ALT ) &&
+				( nAttr != TITLE ) && ( nAttr != CONTENT ) ) )
 		{
 			return null;
 		}

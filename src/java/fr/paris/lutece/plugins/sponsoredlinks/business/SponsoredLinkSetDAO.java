@@ -60,7 +60,9 @@ public class SponsoredLinkSetDAO implements ISponsoredLinkSetDAO
     //Access methods to data
 
     /**
-     * {@inheritDoc}
+     * Generates a new primary key
+     * @param plugin the plugin
+     * @return The new primary key
      */
     private int newPrimaryKey( Plugin plugin )
     {

@@ -55,7 +55,7 @@
     <search-indexers>
         <search-indexer>
             <search-indexer-class>
-                fr.paris.lutece.plugins.sponsoredlinks.service.search.SponsoredLinkGroupIndexer
+                fr.paris.lutece.plugins.sponsoredlinks.service.search.SponsoredLinksIndexer
             </search-indexer-class>
         </search-indexer>
     </search-indexers>   
