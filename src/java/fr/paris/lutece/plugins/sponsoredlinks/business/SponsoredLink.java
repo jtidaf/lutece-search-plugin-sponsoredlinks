@@ -57,16 +57,16 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 	public static final int CONTENT = 4;
 	
 	//Regex used to validate a link and capture data from it
-	//<a\b(?:href="([^>]*?)"|title="([^>]*?)"|alt="([^>]*?)"|[^>]*?)*>(.*?)</a>
+	//^<a\b(?:href="([^>]*?)"|title="([^>]*?)"|alt="([^>]*?)"|[^>]*?)*>(.*?)</a>$
 	private static final String SPONSORED_LINK_REGEX = 
-		"<a\\b(?:" + //opening of <a> tag and start of a non-capturing group
+		"^<a\\b(?:" + //opening of <a> tag and start of a non-capturing group
 			"href=\"([^>]*?)\"|" + //href attribute with capturing group #1
 			"title=\"([^>]*?)\"|"+ //title attribute with capturing group #2
 			"alt=\"([^>]*?)\"|"+ //alt attribute with capturing group #3
 			"[^>]*?" + // any non-matching attribute
 		")*>" + // end of the non-capturing group and closing of the <a> tag
 			"(.*?)" + // inner content with capturing group #4
-		"</a>"; // closing tag
+		"</a>$"; // closing tag
 	
 	//Pre-compiled representation of the regex.
 	private static final Pattern _pattern = Pattern.compile( SPONSORED_LINK_REGEX, Pattern.CASE_INSENSITIVE );

@@ -8,5 +8,7 @@
 	<bean id="sponsoredLinkSetDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSetDAO" />
 	<bean id="sponsoredLinkTemplateDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplateDAO" />
 	<bean id="sponsoredLinkDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkDAO" />
+	<!-- search engine -->
+	<bean id="sponsoredLinksSearchEngin
 	
 </beans>

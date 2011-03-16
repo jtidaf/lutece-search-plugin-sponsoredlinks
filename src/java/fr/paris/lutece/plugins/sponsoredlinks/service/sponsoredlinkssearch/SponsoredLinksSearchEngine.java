@@ -44,8 +44,7 @@ public interface SponsoredLinksSearchEngine
     /**
      * Return search results
      * @param strQuery The search query
-     * @param filter The filter
      * @return Results as a collection of SearchResult
      */
-    public List<SponsoredLinksSearchItem> getSearchResults( String strQuery );
+    List<SponsoredLinksSearchItem> getSearchResults( String strQuery );
 }

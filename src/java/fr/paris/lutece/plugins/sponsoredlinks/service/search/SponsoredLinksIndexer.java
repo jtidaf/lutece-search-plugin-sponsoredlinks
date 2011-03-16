@@ -79,7 +79,7 @@ public class SponsoredLinksIndexer implements SearchIndexer
 	public static final String SET_SHORT_NAME = AppPropertiesService.getProperty( "sponsoredlinks.indexer.short_name.set", "set" );
 	/** id key for links */
 	public static final String LINK_SHORT_NAME = AppPropertiesService.getProperty( "sponsoredlinks.indexer.short_name.link", "ord" );
-	
+	/** id key for groups */
 	public static final String GROUP_SHORT_NAME = AppPropertiesService.getProperty( "sponsoredlinks.indexer.short_name.group", "grp" );
 	
 	//Regex for doc UID
@@ -247,6 +247,7 @@ public class SponsoredLinksIndexer implements SearchIndexer
         
         //specific field for sponsored links
         doc.add( new Field( SponsoredLinksSearchItem.FIELD_TARGET_TYPE, template.getDescription(  ), Field.Store.YES, Field.Index.ANALYZED ) );
+        doc.add( new Field( SponsoredLinksSearchItem.FIELD_GROUP_UID, String.valueOf( group.getId(  ) ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
         //return the document	
         return doc;

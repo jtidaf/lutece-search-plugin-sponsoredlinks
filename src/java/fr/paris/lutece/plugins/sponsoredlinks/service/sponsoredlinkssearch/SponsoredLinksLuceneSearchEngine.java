@@ -57,15 +57,12 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 
 
 /**
- * LuceneSearchEngine
+ * class LuceneSearchEngine
  */
 public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEngine
 {
-    /**
-     * Return search results
-     *
-     * @param strQuery The search query
-     * @return Results as a collection of SearchResult
+	/**
+     * {@inheritDoc}
      */
     public List<SponsoredLinksSearchItem> getSearchResults( String strQuery )
     {
@@ -104,10 +101,10 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
             ScoreDoc[] hits = topDocs.scoreDocs;
 
-            for (int i = 0; i < hits.length; i++)
+            for ( int i = 0; i < hits.length; i++ )
             {
             	int docId = hits[i].doc;
-                Document document = searcher.doc(docId);
+                Document document = searcher.doc( docId );
                 SponsoredLinksSearchItem si = new SponsoredLinksSearchItem( document );
                 listResults.add( si );
             }

@@ -33,12 +33,18 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+
+import org.apache.lucene.document.DateTools;
 
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink;
+import fr.paris.lutece.plugins.sponsoredlinks.service.search.SponsoredLinksIndexer;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.portal.service.util.AppLogService;
 
 
 /**
@@ -46,8 +52,15 @@ import fr.paris.lutece.portal.service.spring.SpringContextService;
  */
 public class SponsoredLinksSearchService
 {
-    private static final String BEAN_SEARCH_ENGINE = "sponsoredlinks.sponsoredlinksSearchEngine";
-    private static final String REGEX_ID = "^[\\d]+$";
+    private static final String BEAN_SEARCH_ENGINE = "sponsoredlinksSearchEngine";
+    private static final String REGEX_UID = 
+    	"^([\\d]+)_" + SponsoredLinksIndexer.SET_SHORT_NAME + 
+    	":([\\d]+)_" + SponsoredLinksIndexer.LINK_SHORT_NAME + "$";
+    private static final String REGEX_GROUP_ID = 
+    	"^([\\d]+)_" + SponsoredLinksIndexer.GROUP_SHORT_NAME + "$";
+    
+    private static final Pattern _patternUID = Pattern.compile( REGEX_UID );
+    private static final Pattern _patternGroupId = Pattern.compile( REGEX_GROUP_ID );
 
     // Constants corresponding to the variables defined in the lutece.properties file
     private static SponsoredLinksSearchService _singleton;
@@ -66,41 +79,48 @@ public class SponsoredLinksSearchService
     }
 
     /**
-     * Return search results
+     * Return every search results. 
      * @param strQuery The search query
      * @param plugin The plugin
-     * @return Results as a collection of {@link DiggSubmit}
+     * @return Results as a collection of {@link SponsoredLink}
      */
-    public List<SponsoredLink> getSearchResults( String strQuery, Plugin plugin )
+    public List<SponsoredLinksSearchResult> getSearchResults( String strQuery, Plugin plugin )
     {
-        List<SponsoredLink> listDiggSubmitResult = new ArrayList<SponsoredLink>(  );
+        List<SponsoredLinksSearchResult> listResult = new ArrayList<SponsoredLinksSearchResult>(  );
         SponsoredLinksSearchEngine engine = (SponsoredLinksSearchEngine) SpringContextService.getPluginBean( plugin.getName(  ),
                 BEAN_SEARCH_ENGINE );
-        /*
-        List<Integer> diggSubmitListId = DiggSubmitHome.getDiggSubmitListId( filter, plugin );
-        List<SponsoredLinksSearchItem> listSearchesults = engine.getSearchResults( strQuery );
-        DiggSubmit diggSubmit;
-
-        for ( Integer nDiggSubmitId : diggSubmitListId )
+              
+        for( SponsoredLinksSearchItem item : engine.getSearchResults( strQuery ) )
         {
-            for ( SponsoredLinksSearchItem searchResult : listSearchesults )
+        	SponsoredLinksSearchResult result = new SponsoredLinksSearchResult(  );
+        	result.setId( item.getId(  ) );
+
+            try
             {
-                if ( ( searchResult.getType(  ) != null ) && ( searchResult.getId(  ) != null ) &&
-                        searchResult.getType(  ).equals( DigglikeIndexer.INDEX_TYPE_DIGG ) &&
-                        searchResult.getIdDiggSubmit(  ).matches( REGEX_ID ) &&
-                        ( Integer.parseInt( searchResult.getIdDiggSubmit(  ) ) == nDiggSubmitId ) )
-                {
-                    diggSubmit = DiggSubmitHome.findByPrimaryKey( nDiggSubmitId, plugin );
-
-                    if ( diggSubmit != null )
-                    {
-                        listDiggSubmitResult.add( diggSubmit );
-                    }
-                }
+                result.setDate( DateTools.stringToDate( item.getDate(  ) ) );
             }
-        }
-        */
+            catch ( ParseException e )
+            {
+                AppLogService.error( "Bad Date Format for indexed item \"" + item.getTitle(  ) + "\" : " +
+                    e.getMessage(  ) );
+            }
 
-        return listDiggSubmitResult;
+            result.setUrl( item.getUrl(  ) );
+            result.setTitle( item.getTitle(  ) );
+            result.setSummary( item.getSummary(  ) );
+            result.setType( item.getType(  ) );
+            
+            //Sponsored links specific data
+            result.setTargetType( item.getTargetType(  ) );
+            result.setSetId( Integer.valueOf( _patternUID.matcher( item.getId(  ) ).group( 1 ) ) );
+            result.setLinkOrder( Integer.valueOf( _patternUID.matcher( item.getId(  ) ).group( 2 ) ) );
+            result.setGroupId( Integer.valueOf( _patternGroupId.matcher( item.getId(  ) ).group( 1 ) ) );
+            
+            listResult.add( result );
+        }
+        
+        return listResult;
     }
+    
+    
 }

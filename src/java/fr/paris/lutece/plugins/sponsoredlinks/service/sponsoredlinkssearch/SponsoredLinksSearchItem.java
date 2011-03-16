@@ -43,10 +43,19 @@ import org.apache.lucene.document.Document;
  */
 public class SponsoredLinksSearchItem extends SearchItem
 {
+	/** Name of the {@link org.apache.lucene.document.Field} that stores the 
+	 * actual type of the resource pointed by a sponsoredlink
+	 */
     public static final String FIELD_TARGET_TYPE = "target_type";
+    
+    /** Name of the {@link org.apache.lucene.document.Field} that stores the id 
+     * of the group of tag
+     */
+    public static final String FIELD_GROUP_UID = "group_id";
 
     // Variables declarations
     private String _strTargetType;
+    private String _strGroupId;
 
 
     /**
@@ -56,6 +65,7 @@ public class SponsoredLinksSearchItem extends SearchItem
     {
         super( document );
         _strTargetType = document.get( FIELD_TARGET_TYPE ) ;
+        _strGroupId = document.get( FIELD_GROUP_UID );
     }
 
     /**
@@ -72,6 +82,26 @@ public class SponsoredLinksSearchItem extends SearchItem
     public void setTargetType( String strTargetType )
     {
     	_strTargetType = strTargetType;
+    }
+    
+    /**
+     * @return the id of the indexed {@link 
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup 
+     * <code>group of tags</code>}
+     */
+    public String getGroupId(  )
+    {
+    	return _strGroupId;
+    }
+    
+    /**
+     * @param strGroupId the id of the indexed {@link 
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup 
+     * <code>group of tags</code>}
+     */
+    public void setGroupId( String strGroupId )
+    {
+    	_strGroupId = strGroupId;
     }
 
 }
