@@ -36,11 +36,11 @@ package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.lucene.document.DateTools;
 
-import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink;
 import fr.paris.lutece.plugins.sponsoredlinks.service.search.SponsoredLinksIndexer;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -52,7 +52,6 @@ import fr.paris.lutece.portal.service.util.AppLogService;
  */
 public class SponsoredLinksSearchService
 {
-    private static final String BEAN_SEARCH_ENGINE = "sponsoredlinksSearchEngine";
     private static final String REGEX_UID = 
     	"^([\\d]+)_" + SponsoredLinksIndexer.SET_SHORT_NAME + 
     	":([\\d]+)_" + SponsoredLinksIndexer.LINK_SHORT_NAME + "$";
@@ -82,13 +81,13 @@ public class SponsoredLinksSearchService
      * Return every search results. 
      * @param strQuery The search query
      * @param plugin The plugin
-     * @return Results as a collection of {@link SponsoredLink}
+     * @return Results as a list of {@link SponsoredLinksSearchResult}
      */
     public List<SponsoredLinksSearchResult> getSearchResults( String strQuery, Plugin plugin )
     {
         List<SponsoredLinksSearchResult> listResult = new ArrayList<SponsoredLinksSearchResult>(  );
         SponsoredLinksSearchEngine engine = (SponsoredLinksSearchEngine) SpringContextService.getPluginBean( plugin.getName(  ),
-                BEAN_SEARCH_ENGINE );
+                SponsoredLinksSearchEngine.SPRING_BEAN_ID );
               
         for( SponsoredLinksSearchItem item : engine.getSearchResults( strQuery ) )
         {
@@ -112,9 +111,18 @@ public class SponsoredLinksSearchService
             
             //Sponsored links specific data
             result.setTargetType( item.getTargetType(  ) );
-            result.setSetId( Integer.valueOf( _patternUID.matcher( item.getId(  ) ).group( 1 ) ) );
-            result.setLinkOrder( Integer.valueOf( _patternUID.matcher( item.getId(  ) ).group( 2 ) ) );
-            result.setGroupId( Integer.valueOf( _patternGroupId.matcher( item.getId(  ) ).group( 1 ) ) );
+            Matcher matcher = _patternUID.matcher( item.getId(  ) );
+            if( matcher.matches(  ) )
+            {
+            	result.setSetId( Integer.parseInt( matcher.group( 1 ) ) );
+            	result.setLinkOrder( Integer.parseInt( matcher.group( 2 ) ) );
+            	
+            }
+            matcher = _patternGroupId.matcher( item.getGroupId(  ) );
+            if( matcher.matches(  ) )
+            {
+            	result.setGroupId( Integer.parseInt( matcher.group( 1 ) ) );
+            }
             
             listResult.add( result );
         }

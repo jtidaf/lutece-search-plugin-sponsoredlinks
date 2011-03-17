@@ -247,7 +247,8 @@ public class SponsoredLinksIndexer implements SearchIndexer
         
         //specific field for sponsored links
         doc.add( new Field( SponsoredLinksSearchItem.FIELD_TARGET_TYPE, template.getDescription(  ), Field.Store.YES, Field.Index.ANALYZED ) );
-        doc.add( new Field( SponsoredLinksSearchItem.FIELD_GROUP_UID, String.valueOf( group.getId(  ) ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        String strGroupId = group.getId(  ) + "_" + GROUP_SHORT_NAME;
+        doc.add( new Field( SponsoredLinksSearchItem.FIELD_GROUP_UID, strGroupId, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
 
         //return the document	
         return doc;

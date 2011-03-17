@@ -41,8 +41,11 @@ import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSetHome;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplate;
 import fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplateHome;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksGroupResourceIdService;
+import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksPlugin;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksSetResourceIdService;
 import fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksTemplateResourceIdService;
+import fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch.SponsoredLinksSearchResult;
+import fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch.SponsoredLinksSearchService;
 import fr.paris.lutece.portal.business.rbac.RBAC;
 import fr.paris.lutece.portal.service.insert.InsertService;
 import fr.paris.lutece.portal.service.insert.InsertServiceManager;
@@ -81,9 +84,11 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String JSP_DO_REMOVE_GROUP = "jsp/admin/plugins/sponsoredlinks/DoRemoveGroup.jsp";
     private static final String JSP_DO_REMOVE_SET = "jsp/admin/plugins/sponsoredlinks/DoRemoveSet.jsp";
     private static final String JSP_DO_REMOVE_TEMPLATE = "jsp/admin/plugins/sponsoredlinks/DoRemoveTemplate.jsp";
+    private static final String JSP_REDIRECT_TO_CREATE_GROUP = "CreateGroup.jsp";
     private static final String JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS = "ManageAdvancedParameters.jsp";
     private static final String JSP_REDIRECT_TO_MANAGE_GROUP = "ManageGroup.jsp";
     private static final String JSP_REDIRECT_TO_MANAGE_SET = "ManageSet.jsp";
+    private static final String JSP_REDIRECT_TO_MODIFY_GROUP = "ModifyGroup.jsp";
 
     //markers
     private static final String MARK_INSERT_SERVICE_LIST = "insertservice_list";
@@ -123,6 +128,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String PARAMETER_GROUP_ID = "id_group";
     private static final String PARAMETER_GROUP_TAGS = "tags";
     private static final String PARAMETER_GROUP_TITLE = "title";
+    private static final String PARAMETER_PLUGIN_NAME = "plugin_name";
+    private static final String PARAMETER_REQUEST = "request";
     private static final String PARAMETER_SET_ID = "id_set";
     private static final String PARAMETER_SET_LINK_LIST = "link_list";
     private static final String PARAMETER_SET_TITLE = "title";
@@ -258,7 +265,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Collection<SponsoredLinkGroup> listUnusedGroup = SponsoredLinkGroupHome.findUnusedGroupList( getPlugin(  ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-
+        
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LINK_LIST, computeLinkFormEntries(  ) );
@@ -608,11 +615,24 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, getLocale(  ) );
+        
+        if( request.getParameter( PARAMETER_REQUEST ) != null )
+        {
+        	String strTags = ( request.getParameter( PARAMETER_GROUP_TAGS ) );
+        	SponsoredLinkGroup savedGroup = new SponsoredLinkGroup(  );
+        	savedGroup.setTitle( request.getParameter( PARAMETER_GROUP_TITLE ));
+        	savedGroup.setTags( strTags );
+        	
+        	model.put( MARK_GROUP , savedGroup );
+        	
+        	model.put( MARK_GROUP_LIST, getConflictingGroup( strTags ) );
+        }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_GROUP, getLocale(  ), model );
 
         return getAdminPage( template.getHtml(  ) );
     }
+
 
     /**
      * Process the data capture form of a new sponsoredlinks group
@@ -628,9 +648,20 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
         }
-
+        
         String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
         String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
+        
+        //Check if the user want to test tags for conflicting groups
+        if( request.getParameter( PARAMETER_REQUEST ) != null )
+        {
+        	String strUrlRedirect = JSP_REDIRECT_TO_CREATE_GROUP +
+        	"?" + PARAMETER_REQUEST + 
+        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : "" ) + 
+            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : "" ) +
+            "&" + PARAMETER_PLUGIN_NAME + "=" + SponsoredLinksPlugin.PLUGIN_NAME;
+        	return strUrlRedirect;
+        }
 
         // Mandatory fields
         if ( ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
@@ -672,14 +703,46 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         int nId = Integer.parseInt( strId );
 
-        SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
-
         Map<String, Object> model = new HashMap<String, Object>(  );
         
+        if( request.getParameter( PARAMETER_REQUEST ) != null )
+        {
+        	String strTags = ( request.getParameter( PARAMETER_GROUP_TAGS ) );
+        	SponsoredLinkGroup savedGroup = new SponsoredLinkGroup(  );
+        	savedGroup.setId( nId );
+        	savedGroup.setTitle( request.getParameter( PARAMETER_GROUP_TITLE ));
+        	savedGroup.setTags( strTags );
+
+        	model.put( MARK_GROUP, savedGroup );
+        	
+        	List<SponsoredLinkGroup> listConflictGroup = new ArrayList<SponsoredLinkGroup>(  );
+        	
+        	Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
+        	
+        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : "", getPlugin(  ) ) )
+        	{
+        		int nGroupId = result.getGroupId(  );
+        		if( !cacheList.containsKey( nGroupId ) && nGroupId != nId )
+        		{
+        			cacheList.put( nGroupId, SponsoredLinkGroupHome.findByPrimaryKey( nGroupId, getPlugin(  ) ) );
+        		}
+        	}
+        	
+        	listConflictGroup.addAll( cacheList.values(  ) );
+        	
+        	model.put( MARK_GROUP_LIST, listConflictGroup );
+        }
+        else
+        {        
+        	SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
+        	model.put( MARK_GROUP, group );
+        }
+        
         model.put( MARK_PERMISSION_MODIFY_GROUP, bPermissionModifyGroup );
-        model.put( MARK_GROUP, group );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, getLocale(  ) );
+        
+        
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_GROUP, getLocale(  ), model );
 
@@ -696,7 +759,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     {
     	String strId = request.getParameter( PARAMETER_GROUP_ID );
         if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-        	 ( ( strId != null ) && !strId.trim(  ).equals( "" ) && 
+        	 ( request.getParameter( PARAMETER_REQUEST ) == null && 
+        	   ( strId != null ) && !strId.trim(  ).equals( "" ) && 
         	   !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) ) )
         {
@@ -707,6 +771,18 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
         String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
 
+        //Check if the user want to test tags for conflicting groups
+        if( request.getParameter( PARAMETER_REQUEST ) != null )
+        {
+        	String strUrlRedirect = JSP_REDIRECT_TO_MODIFY_GROUP +
+        	"?" + PARAMETER_REQUEST + 
+        	"&" + PARAMETER_GROUP_ID + "=" + ( strId != null ? strId : "" ) +
+        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : "" ) + 
+            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : "" ) +
+            "&" + PARAMETER_PLUGIN_NAME + "=" + SponsoredLinksPlugin.PLUGIN_NAME;
+        	return strUrlRedirect;
+        }
+        
         // Mandatory fields
         if ( ( strId == null ) || strId.trim(  ).equals( "" ) || 
         	 ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
@@ -727,6 +803,30 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         return JSP_REDIRECT_TO_MANAGE_GROUP;
     }
 
+    /**
+     * Returns any group that owned at least one of the requested tags
+     * @param strRequest the tags to check
+     * @return a list of conflicting group
+     */
+    private List<SponsoredLinkGroup> getConflictingGroup( String strRequest )
+    {
+    	List<SponsoredLinkGroup> listConflictGroup = new ArrayList<SponsoredLinkGroup>(  );
+    	
+    	Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
+    	
+    	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strRequest != null ) ? strRequest : "", getPlugin(  ) ) )
+    	{
+    		int nGroupId = result.getGroupId(  );
+    		if( !cacheList.containsKey( nGroupId ) )
+    		{
+    			cacheList.put( nGroupId, SponsoredLinkGroupHome.findByPrimaryKey( nGroupId, getPlugin(  ) ) );
+    		}
+    	}
+    	
+    	listConflictGroup.addAll( cacheList.values(  ) );
+    	return listConflictGroup;
+    }
+    
     /**
      * Manages the removal form of a sponsoredlink group whose identifier is in the http request
      *

@@ -39,10 +39,15 @@ import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.misc.ChainedFilter;
 import org.apache.lucene.queryParser.MultiFieldQueryParser;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.CachingWrapperFilter;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
@@ -68,6 +73,8 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
     {
         List<SponsoredLinksSearchItem> listResults = new ArrayList<SponsoredLinksSearchItem>(  );
         Searcher searcher = null;
+        Filter filter = null;
+        Query query = null;
 
         try
         {
@@ -80,25 +87,37 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             //filter on content
             if ( ( strQuery != null ) && !strQuery.equals( "" ) )
             {
-                Query queryContent = new TermQuery( new Term( SponsoredLinksSearchItem.FIELD_CONTENTS, strQuery ) );
-                queries.add( queryContent.toString(  ) );
-                fields.add( SponsoredLinksSearchItem.FIELD_CONTENTS );
-                flags.add( BooleanClause.Occur.MUST );
+                //Query queryContent = new TermQuery( new Term( SponsoredLinksSearchItem.FIELD_CONTENTS, strQuery ) );
+                QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, SearchItem.FIELD_CONTENTS,
+                        IndexationService.getAnalyser(  ) );
+                query = parser.parse( ( strQuery != null ) ? strQuery : "" );
+//                queries. .add( queryContent.toString(  ) );
+//                fields.add( SponsoredLinksSearchItem.FIELD_CONTENTS );
+//                flags.add( BooleanClause.Occur.SHOULD );
             }
 
             //filter on sponsoredlink type
-            Query queryTypeSponsoredLink = new TermQuery( new Term( SearchItem.FIELD_TYPE, SponsoredLinksIndexer.INDEX_TYPE_SPONSOREDLINKS ) );
+            Filter[] filters = null;
             
-            queries.add( queryTypeSponsoredLink.toString(  ) );
-            fields.add( SponsoredLinksSearchItem.FIELD_TYPE );
-            flags.add( BooleanClause.Occur.MUST );
-
-            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION, (String[]) queries.toArray( new String[queries.size(  )] ),
-                    (String[]) fields.toArray( new String[fields.size(  )] ),
-                    (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size(  )] ),
-                    IndexationService.getAnalyser(  ) );
-
-            TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
+            Query queryTypeSponsoredLink = new TermQuery( new Term( SearchItem.FIELD_TYPE, SponsoredLinksIndexer.INDEX_TYPE_SPONSOREDLINKS ) );
+            filters = new Filter[1];
+            
+            filters[filters.length - 1] = new CachingWrapperFilter( new QueryWrapperFilter( queryTypeSponsoredLink ) );
+            filter = new ChainedFilter( filters, ChainedFilter.AND );
+//            
+//            queries.add( queryTypeSponsoredLink.toString(  ) );
+//            fields.add( SponsoredLinksSearchItem.FIELD_TYPE );
+//            flags.add( BooleanClause.Occur.MUST );
+//
+//            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION, (String[]) queries.toArray( new String[queries.size(  )] ),
+//                    (String[]) fields.toArray( new String[fields.size(  )] ),
+//                    (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size(  )] ),
+//                    IndexationService.getAnalyser(  ) );
+//
+//            TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
+            
+            TopDocs topDocs = searcher.search( query, filter, LuceneSearchEngine.MAX_RESPONSES );
+            
             ScoreDoc[] hits = topDocs.scoreDocs;
 
             for ( int i = 0; i < hits.length; i++ )

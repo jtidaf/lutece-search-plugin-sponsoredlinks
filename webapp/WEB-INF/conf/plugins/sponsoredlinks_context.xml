@@ -9,6 +9,5 @@
 	<bean id="sponsoredLinkTemplateDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplateDAO" />
 	<bean id="sponsoredLinkDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkDAO" />
 	<!-- search engine -->
-	<bean id="sponsoredLinksSearchEngin
-	
+	<bean id="sponsoredLinksSearchEngine"  class="fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch.SponsoredLinksLuceneSearchEngine" />
 </beans>

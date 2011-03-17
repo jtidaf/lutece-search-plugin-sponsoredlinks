@@ -4,17 +4,30 @@
     
     <form method="post"  name="create_group" id="create_group" action="jsp/admin/plugins/sponsoredlinks/DoCreateGroup.jsp"> 
         <p>
-            <label for="title" >#i18n{sponsoredlinks.create_group.labelTitle} * : </label> 
-            <input type="text" id="title" name="title" size="60" maxlength="50" />
+            <label for="title" >#i18n{sponsoredlinks.create_group.labelTitle} * : </label>
+            <input type="text" id="title" name="title" size="60" maxlength="50" value="${(group.title)!}" />
         </p>        
         <p>
             <label for="tags">#i18n{sponsoredlinks.create_group.labelTags} * : </label>
-            <input type="text" id="tags" name="tags" size="60" maxlength="50" />
+            <input type="text" id="tags" name="tags" size="60" maxlength="50" value="${(group.tags)!}"/>
+            <input type="submit" value="#i18n{sponsoredlinks.create_group.buttonRequest}" name="request" class="button" />
         </p>  
         <p>   
             <input type="submit" value="#i18n{sponsoredlinks.create_group.buttonValidate}" name="submit" class="button" />
             <input type="submit" value="#i18n{sponsoredlinks.create_group.buttonCancel}" name="cancel" class="button" />
         </p>     
+	    <#if group_list?exists>
+	        <fieldset class="sponsoredlinks-form" style="margin-top: 11px;">
+	           <legend>#i18n{sponsoredlinks.create_group.labelConflictGroupList}</legend>
+	           <#if group_list?size &gt; 0>
+	           <#list group_list as conflict_group>
+	               <p><label>${conflict_group.title} : </label>${conflict_group.tags}</p>
+	           </#list>
+	           <#else>
+	               <p>#i18n{sponsoredlinks.create_group.messageNoConflictingGroup}</p>
+	           </#if>
+	        </fieldset>
+	    </#if>        
     </form>
     
 </div>
