@@ -34,15 +34,12 @@
 package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.misc.ChainedFilter;
-import org.apache.lucene.queryParser.MultiFieldQueryParser;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
@@ -80,20 +77,12 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
         {
             searcher = new IndexSearcher( IndexationService.getDirectoryIndex(  ), true );
 
-            Collection<String> queries = new ArrayList<String>(  );
-            Collection<String> fields = new ArrayList<String>(  );
-            Collection<BooleanClause.Occur> flags = new ArrayList<BooleanClause.Occur>(  );
-
             //filter on content
             if ( ( strQuery != null ) && !strQuery.equals( "" ) )
             {
-                //Query queryContent = new TermQuery( new Term( SponsoredLinksSearchItem.FIELD_CONTENTS, strQuery ) );
                 QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, SearchItem.FIELD_CONTENTS,
                         IndexationService.getAnalyser(  ) );
                 query = parser.parse( ( strQuery != null ) ? strQuery : "" );
-//                queries. .add( queryContent.toString(  ) );
-//                fields.add( SponsoredLinksSearchItem.FIELD_CONTENTS );
-//                flags.add( BooleanClause.Occur.SHOULD );
             }
 
             //filter on sponsoredlink type
@@ -104,17 +93,7 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             
             filters[filters.length - 1] = new CachingWrapperFilter( new QueryWrapperFilter( queryTypeSponsoredLink ) );
             filter = new ChainedFilter( filters, ChainedFilter.AND );
-//            
-//            queries.add( queryTypeSponsoredLink.toString(  ) );
-//            fields.add( SponsoredLinksSearchItem.FIELD_TYPE );
-//            flags.add( BooleanClause.Occur.MUST );
-//
-//            Query queryMulti = MultiFieldQueryParser.parse( IndexationService.LUCENE_INDEX_VERSION, (String[]) queries.toArray( new String[queries.size(  )] ),
-//                    (String[]) fields.toArray( new String[fields.size(  )] ),
-//                    (BooleanClause.Occur[]) flags.toArray( new BooleanClause.Occur[flags.size(  )] ),
-//                    IndexationService.getAnalyser(  ) );
-//
-//            TopDocs topDocs = searcher.search( queryMulti, LuceneSearchEngine.MAX_RESPONSES );
+
             
             TopDocs topDocs = searcher.search( query, filter, LuceneSearchEngine.MAX_RESPONSES );
             

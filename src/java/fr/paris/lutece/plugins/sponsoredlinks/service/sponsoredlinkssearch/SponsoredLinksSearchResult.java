@@ -44,7 +44,7 @@ public class SponsoredLinksSearchResult extends SearchResult
 	private int _nSetId;
 	private int _nLinkOrder;
 	private int _nGroupId;
-	private String strTargetType;
+	private String _strTargetType;
 	
 	/**
 	 * @return the {@link 
@@ -109,14 +109,14 @@ public class SponsoredLinksSearchResult extends SearchResult
 	 */
 	public String getTargetType(  )
 	{
-		return strTargetType;
+		return _strTargetType;
 	}
 	/**
-	 * @param strTargetType the type of the targeted resource to set
+	 * @param _strTargetType the type of the targeted resource to set
 	 */
 	public void setTargetType( String strTargetType )
 	{
-		this.strTargetType = strTargetType;
+		_strTargetType = strTargetType;
 	}
 	
 }
