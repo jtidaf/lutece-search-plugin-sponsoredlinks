@@ -1,0 +1,14 @@
+.sponsoredlinks
+{
+    background: none repeat scroll 0 0 #EDEDED;
+    border: 1px solid #EDEDED;
+    margin: 0.5em 0;
+    padding: 0 0.5em 0.5em;
+}
+
+.sponsoredlinks p
+{
+    color: #888888;
+    font-style: italic;
+    margin: 0 0 0.5em;
+}

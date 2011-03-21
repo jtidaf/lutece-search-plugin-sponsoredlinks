@@ -62,6 +62,6 @@
     
     <!--  Specific plugin CSS stylesheet   --> 
     <css-stylesheets>
-<!--          <css-stylesheet>sponsoredlinks/sponsoredlinks.css</css-stylesheet>-->
+          <css-stylesheet>sponsoredlinks/sponsoredlinks.css</css-stylesheet>
     </css-stylesheets> 
 </plug-in>

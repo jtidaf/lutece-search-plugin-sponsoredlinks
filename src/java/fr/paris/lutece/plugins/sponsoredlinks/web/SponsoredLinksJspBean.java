@@ -238,7 +238,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         model.put( MARK_PERMISSION_CREATE_SET, bPermissionCreateSet );
         model.put( MARK_PERMISSION_DELETE_SET, bPermissionDeleteSetModel );
 
-        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPageSet );
+        model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageSet );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_SET_LIST, paginator.getPageItems(  ) );
 
@@ -296,8 +296,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
 
         // Mandatory fields
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
-        	 ( strGroupId == null ) || strGroupId.trim(  ).equals( "" ) ||
+        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strGroupId == null ) || strGroupId.trim(  ).equals( EMPTY_STRING ) ||
         	 ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
@@ -410,7 +410,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     {
     	String strSetId = request.getParameter( PARAMETER_SET_ID );
     	if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-    		 ( ( strSetId != null ) && !strSetId.trim(  ).equals( "" ) &&
+    		 ( ( strSetId != null ) && !strSetId.trim(  ).equals( EMPTY_STRING ) &&
     		   !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
                     SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) ) )
         {
@@ -423,9 +423,9 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
 
         // Mandatory fields
-        if ( ( strSetId == null ) || strSetId.trim(  ).equals( "" ) ||
-        	 ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
-        	 ( strGroupId == null ) || strGroupId.trim(  ).equals( "" ) ||
+        if ( ( strSetId == null ) || strSetId.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strGroupId == null ) || strGroupId.trim(  ).equals( EMPTY_STRING ) ||
              ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
@@ -587,7 +587,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         model.put( MARK_PERMISSION_CREATE_GROUP, bPermissionCreateGroup );
         model.put( MARK_PERMISSION_DELETE_GROUP, bPermissionDeleteGroupModel );
 
-        model.put( MARK_NB_ITEMS_PER_PAGE, "" + _nItemsPerPageGroup );
+        model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageGroup );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_GROUP_LIST, paginator.getPageItems(  ) );
 
@@ -629,7 +629,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         	
         	Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
         	
-        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : "", getPlugin(  ) ) )
+        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : EMPTY_STRING, getPlugin(  ) ) )
         	{
         		int nGroupId = result.getGroupId(  );
         		if( !cacheList.containsKey( nGroupId ) )
@@ -672,15 +672,15 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         {
         	String strUrlRedirect = JSP_REDIRECT_TO_CREATE_GROUP +
         	"?" + PARAMETER_REQUEST + 
-        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : "" ) + 
-            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : "" ) +
+        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : EMPTY_STRING ) + 
+            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : EMPTY_STRING ) +
             "&" + PARAMETER_PLUGIN_NAME + "=" + SponsoredLinksPlugin.PLUGIN_NAME;
         	return strUrlRedirect;
         }
 
         // Mandatory fields
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
-        	 ( strTags == null ) || strTags.trim(  ).equals( "" ) )
+        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strTags == null ) || strTags.trim(  ).equals( EMPTY_STRING ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -734,7 +734,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         	
         	Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
         	
-        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : "", getPlugin(  ) ) )
+        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : EMPTY_STRING, getPlugin(  ) ) )
         	{
         		int nGroupId = result.getGroupId(  );
         		if( !cacheList.containsKey( nGroupId ) && nGroupId != nId )
@@ -775,7 +775,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     	String strId = request.getParameter( PARAMETER_GROUP_ID );
         if ( request.getParameter( PARAMETER_CANCEL ) != null ||
         	 ( request.getParameter( PARAMETER_REQUEST ) == null && 
-        	   ( strId != null ) && !strId.trim(  ).equals( "" ) && 
+        	   ( strId != null ) && !strId.trim(  ).equals( EMPTY_STRING ) && 
         	   !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) ) )
         {
@@ -791,17 +791,17 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         {
         	String strUrlRedirect = JSP_REDIRECT_TO_MODIFY_GROUP +
         	"?" + PARAMETER_REQUEST + 
-        	"&" + PARAMETER_GROUP_ID + "=" + ( strId != null ? strId : "" ) +
-        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : "" ) + 
-            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : "" ) +
+        	"&" + PARAMETER_GROUP_ID + "=" + ( strId != null ? strId : EMPTY_STRING ) +
+        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : EMPTY_STRING ) + 
+            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : EMPTY_STRING ) +
             "&" + PARAMETER_PLUGIN_NAME + "=" + SponsoredLinksPlugin.PLUGIN_NAME;
         	return strUrlRedirect;
         }
         
         // Mandatory fields
-        if ( ( strId == null ) || strId.trim(  ).equals( "" ) || 
-        	 ( strTitle == null ) || strTitle.trim(  ).equals( "" ) ||
-        	 ( strTags == null ) || strTags.trim(  ).equals( "" ) )
+        if ( ( strId == null ) || strId.trim(  ).equals( EMPTY_STRING ) || 
+        	 ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strTags == null ) || strTags.trim(  ).equals( EMPTY_STRING ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -980,8 +980,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strInsertServiceId = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
 
         // Mandatory fields
-        if ( ( strDescription == null ) || strDescription.trim(  ).equals( "" ) ||
-        	 ( strInsertServiceId == null ) || strInsertServiceId.trim(  ).equals( "" ) )
+        if ( ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strInsertServiceId == null ) || strInsertServiceId.trim(  ).equals( EMPTY_STRING ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -1012,7 +1012,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strTemplateId = request.getParameter( PARAMETER_TEMPLATE_ID );
 
         // Mandatory fields
-        if ( ( strTemplateId == null ) || strTemplateId.trim(  ).equals( "" ) )
+        if ( ( strTemplateId == null ) || strTemplateId.trim(  ).equals( EMPTY_STRING ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -1075,9 +1075,9 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strInsertServiceId = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
 
         // Mandatory fields
-        if ( ( strTemplateId == null ) || strTemplateId.trim(  ).equals( "" ) ||
-        	 ( strDescription == null ) || strDescription.trim(  ).equals( "" ) ||
-        	 ( strInsertServiceId == null ) || strInsertServiceId.trim(  ).equals( "" ) )
+        if ( ( strTemplateId == null ) || strTemplateId.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) ||
+        	 ( strInsertServiceId == null ) || strInsertServiceId.trim(  ).equals( EMPTY_STRING ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }

@@ -48,7 +48,7 @@ import fr.paris.lutece.portal.service.util.AppLogService;
 
 
 /**
- * class SponsoredLinksSearchService
+ * class SponsoredLinksIncludeService
  */
 public class SponsoredLinksSearchService
 {
