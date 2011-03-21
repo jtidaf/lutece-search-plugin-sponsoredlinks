@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.misc.ChainedFilter;
@@ -78,7 +79,7 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             searcher = new IndexSearcher( IndexationService.getDirectoryIndex(  ), true );
 
             //filter on content
-            if ( ( strQuery != null ) && !strQuery.equals( "" ) )
+            if ( StringUtils.isNotBlank( strQuery ) )
             {
                 QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION, SearchItem.FIELD_CONTENTS,
                         IndexationService.getAnalyser(  ) );

@@ -72,6 +72,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * This class provides the user interface to manage SponsoredLinks features.
  */
@@ -296,8 +298,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
 
         // Mandatory fields
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strGroupId == null ) || strGroupId.trim(  ).equals( EMPTY_STRING ) ||
+        if ( StringUtils.isBlank( strTitle ) || StringUtils.isBlank( strGroupId ) ||
         	 ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
@@ -410,7 +411,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     {
     	String strSetId = request.getParameter( PARAMETER_SET_ID );
     	if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-    		 ( ( strSetId != null ) && !strSetId.trim(  ).equals( EMPTY_STRING ) &&
+    		 ( StringUtils.isNotBlank( strSetId ) &&
     		   !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
                     SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) ) )
         {
@@ -423,9 +424,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
 
         // Mandatory fields
-        if ( ( strSetId == null ) || strSetId.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strGroupId == null ) || strGroupId.trim(  ).equals( EMPTY_STRING ) ||
+        if ( StringUtils.isBlank( strSetId ) || StringUtils.isBlank( strTitle ) ||
+        	 StringUtils.isBlank( strGroupId ) || 
              ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
@@ -670,17 +670,17 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         //Check if the user want to test tags for conflicting groups
         if( request.getParameter( PARAMETER_REQUEST ) != null )
         {
-        	String strUrlRedirect = JSP_REDIRECT_TO_CREATE_GROUP +
-        	"?" + PARAMETER_REQUEST + 
-        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : EMPTY_STRING ) + 
-            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : EMPTY_STRING ) +
-            "&" + PARAMETER_PLUGIN_NAME + "=" + SponsoredLinksPlugin.PLUGIN_NAME;
-        	return strUrlRedirect;
+        	UrlItem urlRedirect = new UrlItem( JSP_REDIRECT_TO_MODIFY_GROUP );
+        	urlRedirect.addParameter(PARAMETER_REQUEST, EMPTY_STRING );
+        	urlRedirect.addParameter(PARAMETER_GROUP_TITLE, ( strTitle != null ? strTitle : EMPTY_STRING ) );
+        	urlRedirect.addParameter(PARAMETER_GROUP_TAGS, ( strTags != null ? strTags : EMPTY_STRING ) );
+        	urlRedirect.addParameter(PARAMETER_PLUGIN_NAME, SponsoredLinksPlugin.PLUGIN_NAME );
+        	
+        	return urlRedirect.getUrl(  );
         }
 
         // Mandatory fields
-        if ( ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strTags == null ) || strTags.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTitle ) || StringUtils.isBlank( strTags ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -775,7 +775,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     	String strId = request.getParameter( PARAMETER_GROUP_ID );
         if ( request.getParameter( PARAMETER_CANCEL ) != null ||
         	 ( request.getParameter( PARAMETER_REQUEST ) == null && 
-        	   ( strId != null ) && !strId.trim(  ).equals( EMPTY_STRING ) && 
+        	   StringUtils.isNotBlank( strId  ) && 
         	   !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) ) )
         {
@@ -789,19 +789,19 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         //Check if the user want to test tags for conflicting groups
         if( request.getParameter( PARAMETER_REQUEST ) != null )
         {
-        	String strUrlRedirect = JSP_REDIRECT_TO_MODIFY_GROUP +
-        	"?" + PARAMETER_REQUEST + 
-        	"&" + PARAMETER_GROUP_ID + "=" + ( strId != null ? strId : EMPTY_STRING ) +
-        	"&" + PARAMETER_GROUP_TITLE + "=" + ( strTitle != null ? strTitle : EMPTY_STRING ) + 
-            "&" + PARAMETER_GROUP_TAGS + "=" + ( strTags != null ? strTags : EMPTY_STRING ) +
-            "&" + PARAMETER_PLUGIN_NAME + "=" + SponsoredLinksPlugin.PLUGIN_NAME;
-        	return strUrlRedirect;
+        	UrlItem urlRedirect = new UrlItem( JSP_REDIRECT_TO_MODIFY_GROUP );
+        	urlRedirect.addParameter(PARAMETER_REQUEST, EMPTY_STRING );
+        	urlRedirect.addParameter(PARAMETER_GROUP_ID, ( strId != null ? strId : EMPTY_STRING ) );
+        	urlRedirect.addParameter(PARAMETER_GROUP_TITLE, ( strTitle != null ? strTitle : EMPTY_STRING ) );
+        	urlRedirect.addParameter(PARAMETER_GROUP_TAGS, ( strTags != null ? strTags : EMPTY_STRING ) );
+        	urlRedirect.addParameter(PARAMETER_PLUGIN_NAME, SponsoredLinksPlugin.PLUGIN_NAME );
+        	
+        	return urlRedirect.getUrl(  );
         }
         
         // Mandatory fields
-        if ( ( strId == null ) || strId.trim(  ).equals( EMPTY_STRING ) || 
-        	 ( strTitle == null ) || strTitle.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strTags == null ) || strTags.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strId ) || StringUtils.isBlank( strTitle ) ||
+        		StringUtils.isBlank( strTags ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -980,8 +980,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strInsertServiceId = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
 
         // Mandatory fields
-        if ( ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strInsertServiceId == null ) || strInsertServiceId.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strDescription ) || StringUtils.isBlank( strInsertServiceId ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -1012,7 +1011,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strTemplateId = request.getParameter( PARAMETER_TEMPLATE_ID );
 
         // Mandatory fields
-        if ( ( strTemplateId == null ) || strTemplateId.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTemplateId ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -1075,9 +1074,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String strInsertServiceId = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
 
         // Mandatory fields
-        if ( ( strTemplateId == null ) || strTemplateId.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strDescription == null ) || strDescription.trim(  ).equals( EMPTY_STRING ) ||
-        	 ( strInsertServiceId == null ) || strInsertServiceId.trim(  ).equals( EMPTY_STRING ) )
+        if ( StringUtils.isBlank( strTemplateId ) || StringUtils.isBlank( strDescription ) ||
+        		StringUtils.isBlank( strInsertServiceId ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }

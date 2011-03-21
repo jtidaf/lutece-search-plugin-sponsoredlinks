@@ -36,6 +36,8 @@ package fr.paris.lutece.plugins.sponsoredlinks.business;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+
 
 /**
  *
@@ -144,7 +146,7 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
      */
     public boolean isValidLink(  )
 	{
-    	if( _strLink == null )
+    	if( StringUtils.isBlank( _strLink ) )
     	{
     		return false;
     	}
@@ -157,8 +159,7 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 		
 		String strHref = matcher.group( HREF );
 		String strContent = matcher.group( CONTENT );
-		if( ( strHref == null ) || strHref.equals( "" ) ||
-			( strContent == null ) || strContent.equals( "" ) )
+		if( StringUtils.isBlank( strHref ) || StringUtils.isBlank( strContent  ) )
 		{
 			return false;
 		}
@@ -175,7 +176,7 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
      */
 	public String getLinkAttribute( int nAttr )
 	{
-		if( ( _strLink == null ) || 
+		if( StringUtils.isBlank( _strLink ) || 
 			  (	( nAttr != HREF ) && ( nAttr != ALT ) &&
 				( nAttr != TITLE ) && ( nAttr != CONTENT ) ) )
 		{

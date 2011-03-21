@@ -51,6 +51,7 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 
@@ -235,11 +236,11 @@ public class SponsoredLinksIndexer implements SearchIndexer
         doc.add( new Field( SearchItem.FIELD_TITLE, link.getLinkAttribute( SponsoredLink.CONTENT ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
         doc.add( new Field( SearchItem.FIELD_URL, link.getLinkAttribute( SponsoredLink.HREF ), Field.Store.YES, Field.Index.NOT_ANALYZED ) );
         String strSummary = link.getLinkAttribute( SponsoredLink.ALT );
-        if( ( strSummary == null ) || strSummary.equals( "" ) )
+        if( StringUtils.isBlank( strSummary ) )
         {
         	strSummary = link.getLinkAttribute( SponsoredLink.TITLE );
         }
-        if( ( strSummary != null ) && !strSummary.equals( "" ) )
+        if( StringUtils.isNotBlank( strSummary ) )
         {
         	doc.add( new Field( SearchItem.FIELD_SUMMARY, strSummary, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
         }
