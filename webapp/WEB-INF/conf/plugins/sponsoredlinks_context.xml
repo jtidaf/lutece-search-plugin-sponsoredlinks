@@ -11,5 +11,5 @@
 	<!-- search engine -->
 	<bean id="sponsoredLinksSearchEngine"  class="fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch.SponsoredLinksLuceneSearchEngine" />
 	<!-- service -->
-	<bean id="sponsoredLinksService"  class="fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksService" />
+	<bean id="sponsoredlinks.sponsoredLinksService"  class="fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksService" />
 </beans>
