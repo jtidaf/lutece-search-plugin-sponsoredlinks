@@ -33,10 +33,10 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.business;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
 
 
 /**
@@ -48,31 +48,32 @@ import org.apache.commons.lang.StringUtils;
  */
 public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
 {
-	// Number of the capturing group according to the regex
-	/** Key for the href attribute in the link */
-	public static final int HREF = 1;
-	/** Key for the title attribute in the link */
-	public static final int TITLE = 2;
-	/** Key for the alt attribute in the link */
-	public static final int ALT = 3;
-	/** Key for the content in the link */
-	public static final int CONTENT = 4;
-	
-	//Regex used to validate a link and capture data from it
-	//^<a\b(?:href="([^>]*?)"|title="([^>]*?)"|alt="([^>]*?)"|[^>]*?)*>(.*?)</a>$
-	private static final String SPONSORED_LINK_REGEX = 
-		"^<a\\b(?:" + //opening of <a> tag and start of a non-capturing group
-			"href=\"([^>]*?)\"|" + //href attribute with capturing group #1
-			"title=\"([^>]*?)\"|"+ //title attribute with capturing group #2
-			"alt=\"([^>]*?)\"|"+ //alt attribute with capturing group #3
-			"[^>]*?" + // any non-matching attribute
-		")*>" + // end of the non-capturing group and closing of the <a> tag
-			"(.*?)" + // inner content with capturing group #4
-		"</a>$"; // closing tag
-	
-	//Pre-compiled representation of the regex.
-	private static final Pattern _pattern = Pattern.compile( SPONSORED_LINK_REGEX, Pattern.CASE_INSENSITIVE );
-	
+    // Number of the capturing group according to the regex
+    /** Key for the href attribute in the link */
+    public static final int HREF = 1;
+
+    /** Key for the title attribute in the link */
+    public static final int TITLE = 2;
+
+    /** Key for the alt attribute in the link */
+    public static final int ALT = 3;
+
+    /** Key for the content in the link */
+    public static final int CONTENT = 4;
+
+    //Regex used to validate a link and capture data from it
+    //^<a\b(?:href="([^>]*?)"|title="([^>]*?)"|alt="([^>]*?)"|[^>]*?)*>(.*?)</a>$
+    private static final String SPONSORED_LINK_REGEX = "^<a\\b(?:" + //opening of <a> tag and start of a non-capturing group
+        "href=\"([^>]*?)\"|" + //href attribute with capturing group #1
+        "title=\"([^>]*?)\"|" + //title attribute with capturing group #2
+        "alt=\"([^>]*?)\"|" + //alt attribute with capturing group #3
+        "[^>]*?" + // any non-matching attribute
+        ")*>" + // end of the non-capturing group and closing of the <a> tag
+        "(.*?)" + // inner content with capturing group #4
+        "</a>$"; // closing tag
+
+    //Pre-compiled representation of the regex.
+    private static final Pattern _pattern = Pattern.compile( SPONSORED_LINK_REGEX, Pattern.CASE_INSENSITIVE );
     private int _nOrder;
     private String _strLink;
 
@@ -137,7 +138,7 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
             }
         }
     }
-    
+
     /**
      * Check if the link is a valid html link (as returned by an InsertService).
      * The link must at least contain non-empty href attribute and content.
@@ -145,51 +146,54 @@ public class SponsoredLink implements java.lang.Comparable<SponsoredLink>
      * @return true if the link is valid html
      */
     public boolean isValidLink(  )
-	{
-    	if( StringUtils.isBlank( _strLink ) )
-    	{
-    		return false;
-    	}
-    	
-		Matcher matcher = _pattern.matcher( _strLink );
-		if( !matcher.matches(  ) ) 
-		{
-			return false;
-		}
-		
-		String strHref = matcher.group( HREF );
-		String strContent = matcher.group( CONTENT );
-		if( StringUtils.isBlank( strHref ) || StringUtils.isBlank( strContent  ) )
-		{
-			return false;
-		}
-		return true;
-	}
-	
+    {
+        if ( StringUtils.isBlank( _strLink ) )
+        {
+            return false;
+        }
+
+        Matcher matcher = _pattern.matcher( _strLink );
+
+        if ( !matcher.matches(  ) )
+        {
+            return false;
+        }
+
+        String strHref = matcher.group( HREF );
+        String strContent = matcher.group( CONTENT );
+
+        if ( StringUtils.isBlank( strHref ) || StringUtils.isBlank( strContent ) )
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     /**
      * Parses the link to find the specified attribute or the content.
      * The link has to be valid html.
-     * @param nAttr the key for the attribute. Has to be in the set 
-     * 		{ALT, HREF, TITLE, CONTENT}
+     * @param nAttr the key for the attribute. Has to be in the set
+     *                 {ALT, HREF, TITLE, CONTENT}
      * @return the attribute/content if exists. Returns null if the link is null
      *  and if the key or the link is not valid
      */
-	public String getLinkAttribute( int nAttr )
-	{
-		if( StringUtils.isBlank( _strLink ) || 
-			  (	( nAttr != HREF ) && ( nAttr != ALT ) &&
-				( nAttr != TITLE ) && ( nAttr != CONTENT ) ) )
-		{
-			return null;
-		}
-		
-		String strHrefAttr = null;
-		Matcher matcher = _pattern.matcher( _strLink );
-		if( matcher.matches(  ) )
-		{
-			strHrefAttr = matcher.group( nAttr );
-		}
-		
-		return strHrefAttr;
-	}
+    public String getLinkAttribute( int nAttr )
+    {
+        if ( StringUtils.isBlank( _strLink ) ||
+                ( ( nAttr != HREF ) && ( nAttr != ALT ) && ( nAttr != TITLE ) && ( nAttr != CONTENT ) ) )
+        {
+            return null;
+        }
+
+        String strHrefAttr = null;
+        Matcher matcher = _pattern.matcher( _strLink );
+
+        if ( matcher.matches(  ) )
+        {
+            strHrefAttr = matcher.group( nAttr );
+        }
+
+        return strHrefAttr;
+    }
 }

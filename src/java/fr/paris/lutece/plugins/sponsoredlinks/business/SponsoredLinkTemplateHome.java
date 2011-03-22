@@ -70,7 +70,6 @@ public final class SponsoredLinkTemplateHome
     {
         _dao.insert( template, plugin );
 
-        //TODO/ Put a new null SponsoredLink for every set
         return template;
     }
 
@@ -83,7 +82,6 @@ public final class SponsoredLinkTemplateHome
      */
     public static SponsoredLinkTemplate update( SponsoredLinkTemplate template, Plugin plugin )
     {
-        //TODO: Check whether the resource type have changed and update link sets consequently
         _dao.store( template, plugin );
 
         return template;
@@ -133,7 +131,6 @@ public final class SponsoredLinkTemplateHome
         template.setOrder( nNewOrder );
         _dao.store( template, plugin );
 
-        //TODO: update link sets consequently
         return template;
     }
 
@@ -149,7 +146,6 @@ public final class SponsoredLinkTemplateHome
         int nMaxOrder = _dao.newPrimaryKey( plugin ) - 1;
         template = updateOrder( template, nMaxOrder, plugin );
 
-        //TODO: remove matching link in every set
         _dao.delete( template, plugin );
     }
 

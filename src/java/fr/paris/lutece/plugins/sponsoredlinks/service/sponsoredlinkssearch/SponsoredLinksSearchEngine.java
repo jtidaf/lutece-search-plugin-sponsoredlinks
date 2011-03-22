@@ -41,13 +41,13 @@ import java.util.List;
  */
 public interface SponsoredLinksSearchEngine
 {
-	/** Unique id for spring bean declaration in the plugin context */
+    /** Unique id for spring bean declaration in the plugin context */
     String SPRING_BEAN_ID = "sponsoredLinksSearchEngine";
-    
-	/**
-     * Return search results
-     * @param strQuery The search query
-     * @return Results as a collection of SearchResult
-     */
+
+    /**
+    * Return search results
+    * @param strQuery The search query
+    * @return Results as a collection of SearchResult
+    */
     List<SponsoredLinksSearchItem> getSearchResults( String strQuery );
 }

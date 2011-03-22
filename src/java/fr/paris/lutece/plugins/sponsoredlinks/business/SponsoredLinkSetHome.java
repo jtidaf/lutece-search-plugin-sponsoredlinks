@@ -78,7 +78,6 @@ public final class SponsoredLinkSetHome
 
         for ( SponsoredLink link : linkList )
         {
-            //TODO : Gestion des exceptions (rollback de la requête précédante)
             _daoLink.insert( nSetId, link, plugin );
         }
 
@@ -101,7 +100,6 @@ public final class SponsoredLinkSetHome
 
         for ( SponsoredLink link : linkList )
         {
-            //TODO : Gestion des exceptions (rollback)
             _daoLink.store( nSetId, link, plugin );
         }
 

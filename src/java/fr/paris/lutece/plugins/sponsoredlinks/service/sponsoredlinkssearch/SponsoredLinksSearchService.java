@@ -33,18 +33,19 @@
  */
 package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.lucene.document.DateTools;
-
 import fr.paris.lutece.plugins.sponsoredlinks.service.search.SponsoredLinksIndexer;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
 import fr.paris.lutece.portal.service.util.AppLogService;
+
+import org.apache.lucene.document.DateTools;
+
+import java.text.ParseException;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 /**
@@ -52,12 +53,9 @@ import fr.paris.lutece.portal.service.util.AppLogService;
  */
 public class SponsoredLinksSearchService
 {
-    private static final String REGEX_UID = 
-    	"^([\\d]+)_" + SponsoredLinksIndexer.SET_SHORT_NAME + 
-    	":([\\d]+)_" + SponsoredLinksIndexer.LINK_SHORT_NAME + "$";
-    private static final String REGEX_GROUP_ID = 
-    	"^([\\d]+)_" + SponsoredLinksIndexer.GROUP_SHORT_NAME + "$";
-    
+    private static final String REGEX_UID = "^([\\d]+)_" + SponsoredLinksIndexer.SET_SHORT_NAME + ":([\\d]+)_" +
+        SponsoredLinksIndexer.LINK_SHORT_NAME + "$";
+    private static final String REGEX_GROUP_ID = "^([\\d]+)_" + SponsoredLinksIndexer.GROUP_SHORT_NAME + "$";
     private static final Pattern _patternUID = Pattern.compile( REGEX_UID );
     private static final Pattern _patternGroupId = Pattern.compile( REGEX_GROUP_ID );
 
@@ -78,7 +76,7 @@ public class SponsoredLinksSearchService
     }
 
     /**
-     * Return every search results. 
+     * Return every search results.
      * @param strQuery The search query
      * @param plugin The plugin
      * @return Results as a list of {@link SponsoredLinksSearchResult}
@@ -88,11 +86,11 @@ public class SponsoredLinksSearchService
         List<SponsoredLinksSearchResult> listResult = new ArrayList<SponsoredLinksSearchResult>(  );
         SponsoredLinksSearchEngine engine = (SponsoredLinksSearchEngine) SpringContextService.getPluginBean( plugin.getName(  ),
                 SponsoredLinksSearchEngine.SPRING_BEAN_ID );
-              
-        for( SponsoredLinksSearchItem item : engine.getSearchResults( strQuery ) )
+
+        for ( SponsoredLinksSearchItem item : engine.getSearchResults( strQuery ) )
         {
-        	SponsoredLinksSearchResult result = new SponsoredLinksSearchResult(  );
-        	result.setId( item.getId(  ) );
+            SponsoredLinksSearchResult result = new SponsoredLinksSearchResult(  );
+            result.setId( item.getId(  ) );
 
             try
             {
@@ -108,27 +106,28 @@ public class SponsoredLinksSearchService
             result.setTitle( item.getTitle(  ) );
             result.setSummary( item.getSummary(  ) );
             result.setType( item.getType(  ) );
-            
+
             //Sponsored links specific data
             result.setTargetType( item.getTargetType(  ) );
+
             Matcher matcher = _patternUID.matcher( item.getId(  ) );
-            if( matcher.matches(  ) )
+
+            if ( matcher.matches(  ) )
             {
-            	result.setSetId( Integer.parseInt( matcher.group( 1 ) ) );
-            	result.setLinkOrder( Integer.parseInt( matcher.group( 2 ) ) );
-            	
+                result.setSetId( Integer.parseInt( matcher.group( 1 ) ) );
+                result.setLinkOrder( Integer.parseInt( matcher.group( 2 ) ) );
             }
+
             matcher = _patternGroupId.matcher( item.getGroupId(  ) );
-            if( matcher.matches(  ) )
+
+            if ( matcher.matches(  ) )
             {
-            	result.setGroupId( Integer.parseInt( matcher.group( 1 ) ) );
+                result.setGroupId( Integer.parseInt( matcher.group( 1 ) ) );
             }
-            
+
             listResult.add( result );
         }
-        
+
         return listResult;
     }
-    
-    
 }

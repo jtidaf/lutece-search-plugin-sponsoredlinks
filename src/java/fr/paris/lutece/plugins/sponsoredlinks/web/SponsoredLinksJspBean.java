@@ -63,7 +63,10 @@ import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.html.Paginator;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.security.InvalidParameterException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -72,7 +75,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 
 /**
  * This class provides the user interface to manage SponsoredLinks features.
@@ -222,13 +224,15 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Collection<SponsoredLinkSet> listSet = SponsoredLinkSetHome.findAll( getPlugin(  ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        Map<String, Object>  bPermissionDeleteSetModel = new HashMap<String, Object>(  );
-        for( SponsoredLinkSet set : listSet )
+        Map<String, Object> bPermissionDeleteSetModel = new HashMap<String, Object>(  );
+
+        for ( SponsoredLinkSet set : listSet )
         {
-        	bPermissionDeleteSetModel.put( String.valueOf( set.getId(  ) ), 
-        			RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-        	                String.valueOf( set.getId(  ) ), SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ) );
+            bPermissionDeleteSetModel.put( String.valueOf( set.getId(  ) ),
+                RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, String.valueOf( set.getId(  ) ),
+                    SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ) );
         }
+
         LocalizedPaginator<SponsoredLinkSet> paginator = new LocalizedPaginator<SponsoredLinkSet>( (List<SponsoredLinkSet>) listSet,
                 _nItemsPerPageSet, request.getRequestURI(  ), LocalizedPaginator.PARAMETER_PAGE_INDEX,
                 _strCurrentPageIndexSet, getLocale(  ) );
@@ -267,7 +271,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Collection<SponsoredLinkGroup> listUnusedGroup = SponsoredLinkGroupHome.findUnusedGroupList( getPlugin(  ) );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        
+
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LINK_LIST, computeLinkFormEntries(  ) );
@@ -286,11 +290,11 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateSet( HttpServletRequest request )
     {
-        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-        	 !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( ( request.getParameter( PARAMETER_CANCEL ) != null ) ||
+                !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksSetResourceIdService.PERMISSION_CREATE_SET, getUser(  ) ) )
         {
-        	return JSP_REDIRECT_TO_MANAGE_SET;
+            return JSP_REDIRECT_TO_MANAGE_SET;
         }
 
         String strTitle = request.getParameter( PARAMETER_SET_TITLE );
@@ -298,8 +302,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
 
         // Mandatory fields
-        if ( StringUtils.isBlank( strTitle ) || StringUtils.isBlank( strGroupId ) ||
-        	 ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
+        if ( StringUtils.isBlank( strTitle ) || StringUtils.isBlank( strGroupId ) || ( strArrayLinks == null ) ||
+                ( strArrayLinks.length == 0 ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -317,16 +321,16 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
                 currentLink = new SponsoredLink(  );
                 currentLink.setOrder( i + 1 );
                 currentLink.setLink( strArrayLinks[i] );
-                if( currentLink.isValidLink(  ) )
+
+                if ( currentLink.isValidLink(  ) )
                 {
-                	linkList.add( currentLink );
+                    linkList.add( currentLink );
                 }
                 else
                 {
-                	AppLogService.error( new InvalidParameterException( 
-                			"In SponsoredLinkSet \"" + strTitle + "\" : " +
-                			" SponsoredLink["+ currentLink.getOrder(  ) + "] - " +
-                			currentLink.getLink(  ) + "> : is not a valid html link" ) );
+                    AppLogService.error( new InvalidParameterException( "In SponsoredLinkSet \"" + strTitle + "\" : " +
+                            " SponsoredLink[" + currentLink.getOrder(  ) + "] - " + currentLink.getLink(  ) +
+                            "> : is not a valid html link" ) );
                 }
             }
         }
@@ -348,16 +352,17 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String getModifySet( HttpServletRequest request )
     {
-    	String strSetId = request.getParameter( PARAMETER_SET_ID );
-    	boolean bPermissionModifySet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
-                strSetId, SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) );
+        String strSetId = request.getParameter( PARAMETER_SET_ID );
+        boolean bPermissionModifySet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
+                SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) );
+
         if ( bPermissionModifySet )
         {
-        	setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_SET );
+            setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_SET );
         }
         else
         {
-        	setPageTitleProperty( PROPERTY_PAGE_TITLE_SHOW_SET );
+            setPageTitleProperty( PROPERTY_PAGE_TITLE_SHOW_SET );
         }
 
         int nSetId = Integer.parseInt( strSetId );
@@ -377,14 +382,14 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         {
             try
             {
-            	listLinks.get( link.getOrder(  ) - 1 ).put( MARK_LINK_URL, link.getLink(  ) );
+                listLinks.get( link.getOrder(  ) - 1 ).put( MARK_LINK_URL, link.getLink(  ) );
             }
-            catch( IndexOutOfBoundsException ie )
+            catch ( IndexOutOfBoundsException ie )
             {
-            	AppLogService.error( ie );
+                AppLogService.error( ie );
             }
         }
-        
+
         modelSet.put( MARK_SET_ID, set.getId(  ) );
         modelSet.put( MARK_SET_TITLE, set.getTitle(  ) );
         modelSet.put( MARK_SET_GROUP, usedGroup );
@@ -409,24 +414,23 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifySet( HttpServletRequest request )
     {
-    	String strSetId = request.getParameter( PARAMETER_SET_ID );
-    	if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-    		 ( StringUtils.isNotBlank( strSetId ) &&
-    		   !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
+        String strSetId = request.getParameter( PARAMETER_SET_ID );
+
+        if ( ( request.getParameter( PARAMETER_CANCEL ) != null ) ||
+                ( StringUtils.isNotBlank( strSetId ) &&
+                !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strSetId,
                     SponsoredLinksSetResourceIdService.PERMISSION_MODIFY_SET, getUser(  ) ) ) )
         {
-    		return JSP_REDIRECT_TO_MANAGE_SET;
+            return JSP_REDIRECT_TO_MANAGE_SET;
         }
 
-        
         String strTitle = request.getParameter( PARAMETER_SET_TITLE );
         String strGroupId = request.getParameter( PARAMETER_GROUP_ID );
         String[] strArrayLinks = request.getParameterValues( PARAMETER_SET_LINK_LIST );
 
         // Mandatory fields
-        if ( StringUtils.isBlank( strSetId ) || StringUtils.isBlank( strTitle ) ||
-        	 StringUtils.isBlank( strGroupId ) || 
-             ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
+        if ( StringUtils.isBlank( strSetId ) || StringUtils.isBlank( strTitle ) || StringUtils.isBlank( strGroupId ) ||
+                ( strArrayLinks == null ) || ( strArrayLinks.length == 0 ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
@@ -445,16 +449,16 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
                 currentLink = new SponsoredLink(  );
                 currentLink.setOrder( i + 1 );
                 currentLink.setLink( strArrayLinks[i] );
-                if( currentLink.isValidLink(  ) )
+
+                if ( currentLink.isValidLink(  ) )
                 {
-                	linkList.add( currentLink );
+                    linkList.add( currentLink );
                 }
                 else
                 {
-                	AppLogService.error( new InvalidParameterException( 
-                			"In SponsoredLinkSet \"" + strTitle + "\" : " +
-                			" SponsoredLink["+ currentLink.getOrder(  ) + "] - " +
-                			currentLink.getLink(  ) + "> : is not a valid html link" ) );
+                    AppLogService.error( new InvalidParameterException( "In SponsoredLinkSet \"" + strTitle + "\" : " +
+                            " SponsoredLink[" + currentLink.getOrder(  ) + "] - " + currentLink.getLink(  ) +
+                            "> : is not a valid html link" ) );
                 }
             }
         }
@@ -500,7 +504,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     public String doRemoveSet( HttpServletRequest request )
     {
         String strId = request.getParameter( PARAMETER_SET_ID );
-    	if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strId,
+
+        if ( !RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE, strId,
                     SponsoredLinksSetResourceIdService.PERMISSION_DELETE_SET, getUser(  ) ) )
         {
             // if the user is not authorized, redirects quietly towards the list of sets
@@ -565,13 +570,14 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
                 _nItemsPerPageGroup, _nDefaultItemsPerPage );
 
         Collection<SponsoredLinkGroup> listGroup = SponsoredLinkGroupHome.findAll( getPlugin(  ) );
-        
-        Map<String, Object>  bPermissionDeleteGroupModel = new HashMap<String, Object>(  );
-        for( SponsoredLinkGroup group : listGroup )
+
+        Map<String, Object> bPermissionDeleteGroupModel = new HashMap<String, Object>(  );
+
+        for ( SponsoredLinkGroup group : listGroup )
         {
-        	bPermissionDeleteGroupModel.put( String.valueOf( group.getId(  ) ), 
-        			RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
-        	                String.valueOf( group.getId(  ) ), SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) ) );
+            bPermissionDeleteGroupModel.put( String.valueOf( group.getId(  ) ),
+                RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, String.valueOf( group.getId(  ) ),
+                    SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) ) );
         }
 
         LocalizedPaginator<SponsoredLinkGroup> paginator = new LocalizedPaginator<SponsoredLinkGroup>( (List<SponsoredLinkGroup>) listGroup,
@@ -615,39 +621,23 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         Map<String, Object> model = new HashMap<String, Object>(  );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, getLocale(  ) );
-        
-        if( request.getParameter( PARAMETER_REQUEST ) != null )
+
+        if ( request.getParameter( PARAMETER_REQUEST ) != null )
         {
-        	String strTags = ( request.getParameter( PARAMETER_GROUP_TAGS ) );
-        	SponsoredLinkGroup savedGroup = new SponsoredLinkGroup(  );
-        	savedGroup.setTitle( request.getParameter( PARAMETER_GROUP_TITLE ) );
-        	savedGroup.setTags( strTags );
-        	
-        	model.put( MARK_GROUP , savedGroup );
-        	
-        	List<SponsoredLinkGroup> listConflictGroup = new ArrayList<SponsoredLinkGroup>(  );
-        	
-        	Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
-        	
-        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : EMPTY_STRING, getPlugin(  ) ) )
-        	{
-        		int nGroupId = result.getGroupId(  );
-        		if( !cacheList.containsKey( nGroupId ) )
-        		{
-        			cacheList.put( nGroupId, SponsoredLinkGroupHome.findByPrimaryKey( nGroupId, getPlugin(  ) ) );
-        		}
-        	}
-        	
-        	listConflictGroup.addAll( cacheList.values(  ) );
-        	
-        	model.put( MARK_GROUP_LIST, listConflictGroup );
+            String strTags = ( request.getParameter( PARAMETER_GROUP_TAGS ) );
+            SponsoredLinkGroup savedGroup = new SponsoredLinkGroup(  );
+            savedGroup.setTitle( request.getParameter( PARAMETER_GROUP_TITLE ) );
+            savedGroup.setTags( strTags );
+
+            model.put( MARK_GROUP, savedGroup );
+
+            model.put( MARK_GROUP_LIST, getConflictingGroups( strTags, -1 ) );
         }
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_CREATE_GROUP, getLocale(  ), model );
 
         return getAdminPage( template.getHtml(  ) );
     }
-
 
     /**
      * Process the data capture form of a new sponsoredlinks group
@@ -657,26 +647,26 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateGroup( HttpServletRequest request )
     {
-        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-        	 !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( ( request.getParameter( PARAMETER_CANCEL ) != null ) ||
+                !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksGroupResourceIdService.PERMISSION_CREATE_GROUP, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
         }
-        
+
         String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
         String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
-        
+
         //Check if the user want to test tags for conflicting groups
-        if( request.getParameter( PARAMETER_REQUEST ) != null )
+        if ( request.getParameter( PARAMETER_REQUEST ) != null )
         {
-        	UrlItem urlRedirect = new UrlItem( JSP_REDIRECT_TO_MODIFY_GROUP );
-        	urlRedirect.addParameter(PARAMETER_REQUEST, EMPTY_STRING );
-        	urlRedirect.addParameter(PARAMETER_GROUP_TITLE, ( strTitle != null ? strTitle : EMPTY_STRING ) );
-        	urlRedirect.addParameter(PARAMETER_GROUP_TAGS, ( strTags != null ? strTags : EMPTY_STRING ) );
-        	urlRedirect.addParameter(PARAMETER_PLUGIN_NAME, SponsoredLinksPlugin.PLUGIN_NAME );
-        	
-        	return urlRedirect.getUrl(  );
+            UrlItem urlRedirect = new UrlItem( JSP_REDIRECT_TO_CREATE_GROUP );
+            urlRedirect.addParameter( PARAMETER_REQUEST, EMPTY_STRING );
+            urlRedirect.addParameter( PARAMETER_GROUP_TITLE, ( ( strTitle != null ) ? strTitle : EMPTY_STRING ) );
+            urlRedirect.addParameter( PARAMETER_GROUP_TAGS, ( ( strTags != null ) ? strTags : EMPTY_STRING ) );
+            urlRedirect.addParameter( PARAMETER_PLUGIN_NAME, SponsoredLinksPlugin.PLUGIN_NAME );
+
+            return urlRedirect.getUrl(  );
         }
 
         // Mandatory fields
@@ -704,60 +694,46 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String getModifyGroup( HttpServletRequest request )
     {
-    	String strId = request.getParameter( PARAMETER_GROUP_ID );
-    	boolean bPermissionModifyGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
-                strId, SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) );
-    	if ( bPermissionModifyGroup )
+        String strId = request.getParameter( PARAMETER_GROUP_ID );
+        boolean bPermissionModifyGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
+                SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) );
+
+        if ( bPermissionModifyGroup )
         {
-    		setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_GROUP );
+            setPageTitleProperty( PROPERTY_PAGE_TITLE_MODIFY_GROUP );
         }
-    	else
-    	{
-    		setPageTitleProperty( PROPERTY_PAGE_TITLE_SHOW_GROUP );
-    	}
+        else
+        {
+            setPageTitleProperty( PROPERTY_PAGE_TITLE_SHOW_GROUP );
+        }
 
         int nId = Integer.parseInt( strId );
 
         Map<String, Object> model = new HashMap<String, Object>(  );
-        
-        if( request.getParameter( PARAMETER_REQUEST ) != null )
-        {
-        	String strTags = ( request.getParameter( PARAMETER_GROUP_TAGS ) );
-        	SponsoredLinkGroup savedGroup = new SponsoredLinkGroup(  );
-        	savedGroup.setId( nId );
-        	savedGroup.setTitle( request.getParameter( PARAMETER_GROUP_TITLE ) );
-        	savedGroup.setTags( strTags );
 
-        	model.put( MARK_GROUP, savedGroup );
-        	
-        	List<SponsoredLinkGroup> listConflictGroup = new ArrayList<SponsoredLinkGroup>(  );
-        	
-        	Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
-        	
-        	for( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  ).getSearchResults( ( strTags != null ) ? strTags : EMPTY_STRING, getPlugin(  ) ) )
-        	{
-        		int nGroupId = result.getGroupId(  );
-        		if( !cacheList.containsKey( nGroupId ) && nGroupId != nId )
-        		{
-        			cacheList.put( nGroupId, SponsoredLinkGroupHome.findByPrimaryKey( nGroupId, getPlugin(  ) ) );
-        		}
-        	}
-        	
-        	listConflictGroup.addAll( cacheList.values(  ) );
-        	
-        	model.put( MARK_GROUP_LIST, listConflictGroup );
+        if ( request.getParameter( PARAMETER_REQUEST ) != null )
+        {
+            String strTags = ( request.getParameter( PARAMETER_GROUP_TAGS ) );
+            SponsoredLinkGroup savedGroup = new SponsoredLinkGroup(  );
+            savedGroup.setId( nId );
+            savedGroup.setTitle( request.getParameter( PARAMETER_GROUP_TITLE ) );
+            savedGroup.setTags( strTags );
+
+            model.put( MARK_GROUP, savedGroup );
+
+            List<SponsoredLinkGroup> listConflictGroup = getConflictingGroups( strTags, nId );
+
+            model.put( MARK_GROUP_LIST, listConflictGroup );
         }
         else
-        {        
-        	SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
-        	model.put( MARK_GROUP, group );
+        {
+            SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( nId, getPlugin(  ) );
+            model.put( MARK_GROUP, group );
         }
-        
+
         model.put( MARK_PERMISSION_MODIFY_GROUP, bPermissionModifyGroup );
         model.put( MARK_WEBAPP_URL, AppPathService.getBaseUrl( request ) );
         model.put( MARK_LOCALE, getLocale(  ) );
-        
-        
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_MODIFY_GROUP, getLocale(  ), model );
 
@@ -772,40 +748,38 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifyGroup( HttpServletRequest request )
     {
-    	String strId = request.getParameter( PARAMETER_GROUP_ID );
-        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-        	 ( request.getParameter( PARAMETER_REQUEST ) == null && 
-        	   StringUtils.isNotBlank( strId  ) && 
-        	   !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
+        String strId = request.getParameter( PARAMETER_GROUP_ID );
+
+        if ( ( request.getParameter( PARAMETER_CANCEL ) != null ) ||
+                ( ( request.getParameter( PARAMETER_REQUEST ) == null ) && StringUtils.isNotBlank( strId ) &&
+                !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_MODIFY_GROUP, getUser(  ) ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_GROUP;
         }
 
-        
         String strTitle = request.getParameter( PARAMETER_GROUP_TITLE );
         String strTags = request.getParameter( PARAMETER_GROUP_TAGS );
 
         //Check if the user want to test tags for conflicting groups
-        if( request.getParameter( PARAMETER_REQUEST ) != null )
+        if ( request.getParameter( PARAMETER_REQUEST ) != null )
         {
-        	UrlItem urlRedirect = new UrlItem( JSP_REDIRECT_TO_MODIFY_GROUP );
-        	urlRedirect.addParameter(PARAMETER_REQUEST, EMPTY_STRING );
-        	urlRedirect.addParameter(PARAMETER_GROUP_ID, ( strId != null ? strId : EMPTY_STRING ) );
-        	urlRedirect.addParameter(PARAMETER_GROUP_TITLE, ( strTitle != null ? strTitle : EMPTY_STRING ) );
-        	urlRedirect.addParameter(PARAMETER_GROUP_TAGS, ( strTags != null ? strTags : EMPTY_STRING ) );
-        	urlRedirect.addParameter(PARAMETER_PLUGIN_NAME, SponsoredLinksPlugin.PLUGIN_NAME );
-        	
-        	return urlRedirect.getUrl(  );
+            UrlItem urlRedirect = new UrlItem( JSP_REDIRECT_TO_MODIFY_GROUP );
+            urlRedirect.addParameter( PARAMETER_REQUEST, EMPTY_STRING );
+            urlRedirect.addParameter( PARAMETER_GROUP_ID, ( ( strId != null ) ? strId : EMPTY_STRING ) );
+            urlRedirect.addParameter( PARAMETER_GROUP_TITLE, ( ( strTitle != null ) ? strTitle : EMPTY_STRING ) );
+            urlRedirect.addParameter( PARAMETER_GROUP_TAGS, ( ( strTags != null ) ? strTags : EMPTY_STRING ) );
+            urlRedirect.addParameter( PARAMETER_PLUGIN_NAME, SponsoredLinksPlugin.PLUGIN_NAME );
+
+            return urlRedirect.getUrl(  );
         }
-        
+
         // Mandatory fields
-        if ( StringUtils.isBlank( strId ) || StringUtils.isBlank( strTitle ) ||
-        		StringUtils.isBlank( strTags ) )
+        if ( StringUtils.isBlank( strId ) || StringUtils.isBlank( strTitle ) || StringUtils.isBlank( strTags ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
-        
+
         int nId = Integer.parseInt( strId );
         SponsoredLinkGroup group = new SponsoredLinkGroup(  );
         group.setId( nId );
@@ -817,7 +791,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         // if the operation occurred well, redirects towards the list of groups
         return JSP_REDIRECT_TO_MANAGE_GROUP;
     }
-    
+
     /**
      * Manages the removal form of a sponsoredlink group whose identifier is in the http request
      *
@@ -856,7 +830,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doRemoveGroup( HttpServletRequest request )
     {
-    	String strId = request.getParameter( PARAMETER_GROUP_ID );
+        String strId = request.getParameter( PARAMETER_GROUP_ID );
+
         if ( !RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE, strId,
                     SponsoredLinksGroupResourceIdService.PERMISSION_DELETE_GROUP, getUser(  ) ) )
         {
@@ -876,6 +851,29 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         }
 
         return JSP_REDIRECT_TO_MANAGE_GROUP;
+    }
+
+    private List<SponsoredLinkGroup> getConflictingGroups( String strTags, int nId )
+    {
+        List<SponsoredLinkGroup> listConflictGroup = new ArrayList<SponsoredLinkGroup>(  );
+
+        Map<Integer, SponsoredLinkGroup> cacheList = new HashMap<Integer, SponsoredLinkGroup>(  );
+
+        for ( SponsoredLinksSearchResult result : SponsoredLinksSearchService.getInstance(  )
+                                                                             .getSearchResults( ( strTags != null )
+                ? strTags : EMPTY_STRING, getPlugin(  ) ) )
+        {
+            int nGroupId = result.getGroupId(  );
+
+            if ( !cacheList.containsKey( nGroupId ) && ( nGroupId != nId ) )
+            {
+                cacheList.put( nGroupId, SponsoredLinkGroupHome.findByPrimaryKey( nGroupId, getPlugin(  ) ) );
+            }
+        }
+
+        listConflictGroup.addAll( cacheList.values(  ) );
+
+        return listConflictGroup;
     }
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -910,7 +908,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
             }
             catch ( NullPointerException e )
             {
-            	AppLogService.error( e );
+                AppLogService.error( e );
             }
         }
 
@@ -969,8 +967,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doCreateTemplate( HttpServletRequest request )
     {
-        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-        	 !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( ( request.getParameter( PARAMETER_CANCEL ) != null ) ||
+                !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
@@ -991,7 +989,6 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         SponsoredLinkTemplateHome.create( linkTemplate, getPlugin(  ) );
 
-        //TODO: Add a empty link in every set
         return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
     }
 
@@ -1062,8 +1059,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
      */
     public String doModifyTemplate( HttpServletRequest request )
     {
-        if ( request.getParameter( PARAMETER_CANCEL ) != null ||
-        	 !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
+        if ( ( request.getParameter( PARAMETER_CANCEL ) != null ) ||
+                !RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE, RBAC.WILDCARD_RESOURCES_ID,
                     SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) ) )
         {
             return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
@@ -1075,14 +1072,14 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         // Mandatory fields
         if ( StringUtils.isBlank( strTemplateId ) || StringUtils.isBlank( strDescription ) ||
-        		StringUtils.isBlank( strInsertServiceId ) )
+                StringUtils.isBlank( strInsertServiceId ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
 
         SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( Integer.parseInt( 
                     strTemplateId ), getPlugin(  ) );
-        //TODO: If InsertServiceId has changed delete matching link in sets
+
         linkTemplate.setDescription( strDescription );
         linkTemplate.setInsertService( strInsertServiceId );
 
@@ -1130,7 +1127,6 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( nId, getPlugin(  ) );
 
-        //TODO: update sets
         SponsoredLinkTemplateHome.remove( linkTemplate, getPlugin(  ) );
 
         return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
@@ -1176,7 +1172,6 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( nId, getPlugin(  ) );
 
-        //TODO: update sets
         SponsoredLinkTemplateHome.updateOrder( linkTemplate, nNeworder, getPlugin(  ) );
 
         return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;

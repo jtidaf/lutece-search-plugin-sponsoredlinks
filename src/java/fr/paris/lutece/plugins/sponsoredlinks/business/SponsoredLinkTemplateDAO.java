@@ -116,15 +116,6 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
             template.setInsertService( daoUtil.getString( 3 ) );
-
-            //TODO: manage unavailable insertService
-            /*
-            if( template.setInsertService( daoUtil.getString( 3 ) ) == null)
-            {
-                    daoUtil.free(  );
-                    throw new InsertServiceNotAvailable( template );
-            }
-            */
         }
 
         daoUtil.free(  );

@@ -35,88 +35,91 @@ package fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch;
 
 import fr.paris.lutece.portal.service.search.SearchResult;
 
+
 /**
  * class SponsoredLinksSearchResult
  */
 public class SponsoredLinksSearchResult extends SearchResult
 {
-	//Variables declarations
-	private int _nSetId;
-	private int _nLinkOrder;
-	private int _nGroupId;
-	private String _strTargetType;
-	
-	/**
-	 * @return the {@link 
-	 * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet#getId()
-	 * <code>set id</code>}
-	 */
-	public int getSetId(  )
-	{
-		return _nSetId;
-	}
-	
-	/**
-	 * @param nSetId the {@link 
-	 * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet#getId()
-	 * <code>set id</code>} to set
-	 */
-	public void setSetId( int nSetId )
-	{
-		_nSetId = nSetId;
-	}
-	
-	/**
-	 * @return the {@link 
-	 * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink#getOrder()
-	 * <code>link order</code>} in the set
-	 */
-	public int getLinkOrder(  )
-	{
-		return _nLinkOrder;
-	}
-	/**
-	 * @param nLinkOrder the {@link 
-	 * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink#getOrder()
-	 * <code>link order</code>} to set
-	 */
-	public void setLinkOrder( int nLinkOrder )
-	{
-		_nLinkOrder = nLinkOrder;
-	}
-	
-	/**
-	 * @return the {@link 
-	 * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup#getId()
-	 * <code>group id</code>}
-	 */
-	public int getGroupId(  )
-	{
-		return _nGroupId;
-	}
-	/**
-	 * @param nGroupId the {@link 
-	 * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup#getId()
-	 * <code>group id</code>} to set
-	 */
-	public void setGroupId( int nGroupId )
-	{
-		_nGroupId = nGroupId;
-	}
-	
-	/**
-	 * @return the type of the targeted resource
-	 */
-	public String getTargetType(  )
-	{
-		return _strTargetType;
-	}
-	/**
-	 * @param _strTargetType the type of the targeted resource to set
-	 */
-	public void setTargetType( String strTargetType )
-	{
-		_strTargetType = strTargetType;
-	}
-	
+    //Variables declarations
+    private int _nSetId;
+    private int _nLinkOrder;
+    private int _nGroupId;
+    private String _strTargetType;
+
+    /**
+     * @return the {@link
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet#getId()
+     * <code>set id</code>}
+     */
+    public int getSetId(  )
+    {
+        return _nSetId;
+    }
+
+    /**
+     * @param nSetId the {@link
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSet#getId()
+     * <code>set id</code>} to set
+     */
+    public void setSetId( int nSetId )
+    {
+        _nSetId = nSetId;
+    }
+
+    /**
+     * @return the {@link
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink#getOrder()
+     * <code>link order</code>} in the set
+     */
+    public int getLinkOrder(  )
+    {
+        return _nLinkOrder;
+    }
+
+    /**
+     * @param nLinkOrder the {@link
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLink#getOrder()
+     * <code>link order</code>} to set
+     */
+    public void setLinkOrder( int nLinkOrder )
+    {
+        _nLinkOrder = nLinkOrder;
+    }
+
+    /**
+     * @return the {@link
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup#getId()
+     * <code>group id</code>}
+     */
+    public int getGroupId(  )
+    {
+        return _nGroupId;
+    }
+
+    /**
+     * @param nGroupId the {@link
+     * fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroup#getId()
+     * <code>group id</code>} to set
+     */
+    public void setGroupId( int nGroupId )
+    {
+        _nGroupId = nGroupId;
+    }
+
+    /**
+     * @return the type of the targeted resource
+     */
+    public String getTargetType(  )
+    {
+        return _strTargetType;
+    }
+
+    /**
+     * @param strTargetType the type of the targeted resource to set
+     */
+    public void setTargetType( String strTargetType )
+    {
+        _strTargetType = strTargetType;
+    }
 }
