@@ -4,8 +4,8 @@
 DROP TABLE IF EXISTS sponsoredlinks_group;
 CREATE TABLE sponsoredlinks_group (
   id_group INT DEFAULT 0 NOT NULL,
-  title VARCHAR(30) DEFAULT '' NOT NULL,
-  tags VARCHAR(255),
+  title VARCHAR(255) DEFAULT '' NOT NULL,
+  tags LONG VARCHAR DEFAULT '' NOT NULL,
   PRIMARY KEY (id_group)
 );
 
@@ -15,7 +15,7 @@ CREATE TABLE sponsoredlinks_group (
 DROP TABLE IF EXISTS sponsoredlinks_set;
 CREATE TABLE sponsoredlinks_set (
   id_set INT DEFAULT 0 NOT NULL,
-  title VARCHAR(30) DEFAULT '' NOT NULL,
+  title VARCHAR(255) DEFAULT '' NOT NULL,
   id_group INT,
   PRIMARY KEY (id_set)
 );
@@ -26,8 +26,8 @@ CREATE TABLE sponsoredlinks_set (
 DROP TABLE IF EXISTS sponsoredlinks_template;
 CREATE TABLE sponsoredlinks_template (
   id_template INT DEFAULT 0 NOT NULL,
-  description VARCHAR(50) DEFAULT '' NOT NULL,
-  id_insertservice VARCHAR(100) DEFAULT '' NOT NULL,
+  description VARCHAR(255) DEFAULT '' NOT NULL,
+  id_insertservice VARCHAR(255) DEFAULT '' NOT NULL,
   PRIMARY KEY (id_template)
 );
 
@@ -38,6 +38,6 @@ DROP TABLE IF EXISTS sponsoredlinks_link;
 CREATE TABLE sponsoredlinks_link (
   id_set INT,
   id_template INT,
-  link VARCHAR(255) DEFAULT '' NOT NULL,
+  link LONG VARCHAR DEFAULT '' NOT NULL,
   PRIMARY KEY (id_set, id_template)
 );
