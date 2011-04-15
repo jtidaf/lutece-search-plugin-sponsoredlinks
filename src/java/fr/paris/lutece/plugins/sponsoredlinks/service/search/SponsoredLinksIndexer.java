@@ -62,6 +62,7 @@ import java.security.InvalidParameterException;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -280,4 +281,22 @@ public class SponsoredLinksIndexer implements SearchIndexer
         //return the document	
         return doc;
     }
+    
+    /**
+     * 
+     *{@inheritDoc}
+     */
+	public List<String> getListType()
+	{
+		return Collections.emptyList();
+	}
+
+	/**
+	 * 
+	 *{@inheritDoc}
+	 */
+	public String getSpecificSearchAppUrl()
+	{
+		return "";
+	}
 }
