@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS sponsoredlinks_group;
 CREATE TABLE sponsoredlinks_group (
   id_group INT DEFAULT 0 NOT NULL,
   title VARCHAR(255) DEFAULT '' NOT NULL,
-  tags LONG VARCHAR DEFAULT '' NOT NULL,
+  tags LONG VARCHAR,
   PRIMARY KEY (id_group)
 );
 
@@ -38,6 +38,6 @@ DROP TABLE IF EXISTS sponsoredlinks_link;
 CREATE TABLE sponsoredlinks_link (
   id_set INT,
   id_template INT,
-  link LONG VARCHAR DEFAULT '' NOT NULL,
+  link LONG VARCHAR,
   PRIMARY KEY (id_set, id_template)
 );
