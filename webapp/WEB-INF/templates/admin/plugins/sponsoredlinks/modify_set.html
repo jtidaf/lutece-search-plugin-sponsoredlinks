@@ -1,12 +1,13 @@
 <script language="javascript" type="text/javascript">
 var target_content_id;
-function linkservice( content_id, insert_service_id, plugin_name ) 
+function linkservice( content_id, insert_service_id, plugin_name, subcategory ) 
 {
 	target_content_id=content_id;
 	javascript:document.getElementById( content_id ).innerHTML = "&nbsp;";
 	var url = "${webapp_url}/jsp/admin/insert/DisplayInsertService.jsp" +
 				"?insert_service_type=" + insert_service_id +
 				"&plugin_name=" + plugin_name + 
+				"&subcategory=" + subcategory +
 				"&input=" + content_id + "&selected_text=";
 	fen=window.open( url ,"","toolbar=no, scrollbars=yes, status=yes, location=no, " +
 							"directories=no, menubar=no, width=550, height=450");
@@ -48,12 +49,26 @@ function linkservice( content_id, insert_service_id, plugin_name )
 	            <label for="link_list">${link_index + 1}. ${link.template.description} :</label>
 	            <#if link.template.resource?exists && permission_modify_set>
 	                <textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
-		            <a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}');">
+		            <a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}', '${link.template.subCategory}');">
 		            	<img src="images/admin/skin/plugins/sponsoredlinks/action/linkservice.png" alt="#i18n{sponsoredlinks.create_set.actionLink}" title="#i18n{sponsoredlinks.create_set.actionLink}" />
 		            </a>
 		        </p>
 	        	<p>
-	        		<label>&nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}</p>
+	        		<label>&nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
+	        			        		<#-- subcategory (if any) -->
+	        		<#if link.template.subCategory?has_content>
+	        			<#assign selectionBean = link.template.resource.selectionActionBean />
+		        		<#if selectionBean.subCategories?size &gt; 0>
+			            	<#list selectionBean.subCategories as subCategory>
+			            		<#if link.template.subCategory == subCategory.code>
+			            		<#-- insertservice matches and subcategory selected -->
+			            		&nbsp;: ${subCategory.name}
+			            		</#if>
+	            			</#list>
+						</#if>
+					</#if>
+	        		
+	        	</p>
 	        	<#elseif link.template.resource?exists && !permission_modify_set />
 	        	    <textarea disabled rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
                 </p>

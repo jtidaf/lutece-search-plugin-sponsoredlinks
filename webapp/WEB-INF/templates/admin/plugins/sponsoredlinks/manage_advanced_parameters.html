@@ -19,6 +19,18 @@
             </td>
             <td>
             	${template.insertService.label}
+            	<#-- subcategory label : (if any)-->
+            	<#if template.subCategory?has_content>
+            		<#assign selectionBean = template.insertService.selectionActionBean />
+	            	<#if selectionBean.subCategories?size &gt; 0>
+		            	<#list selectionBean.subCategories as subCategory>
+		            		<#if template.subCategory == subCategory.code>
+		            		<#-- insertservice matches and subcategory selected -->
+		            		&nbsp;: ${subCategory.name}
+		            		</#if>
+            			</#list>
+					</#if>
+            	</#if>
             </td>
             <td>
             	<form method="post" action="jsp/admin/plugins/sponsoredlinks/DoModifyTemplateOrder.jsp">

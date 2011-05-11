@@ -4,12 +4,12 @@
 <beans>
 	
 	<!-- package sqlquery -->
-	<bean id="sponsoredLinkGroupDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroupDAO" />   
-	<bean id="sponsoredLinkSetDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSetDAO" />
-	<bean id="sponsoredLinkTemplateDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplateDAO" />
-	<bean id="sponsoredLinkDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkDAO" />
+	<bean id="sponsoredlinks.sponsoredLinkGroupDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkGroupDAO" />   
+	<bean id="sponsoredlinks.sponsoredLinkSetDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkSetDAO" />
+	<bean id="sponsoredlinks.sponsoredLinkTemplateDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkTemplateDAO" />
+	<bean id="sponsoredlinks.sponsoredLinkDAO"  class="fr.paris.lutece.plugins.sponsoredlinks.business.SponsoredLinkDAO" />
 	<!-- search engine -->
-	<bean id="sponsoredLinksSearchEngine"  class="fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch.SponsoredLinksLuceneSearchEngine" />
+	<bean id="sponsoredlinks.sponsoredLinksSearchEngine"  class="fr.paris.lutece.plugins.sponsoredlinks.service.sponsoredlinkssearch.SponsoredLinksLuceneSearchEngine" />
 	<!-- service -->
 	<bean id="sponsoredlinks.sponsoredLinksService"  class="fr.paris.lutece.plugins.sponsoredlinks.service.SponsoredLinksService" />
 </beans>

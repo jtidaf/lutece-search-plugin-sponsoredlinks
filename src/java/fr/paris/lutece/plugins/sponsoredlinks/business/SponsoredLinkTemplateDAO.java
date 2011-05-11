@@ -49,12 +49,12 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
 {
     //Constants
     private static final String SQL_QUERY_NEWPK = "SELECT max( id_template ) FROM sponsoredlinks_template";
-    private static final String SQL_QUERY_SELECT = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_template = ? ";
-    private static final String SQL_QUERY_SELECTALL = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template ORDER BY id_template ASC";
-    private static final String SQL_QUERY_SELECT_BY_RESOURCE_TYPE = "SELECT id_template, description, id_insertservice FROM sponsoredlinks_template WHERE id_insertservice = ? ";
-    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_template ( id_template, description, id_insertservice )  VALUES ( ?, ?, ? ) ";
+    private static final String SQL_QUERY_SELECT = "SELECT id_template, description, id_insertservice, subcategory FROM sponsoredlinks_template WHERE id_template = ? ";
+    private static final String SQL_QUERY_SELECTALL = "SELECT id_template, description, id_insertservice, subcategory FROM sponsoredlinks_template ORDER BY id_template ASC";
+    private static final String SQL_QUERY_SELECT_BY_RESOURCE_TYPE = "SELECT id_template, description, id_insertservice, subcategory FROM sponsoredlinks_template WHERE id_insertservice = ? ";
+    private static final String SQL_QUERY_INSERT = "INSERT INTO sponsoredlinks_template ( id_template, description, id_insertservice, subcategory )  VALUES ( ?, ?, ?, ? ) ";
     private static final String SQL_QUERY_DELETE = "DELETE FROM sponsoredlinks_template WHERE id_template = ? ";
-    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_template SET description = ? , id_insertservice = ?  WHERE id_template= ?  ";
+    private static final String SQL_QUERY_UPDATE = "UPDATE sponsoredlinks_template SET description = ? , id_insertservice = ?, subcategory = ?  WHERE id_template= ?  ";
 
     ///////////////////////////////////////////////////////////////////////////////////////
     //Access methods to data
@@ -94,6 +94,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
         daoUtil.setInt( 1, template.getOrder(  ) );
         daoUtil.setString( 2, template.getDescription(  ) );
         daoUtil.setString( 3, template.getInsertService(  ).getId(  ) );
+        daoUtil.setString( 4, template.getSubCategory(  ) );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -116,6 +117,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
             template.setInsertService( daoUtil.getString( 3 ) );
+            template.setSubCategory( daoUtil.getString( 4 ) );
         }
 
         daoUtil.free(  );
@@ -144,7 +146,8 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
 
         daoUtil.setString( 1, template.getDescription(  ) );
         daoUtil.setString( 2, template.getInsertService(  ).getId(  ) );
-        daoUtil.setInt( 3, nSetId );
+        daoUtil.setString( 3, template.getSubCategory(  ) );
+        daoUtil.setInt( 4, nSetId );
 
         daoUtil.executeUpdate(  );
         daoUtil.free(  );
@@ -165,6 +168,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
             template.setInsertService( daoUtil.getString( 3 ) );
+            template.setSubCategory( daoUtil.getString( 4 ) );
             templateList.add( template );
         }
 
@@ -189,6 +193,7 @@ public class SponsoredLinkTemplateDAO implements ISponsoredLinkTemplateDAO
             template.setOrder( daoUtil.getInt( 1 ) );
             template.setDescription( daoUtil.getString( 2 ) );
             template.setInsertService( daoUtil.getString( 3 ) );
+            template.setSubCategory( daoUtil.getString( 4 ) );
             templateList.add( template );
         }
 

@@ -46,7 +46,7 @@ import java.util.Collection;
 public interface ISponsoredLinkSetDAO
 {
     /** Unique id for spring bean declaration in the plugin context */
-    String SPRING_BEAN_ID = "sponsoredLinkSetDAO";
+    String SPRING_BEAN_ID = "sponsoredlinks.sponsoredLinkSetDAO";
 
     /**
      * Insert a new record in the table.

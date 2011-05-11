@@ -28,6 +28,7 @@ CREATE TABLE sponsoredlinks_template (
   id_template INT DEFAULT 0 NOT NULL,
   description VARCHAR(255) DEFAULT '' NOT NULL,
   id_insertservice VARCHAR(255) DEFAULT '' NOT NULL,
+  subcategory VARCHAR(100) DEFAULT '' NOT NULL,
   PRIMARY KEY (id_template)
 );
 

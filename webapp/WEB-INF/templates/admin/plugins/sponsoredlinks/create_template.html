@@ -6,12 +6,18 @@
         <p>
             <label for="description" >#i18n{sponsoredlinks.create_template.labelDescription} * : </label> 
             <input type="text" id="description" name="description" size="60" maxlength="50" />
-        </p>        
+        </p>
         <div class="sponsoredlinks-form-entry">
             <label for="id_insertservice">#i18n{sponsoredlinks.modify_template.labelInsertService} * : </label>
             <ul>
             <#list insertservice_list as insertservice>
             	<li><input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}" />&nbsp;${insertservice.label}</li>
+            	<#assign selectionBean = insertservice.selectionActionBean />
+            	<#if selectionBean.subCategories?size &gt; 0>
+            		<#list selectionBean.subCategories as subCategory>
+            		<li><input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}/${subCategory.code}" />&nbsp;${insertservice.label} : ${subCategory.name}</li>
+            		</#list>
+            	</#if>
             </#list>
             </ul>
         </div>  

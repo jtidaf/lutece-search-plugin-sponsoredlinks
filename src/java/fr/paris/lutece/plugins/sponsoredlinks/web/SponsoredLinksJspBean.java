@@ -102,6 +102,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private static final String MARK_LINK_TEMPLATE = "template";
     private static final String MARK_LINK_TEMPLATE_DESCRIPTION = "description";
     private static final String MARK_LINK_TEMPLATE_RESOURCE = "resource";
+    private static final String MARK_LINK_TEMPLATE_SUBCATEGORY = "subCategory";
     private static final String MARK_LINK_URL = "url";
     private static final String MARK_LOCALE = "locale";
     private static final String MARK_NB_ITEMS_PER_PAGE = "nb_items_per_page";
@@ -170,6 +171,19 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
     // other constants
     private static final String EMPTY_STRING = "";
+    /** The separator is used to split insert id from the subcategory */
+    private static final String SUBCATEGORY_SEPARATOR = "/";
+    
+    /**   
+     * Position of the category token
+     * @see #SUBCATEGORY_SEPARATOR 
+     */
+    private static final int POSITION_SUBCATEGORY = 1;
+    /**   
+     * Position of the insert service id token
+     * @see #SUBCATEGORY_SEPARATOR 
+     */
+    private static final int POSITION_INSERT_SERVICE_ID = 0;
 
     //session fields
     private int _nDefaultItemsPerPage = AppPropertiesService.getPropertyInt( PROPERTY_ITEM_PER_PAGE, 50 );
@@ -178,7 +192,7 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
     private String _strCurrentPageIndexGroup;
     private int _nItemsPerPageGroup;
 
-    /// \Modèle de données
+    /// \Modï¿½le de donnï¿½es
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -541,6 +555,8 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
             insertService.setLocale( getLocale(  ) );
             modelLinkTemplate.put( MARK_LINK_TEMPLATE_RESOURCE, insertService );
+            
+            modelLinkTemplate.put( MARK_LINK_TEMPLATE_SUBCATEGORY, linkTemplate.getSubCategory(  ) );
 
             modelLinkTemplate.put( MARK_LINK_TEMPLATE_DESCRIPTION, linkTemplate.getDescription(  ) );
 
@@ -975,21 +991,60 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         }
 
         String strDescription = request.getParameter( PARAMETER_TEMPLATE_DESCRIPTION );
-        String strInsertServiceId = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
+        String strInsertServiceIdWithSubCategory = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
 
         // Mandatory fields
-        if ( StringUtils.isBlank( strDescription ) || StringUtils.isBlank( strInsertServiceId ) )
+        if ( StringUtils.isBlank( strDescription ) || StringUtils.isBlank( strInsertServiceIdWithSubCategory ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
+        
+        String strInsertServiceId = getInsertServiceId( strInsertServiceIdWithSubCategory );
+        String strSubCategory = getSubCategory( strInsertServiceIdWithSubCategory );
 
         SponsoredLinkTemplate linkTemplate = new SponsoredLinkTemplate(  );
         linkTemplate.setDescription( strDescription );
         linkTemplate.setInsertService( strInsertServiceId );
+        linkTemplate.setSubCategory( strSubCategory );
 
         SponsoredLinkTemplateHome.create( linkTemplate, getPlugin(  ) );
 
         return JSP_REDIRECT_TO_MANAGE_ADVANCED_PARAMETERS;
+    }
+    
+    /**
+     * Gets the insert service id for the given id. If no {@link #SUBCATEGORY_SEPARATOR} is found, then returns the parameter.
+     * Otherwise, splits the parameter and returns the {@link #POSITION_INSERT_SERVICE_ID} token.
+     * @param strInsertServiceId the service id
+     * @return the found insert service. 
+     * @see #SUBCATEGORY_SEPARATOR
+     */
+    private String getInsertServiceId( final String strInsertServiceId )
+    {
+    	if ( !strInsertServiceId.contains( SUBCATEGORY_SEPARATOR ) )
+    	{
+    		return strInsertServiceId;
+    	}
+    	
+    	return strInsertServiceId.split( SUBCATEGORY_SEPARATOR )[POSITION_INSERT_SERVICE_ID];
+    }
+    
+    /**
+     * Gets the sub category for the given id. If no {@link #SUBCATEGORY_SEPARATOR} is found, then returns {@link #EMPTY_STRING}.
+     * Otherwise, splits the parameter and returns the {@link #POSITION_SUBCATEGORY} token.
+     * @param strInsertServiceId the service id
+     * @return the found subcategory, {@link #EMPTY_STRING} otherwise. 
+     * @see #SUBCATEGORY_SEPARATOR
+     */
+    private String getSubCategory( final String strInsertServiceId )
+    {
+    	if ( !strInsertServiceId.contains( SUBCATEGORY_SEPARATOR ) )
+    	{
+    		return EMPTY_STRING;
+    	}
+    	
+    	// assume that subcategory is always specified
+    	return strInsertServiceId.split( SUBCATEGORY_SEPARATOR )[POSITION_SUBCATEGORY];
     }
 
     /**
@@ -1068,20 +1123,24 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         String strTemplateId = request.getParameter( PARAMETER_TEMPLATE_ID );
         String strDescription = request.getParameter( PARAMETER_TEMPLATE_DESCRIPTION );
-        String strInsertServiceId = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
+        String strInsertServiceIdWithSubCategory = request.getParameter( PARAMETER_TEMPLATE_INSERTSERVICE_ID );
 
         // Mandatory fields
         if ( StringUtils.isBlank( strTemplateId ) || StringUtils.isBlank( strDescription ) ||
-                StringUtils.isBlank( strInsertServiceId ) )
+                StringUtils.isBlank( strInsertServiceIdWithSubCategory ) )
         {
             return AdminMessageService.getMessageUrl( request, Messages.MANDATORY_FIELDS, AdminMessage.TYPE_STOP );
         }
+        
+        String strInsertServiceId = getInsertServiceId( strInsertServiceIdWithSubCategory );
+        String strSubCategory = getSubCategory( strInsertServiceIdWithSubCategory );
 
         SponsoredLinkTemplate linkTemplate = SponsoredLinkTemplateHome.findByPrimaryKey( Integer.parseInt( 
                     strTemplateId ), getPlugin(  ) );
 
         linkTemplate.setDescription( strDescription );
         linkTemplate.setInsertService( strInsertServiceId );
+        linkTemplate.setSubCategory( strSubCategory );
 
         SponsoredLinkTemplateHome.update( linkTemplate, getPlugin(  ) );
 

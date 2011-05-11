@@ -46,11 +46,35 @@ public class SponsoredLinkTemplate
 {
     /** Unique name of the resource type implemented by this class */
     public static final String RESOURCE_TYPE = "SPONSOREDLINKS_TEMPLATE_TYPE";
+    
+    private static final String EMPTY_STRING = "";
+    
     private int _nOrder;
     private String _strDescription;
     private InsertService _insertService;
+    private String _strSubCategory;
+    
+    
 
     /**
+     * The subcategory that might be used to filter resources.
+     * @return The subcategory that might be used to filter resources, empty string otherwise.
+     */
+    public String getSubCategory(  )
+	{
+		return _strSubCategory == null ? EMPTY_STRING : _strSubCategory;
+	}
+
+    /**
+     * The subcategory that might be used to filter resources.
+     * @param strSubCategory The subcategory that might be used to filter resources, empty string otherwise.
+     */
+	public void setSubCategory( String strSubCategory )
+	{
+		this._strSubCategory = strSubCategory;
+	}
+
+	/**
      *
      * @return the order of the link in the set
      */
