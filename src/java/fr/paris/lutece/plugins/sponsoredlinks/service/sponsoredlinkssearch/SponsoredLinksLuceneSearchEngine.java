@@ -43,7 +43,7 @@ import org.apache.commons.lang.StringUtils;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.misc.ChainedFilter;
+import org.apache.lucene.search.ChainedFilter;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.Filter;
