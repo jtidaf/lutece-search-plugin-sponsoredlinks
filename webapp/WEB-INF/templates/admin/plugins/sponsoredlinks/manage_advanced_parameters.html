@@ -1,7 +1,7 @@
-<div class="content-box" >
-    <h2>#i18n{sponsoredlinks.manage_advanced_parameters.tableLabel}</h2>
+<div class="row-fluid" >
+    <legend>#i18n{sponsoredlinks.manage_advanced_parameters.tableLabel}</legend>
 
-    <table>
+    <table class="table table-striped table-condensed">
     
         <tr>
             <th width="25%">#i18n{sponsoredlinks.manage_advanced_parameters.columnTitleDescription}</th>
@@ -13,9 +13,10 @@
         <#list template_list as template >
         <tr>
             <td>
-                <a href="jsp/admin/plugins/sponsoredlinks/ModifyTemplate.jsp?id_template=${template.order}" class="bullet-link">
-                    ${template.description}
-                </a>
+                <a class="btn btn-primary btn-mini" href="jsp/admin/plugins/sponsoredlinks/ModifyTemplate.jsp?id_template=${template.order}"  title="null" >
+	<i class="icon-question-sign icon-white"></i>
+	</a>
+
             </td>
             <td>
             	${template.insertService.label}
@@ -33,7 +34,8 @@
             	</#if>
             </td>
             <td>
-            	<form method="post" action="jsp/admin/plugins/sponsoredlinks/DoModifyTemplateOrder.jsp">
+            	<form class="form-horizontal" method="post" action="jsp/admin/plugins/sponsoredlinks/DoModifyTemplateOrder.jsp">
+	<fieldset>
 						<select id="new_order" name="new_order" >
 							<#list 1..template_list?size as i>
 								<#if template.order == i>
@@ -44,22 +46,28 @@
 							</#list>
 						</select>		        	
 	            	<input type="hidden" name="id_template" value="${template.order}" />
-		            <input class="button" type="submit" value="#i18n{sponsoredlinks.manage_advanced_parameters.actionModifyOrder}" />
-		         </form>
+		            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.manage_advanced_parameters.actionModifyOrder}</button>
+	
+		         </fieldset>
+</form>
             </td>
             <td>
-		        <a href="jsp/admin/plugins/sponsoredlinks/RemoveTemplate.jsp?id_template=${template.order}&description=${template.description}">
-					<img src="images/admin/skin/actions/delete.png" alt="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}" title="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}">
-				</a>  
+		        <a class="btn btn-danger btn-mini" href="jsp/admin/plugins/sponsoredlinks/RemoveTemplate.jsp?id_template=${template.order}&description=${template.description}"  title="#i18n{sponsoredlinks.manage_advanced_parameters.actionDelete}" >
+	<i class="icon-trash icon-white"></i>
+	</a>
+  
             </td>
         </tr>					
         </#list>
         
     </table>
     
-    <form method="post"  action="jsp/admin/plugins/sponsoredlinks/CreateTemplate.jsp">
-        <input type="submit" value="#i18n{sponsoredlinks.manage_advanced_parameters.buttonAddTemplate}" class="button bt-toolbar" />
-    </form>
+    <form class="form-horizontal" method="post"  action="jsp/admin/plugins/sponsoredlinks/CreateTemplate.jsp">
+	<fieldset>
+        <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.manage_advanced_parameters.buttonAddTemplate}</button>
+	
+    </fieldset>
+</form>
        
 </div>
 

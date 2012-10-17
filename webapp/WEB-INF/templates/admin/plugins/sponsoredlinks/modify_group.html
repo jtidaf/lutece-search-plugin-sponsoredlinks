@@ -1,46 +1,66 @@
-<div class="content-box" >
+<div class="row-fluid" >
     
-    <h2>#i18n{sponsoredlinks.modify_group.tableLabel}</h2>
+    <legend>#i18n{sponsoredlinks.modify_group.tableLabel}</legend>
 
-    <form method="post"  name="modify_group" id="modify_group" action="jsp/admin/plugins/sponsoredlinks/DoModifyGroup.jsp"> 
+    <form class="form-horizontal" method="post"  name="modify_group" id="modify_group" action="jsp/admin/plugins/sponsoredlinks/DoModifyGroup.jsp">
+	<fieldset> 
 	    <input type="hidden" name="id_group" value="${group.id}" />   
-        <p>
-            <label for="title" >#i18n{sponsoredlinks.modify_group.labelTitle} * : </label> 
+        
+            <div class="control-group">
+		<label class="control-label" for="title" >#i18n{sponsoredlinks.modify_group.labelTitle} * : </label> 
             <#if permission_modify_group>
-                <input type="text" id="title" name="title" size="60" maxlength="50" value="${group.title}" />
+                <div class="controls">
+	<input type="text" id="title" name="title" size="60" maxlength="50" value="${group.title}" />
+		</div>
+	</div>
             <#else />
-                <input disabled type="text" size="60" maxlength="50" value="${group.title}" />
+                <div class="controls">
+	<input disabled type="text" size="60" maxlength="50" value="${group.title}" />
+		</div>
+	</div>
                 <input type="hidden" name="title" value="${group.title}" />
             </#if>
-        </p>        
-        <p>
-            <label for="tags">#i18n{sponsoredlinks.modify_group.labelTags} * : </label>
+                
+        
+            <div class="control-group">
+		<label class="control-label" for="tags">#i18n{sponsoredlinks.modify_group.labelTags} * : </label>
             <#if permission_modify_group>
-                <input type="text" id="tags" name="tags" size="60" maxlength="50" value="${group.tags}" />
+                <div class="controls">
+	<input type="text" id="tags" name="tags" size="60" maxlength="50" value="${group.tags}" />
+		</div>
+	</div>
             <#else />
-                <input disabled type="text" size="60" maxlength="50" value="${group.tags}" />
+                <div class="controls">
+	<input disabled type="text" size="60" maxlength="50" value="${group.tags}" />
+		</div>
+	</div>
                 <input type="hidden" name="tags" value="${group.tags}" />
             </#if>
-            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonRequest}" name="request" class="button" />
-        </p>  
-        <p>
+            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.modify_group.buttonRequest}</button>
+	
+          
+        
             <#if permission_modify_group>
-	            <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonValidate}" name="submit" class="button" />
+	            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.modify_group.buttonValidate}</button>
+	
 	        </#if>
-	        <input type="submit" value="#i18n{sponsoredlinks.modify_group.buttonCancel}" name="cancel" class="button" />
-        </p>
+	        <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.modify_group.buttonCancel}</button>
+	
+        
         <#if group_list?exists>
             <fieldset class="sponsoredlinks-form" style="margin-top: 11px;">
                <legend>#i18n{sponsoredlinks.create_group.labelConflictGroupList}</legend>
                <#if group_list?size &gt; 0>
                <#list group_list as conflict_group>
-                   <p><label>${conflict_group.title} : </label>${conflict_group.tags}</p>
+                   <div class="control-group">
+		<label class="control-label" > ${conflict_group.title} : </label>${conflict_group.tags}
                </#list>
                <#else>
-                   <p>#i18n{sponsoredlinks.create_group.messageNoConflictingGroup}</p>
+                   #i18n{sponsoredlinks.create_group.messageNoConflictingGroup}
                </#if>
             </fieldset>
         </#if>    
-    </form>
+    </fieldset>
+</form>
     
 </div>

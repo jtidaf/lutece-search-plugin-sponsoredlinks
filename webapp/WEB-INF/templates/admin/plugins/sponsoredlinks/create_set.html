@@ -15,39 +15,47 @@ function linkservice( content_id, insert_service_id, plugin_name, subcategory )
 }
 </script>
 
-<div class="content-box" >
+<div class="row-fluid" >
     
-    <h2>#i18n{sponsoredlinks.create_set.tableLabel}</h2>
+    <legend>#i18n{sponsoredlinks.create_set.tableLabel}</legend>
     
-    <form method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoCreateSet.jsp">
+    <form class="form-horizontal" method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoCreateSet.jsp">
+	<fieldset>
 	<div class="sponsoredlinks-form">    
-        <p>
-            <label for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label> 
-            <input type="text" id="title" name="title" size="60" maxlength="50" />
-        </p>        
-        <p>
-            <label for="id_group">#i18n{sponsoredlinks.create_set.labelGroup} * : </label>
+        
+            <div class="control-group">
+		<label class="control-label" for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label> 
+            <div class="controls">
+	<input type="text" id="title" name="title" size="60" maxlength="50" />
+		</div>
+	</div>
+                
+        
+            <div class="control-group">
+		<label class="control-label" for="id_group">#i18n{sponsoredlinks.create_set.labelGroup} * : </label>
             <select name="id_group" >
                 <!--<option value =""></option>-->
                 <#list group_list as group >
 	                <option value="${group.id}">${group.title}</option>
                 </#list>
             </select>
-        </p>
+        
     </div>
-    <div class="highlight-box">
-    	<h2>#i18n{sponsoredlinks.create_set.labelLinkList}</h2>
+    <div class="well">
+    	<legend>#i18n{sponsoredlinks.create_set.labelLinkList}</legend>
     	<#list link_list as link>       
-	        <p>
-	            <label for="link_list" style="margin-top: 4px;">${link_index + 1}. ${link.template.description} :</label>
+	        
+	            <div class="control-group">
+		<label class="control-label" for="link_list" style="margin-top: 4px;">${link_index + 1}. ${link.template.description} :</label>
 	            <#if link.template.resource?exists>
 		            <textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57">&nbsp;</textarea>
 		            <a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}', '${link.template.subCategory}');">
 		            	<img src="images/admin/skin/plugins/sponsoredlinks/action/linkservice.png" alt="#i18n{sponsoredlinks.create_set.actionLink}" title="#i18n{sponsoredlinks.create_set.actionLink}" />
 		            </a>
-		        </p>
-	        	<p>
-	        		<label>&nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
+		        
+	        	
+	        		<div class="control-group">
+		<label class="control-label" > &nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
 	        		<#-- subcategory (if any) -->
 	        		<#if link.template.subCategory?has_content>
 	        			<#assign selectionBean = link.template.resource.selectionActionBean />
@@ -60,22 +68,26 @@ function linkservice( content_id, insert_service_id, plugin_name, subcategory )
 	            			</#list>
 						</#if>
 					</#if>
-	        	</p>
+	        	
 	        	<#else>
 		        	<textarea disabled id="link_list_${link_index + 1}" name="link_list"  rows="2" cols="57">&nbsp;</textarea>
-		        </p>
-	        	<p>
-	        		<label>&nbsp;</label><p id="sponsoredlinks-warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}</p>
+		        
+	        	
+	        		<div class="control-group">
+		<label class="control-label" > &nbsp;</label><p id="sponsoredlinks-warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}
 		        </#if>
-	        </p>
+	        
     	</#list>
-	 	<p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice}</p> 
+	 	<p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice} 
 	</div>  	
-        <p>   
-            <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonValidate}" name="submit" class="button" />
-            <input type="submit" value="#i18n{sponsoredlinks.create_set.buttonCancel}" name="cancel" class="button" />
-        </p>
+           
+            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_set.buttonValidate}</button>
+	
+            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_set.buttonCancel}</button>
+	
         
-    </form>
+        
+    </fieldset>
+</form>
     
 </div>
