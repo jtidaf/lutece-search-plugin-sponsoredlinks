@@ -1,13 +1,12 @@
-
-</div>
 <div class="row-fluid" >
+	<div class="span12">
 	<fieldset>
 		<legend>#i18n{sponsoredlinks.manage_sponsoredlinks.tableLabel}
 			<#if permission_manage_advanced_parameters>
 			<form class="form-inline pull-right" method="post" action="jsp/admin/plugins/sponsoredlinks/ManageAdvancedParameters.jsp">
-			<button class="btn btn-primary pull-right" type="submit" >
+			<button class="btn btn-primary" type="submit" >
 				<i class="icon-plus icon-white" ></i>
-					<span class="hidden-phone" >#i18n{sponsoredlinks.manage_sponsoredlinks.button_manage_advanced_parameters}</span>
+				<span class="hidden-phone" >#i18n{sponsoredlinks.manage_sponsoredlinks.button_manage_advanced_parameters}</span>
 			</button>
 			</form>
 			</#if>
@@ -16,11 +15,12 @@
         <tr>
 			<td>
 				#i18n{sponsoredlinks.manage_sponsoredlinks.setManagement.title}
-				<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/sponsoredlinks/ManageSet.jsp"  title="null" >
-					<i class="icon-question-sign icon-white"></i>
-				</a>
+				
 			</td>
             <td>#i18n{sponsoredlinks.manage_sponsoredlinks.setManagement.description}</td>
+			<a class="btn btn-primary btn-mini" href="jsp/admin/plugins/sponsoredlinks/ManageSet.jsp"  title="null" >
+					<i class="icon-question-sign icon-white"></i>
+				</a>
         </tr>
         <tr>
              <td>
@@ -34,7 +34,9 @@
             </td>            
         </tr>			
     </table>       
+	</div>
 </div>
+
 
 
 

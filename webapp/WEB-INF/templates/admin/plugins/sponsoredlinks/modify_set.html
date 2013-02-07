@@ -1,8 +1,86 @@
-<script language="javascript" type="text/javascript">
-var target_content_id;
-function linkservice( content_id, insert_service_id, plugin_name, subcategory ) 
-{
-	target_content_id=content_id;
+<div class="row-fluid" >
+	<div class="span12" >
+		<fieldset>
+			<legend>#i18n{sponsoredlinks.create_set.tableLabel}</legend>
+			<form class="form-horizontal" method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoModifySet.jsp">
+				<div class="control-group">
+				<label class="control-label" for="title" >#i18n{sponsoredlinks.create_set.labelTitle} *</label>
+					<div class="controls">
+						<input type="text" <#if permission_modify_set>disabled</#if> id="title" name="title" class="input-normal" maxlength="50" value="${set.title}" />
+					</div>
+			</div>
+            <div class="control-group">
+			<label class="control-label" for="id_group">#i18n{sponsoredlinks.create_set.labelGroup} *</label>
+				<div class="controls">
+				<select name="id_group" >
+					<#if permission_modify_set>
+						<#list group_list as group >
+							<option value="${group.id}">${group.title}</option>
+						</#list>
+					</#if>
+					<option selected value="${set.group.id}">${set.group.title}</option>
+				</select>
+				</div>
+			</div>
+			<fieldset>
+				<legend>#i18n{sponsoredlinks.create_set.labelLinkList}</legend>
+				<#list set.link_list as link>       
+					<div class="control-group">
+					<label class="control-label" for="link_list">${link_index + 1}. ${link.template.description} :</label>
+						<div class="controls">
+							<#if link.template.resource?exists && permission_modify_set>
+								<textarea readonly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
+								<a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}', '${link.template.subCategory}');">
+									<img src="images/admin/skin/plugins/sponsoredlinks/action/linkservice.png" alt="#i18n{sponsoredlinks.create_set.actionLink}" title="#i18n{sponsoredlinks.create_set.actionLink}" />
+								</a>
+								<p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
+								<#-- subcategory (if any) -->
+								<#if link.template.subCategory?has_content>
+									<#assign selectionBean = link.template.resource.selectionActionBean />
+									<#if selectionBean.subCategories?size &gt; 0>
+										<#list selectionBean.subCategories as subCategory>
+											<#if link.template.subCategory == subCategory.code>
+											<#-- insertservice matches and subcategory selected -->
+											&nbsp;: ${subCategory.name}
+											</#if>
+										</#list>
+									</#if>
+								</#if>
+							<#elseif link.template.resource?exists && !permission_modify_set />
+								<textarea disabled rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
+								<p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
+							<#else />
+								<textarea disabled type="text" rows="2" cols="57">&nbsp;</textarea>
+								<p id="sponsoredlinks-warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}
+							</#if>
+						</div>
+					</div>
+				</#list>
+				<div class="control-group">
+						<label class="control-label" for=""></label>
+							<div class="controls">
+								<p class="help-block">#i18n{sponsoredlinks.create_set.linkAdvice}</p>
+							</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<#if permission_modify_set>        
+					<input type="hidden" name="id_set" value="${set.id}" />
+					 <button class="btn btn-primary btn-small" type="submit">
+							<i class="icon-ok icon-white"></i>&nbsp;#i18n{sponsoredlinks.create_set.buttonValidate}
+					</button>
+				</#if>
+				<a class="btn btn-small" href="jsp/admin/plugins/sponsoredlinks/ManageSet.jsp">
+					<i class="icon-remove-circle"></i>&nbsp;#i18n{sponsoredlinks.create_set.buttonCancel}
+				</a>
+			</div>  
+        </form>
+		</fieldset>
+    </div>
+</div>
+
+<script>
+function linkservice( content_id, insert_service_id, plugin_name, subcategory ){
 	javascript:document.getElementById( content_id ).innerHTML = "&nbsp;";
 	var url = "${webapp_url}/jsp/admin/insert/DisplayInsertService.jsp" +
 				"?insert_service_type=" + insert_service_id +
@@ -14,101 +92,3 @@ function linkservice( content_id, insert_service_id, plugin_name, subcategory )
 	fen.focus();
 }
 </script>
-
-<div class="row-fluid" >
-    
-    <legend>#i18n{sponsoredlinks.create_set.tableLabel}</legend>
-    
-    <form class="form-horizontal" method="post"  name="create_set" id="create_set" action="jsp/admin/plugins/sponsoredlinks/DoModifySet.jsp">
-	<fieldset>
-	<div class="sponsoredlinks-form">    
-        
-            <div class="control-group">
-		<label class="control-label" for="title" >#i18n{sponsoredlinks.create_set.labelTitle} * : </label>
-            <#if permission_modify_set>
-                <div class="controls">
-	<input type="text" id="title" name="title" size="60" maxlength="50" value="${set.title}" />
-		</div>
-	</div>
-            <#else />
-                <div class="controls">
-	<input disabled size="60" maxlength="50" value="${set.title}" />
-		</div>
-	</div>
-            </#if>
-                
-        
-            <div class="control-group">
-		<label class="control-label" for="id_group">#i18n{sponsoredlinks.create_set.labelGroup} * : </label>
-            <select name="id_group" >
-                <!--<option value =""></option>-->
-                <#if permission_modify_set>
-	                <#list group_list as group >
-		                <option value="${group.id}">${group.title}</option>
-	                </#list>
-                </#if>
-                <option selected value="${set.group.id}">${set.group.title}</option>
-            </select>
-        
-    </div>
-    <fieldset class="sponsoredlinks-form">
-    	<legend>#i18n{sponsoredlinks.create_set.labelLinkList}</legend>
-    	<#list set.link_list as link>       
-	        
-	            <div class="control-group">
-		<label class="control-label" for="link_list">${link_index + 1}. ${link.template.description} :</label>
-	            <#if link.template.resource?exists && permission_modify_set>
-	                <textarea readOnly id="link_list_${link_index + 1}" name="link_list" rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
-		            <a href="javascript:void(0)" onClick="javascript:linkservice('link_list_${link_index + 1}', '${link.template.resource.id}', '${link.template.resource.pluginName}', '${link.template.subCategory}');">
-		            	<img src="images/admin/skin/plugins/sponsoredlinks/action/linkservice.png" alt="#i18n{sponsoredlinks.create_set.actionLink}" title="#i18n{sponsoredlinks.create_set.actionLink}" />
-		            </a>
-		        
-	        	
-	        		<div class="control-group">
-		<label class="control-label" > &nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
-	        			        		<#-- subcategory (if any) -->
-	        		<#if link.template.subCategory?has_content>
-	        			<#assign selectionBean = link.template.resource.selectionActionBean />
-		        		<#if selectionBean.subCategories?size &gt; 0>
-			            	<#list selectionBean.subCategories as subCategory>
-			            		<#if link.template.subCategory == subCategory.code>
-			            		<#-- insertservice matches and subcategory selected -->
-			            		&nbsp;: ${subCategory.name}
-			            		</#if>
-	            			</#list>
-						</#if>
-					</#if>
-	        		
-	        	
-	        	<#elseif link.template.resource?exists && !permission_modify_set />
-	        	    <textarea disabled rows="2" cols="57"><#if link.url?exists>${link.url}<#else />&nbsp;</#if></textarea>
-                
-                
-                    <div class="control-group">
-		<label class="control-label" > &nbsp;</label><p id="sponsoredlinks-advice-caption">#i18n{sponsoredlinks.create_set.descriptionContent} : ${link.template.resource.label}
-	        	<#else />
-		        	<textarea disabled type="text" rows="2" cols="57">&nbsp;</textarea>
-		        
-	        	
-	        		<div class="control-group">
-		<label class="control-label" > &nbsp;</label><p id="sponsoredlinks-warning-caption">#i18n{sponsoredlinks.create_set.resourceNotAvailable}
-		        </#if>
-	        
-    	</#list>
-    	<#if permission_modify_set>
-	 	     <p id="sponsoredlinks-advice">#i18n{sponsoredlinks.create_set.linkAdvice}
-	 	</#if>
-	</fieldset>
-	     
-	    <#if permission_modify_set>        
-        	<input type="hidden" name="id_set" value="${set.id}" />
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_set.buttonValidate}</button>
-	
-        </#if>
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_set.buttonCancel}</button>
-	
-                
-    </fieldset>
-</form>
-    
-</div>

@@ -1,43 +1,40 @@
 <div class="row-fluid" >
-    
-    <legend>#i18n{sponsoredlinks.create_group.tableLabel}</legend>
-    
-    <form class="form-horizontal" method="post"  name="create_group" id="create_group" action="jsp/admin/plugins/sponsoredlinks/DoCreateGroup.jsp">
-	<fieldset> 
-        
+	<div class="span12" >
+		<fieldset> 
+        <legend>#i18n{sponsoredlinks.create_group.tableLabel}</legend>
+        <form class="form-horizontal" method="post"  name="create_group" id="create_group" action="jsp/admin/plugins/sponsoredlinks/DoCreateGroup.jsp">
             <div class="control-group">
-		<label class="control-label" for="title" >#i18n{sponsoredlinks.create_group.labelTitle} * : </label>
-            <div class="controls">
-	<input type="text" id="title" name="title" size="60" maxlength="50" value="${(group.title)!}" />
-		</div>
-	</div>
-                
-        
+			<label class="control-label" for="title" >#i18n{sponsoredlinks.create_group.labelTitle} * : </label>
+				<div class="controls">
+					<input type="text" id="title" name="title" size="60" maxlength="50" value="${(group.title)!}" />
+				</div>
+			</div>
             <div class="control-group">
-		<label class="control-label" for="tags">#i18n{sponsoredlinks.create_group.labelTags} * : </label>
-            <div class="controls">
-	<input type="text" id="tags" name="tags" size="60" maxlength="50" value="${(group.tags)!}"/>
-		</div>
-	</div>
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_group.buttonRequest}</button>
-	
-          
-           
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_group.buttonValidate}</button>
-	
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.create_group.buttonCancel}</button>
-	
-             
-	    <#if group_list?exists>
-	        <fieldset class="sponsoredlinks-form" style="margin-top: 11px;">
-	           <legend>#i18n{sponsoredlinks.create_group.labelConflictGroupList}</legend>
-	           <#if group_list?size &gt; 0>
-	           <#list group_list as conflict_group>
-	               <div class="control-group">
-		<label class="control-label" > ${conflict_group.title} : </label>${conflict_group.tags}
-	           </#list>
+			<label class="control-label" for="tags">#i18n{sponsoredlinks.create_group.labelTags} * : </label>
+				<div class="controls">
+					<div class="input-append">
+						<input type="text" id="tags" name="tags" size="60" maxlength="50" value="${(group.tags)!}"/>
+						<button class="btn" type="submit" name="request"><i class="icon-play"></i>&nbsp;#i18n{sponsoredlinks.create_group.buttonRequest}</button>
+					</div>
+				</div>
+			</div>
+			<div class="form-actions">
+				<button class="btn btn-primary btn-small" type="submit" name="save" >
+					<i class="icon-ok icon-white"></i>&nbsp;#i18n{sponsoredlinks.create_group.buttonValidate}
+				</button>
+				<a class="btn btn-small" href="jsp/admin/plugins/sponsoredlinks/ManageGroup.jsp" >
+					<i class="icon-remove-circle"></i>&nbsp;#i18n{sponsoredlinks.create_group.buttonCancel}
+				</a>
+			</div>
+		<#if group_list?exists>
+			<fieldset>
+				<legend>#i18n{sponsoredlinks.create_group.labelConflictGroupList}</legend>
+				<#if group_list?size &gt; 0>
+					<#list group_list as conflict_group>
+						<p class="alert alert-error">${conflict_group.title} : ${conflict_group.tags}</p>
+					</#list>
 	           <#else>
-	               #i18n{sponsoredlinks.create_group.messageNoConflictingGroup}
+	               <p class="alert alert-success">#i18n{sponsoredlinks.create_group.messageNoConflictingGroup}</p>
 	           </#if>
 	        </fieldset>
 	    </#if>        

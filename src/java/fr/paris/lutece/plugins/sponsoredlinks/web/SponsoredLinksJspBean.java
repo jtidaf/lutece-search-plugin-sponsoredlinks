@@ -253,11 +253,17 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
 
         boolean bPermissionCreateSet = RBACService.isAuthorized( SponsoredLinkSet.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksSetResourceIdService.PERMISSION_CREATE_SET, getUser(  ) );
-
+         boolean bPermissionAdvancedParameter = RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE,
+                RBAC.WILDCARD_RESOURCES_ID,
+                SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) );
+       
+        
+        
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_PERMISSION_CREATE_SET, bPermissionCreateSet );
         model.put( MARK_PERMISSION_DELETE_SET, bPermissionDeleteSetModel );
-
+        model.put( MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS, bPermissionAdvancedParameter );
+       
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageSet );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_SET_LIST, paginator.getPageItems(  ) );
@@ -605,10 +611,15 @@ public class SponsoredLinksJspBean extends PluginAdminPageJspBean
         boolean bPermissionCreateGroup = RBACService.isAuthorized( SponsoredLinkGroup.RESOURCE_TYPE,
                 RBAC.WILDCARD_RESOURCES_ID, SponsoredLinksGroupResourceIdService.PERMISSION_CREATE_GROUP, getUser(  ) );
 
+        boolean bPermissionAdvancedParameter = RBACService.isAuthorized( SponsoredLinkTemplate.RESOURCE_TYPE,
+                RBAC.WILDCARD_RESOURCES_ID,
+                SponsoredLinksTemplateResourceIdService.PERMISSION_MANAGE_ADVANCED_PARAMETERS, getUser(  ) );
+        
         model.put( MARK_LOCALE, request.getLocale(  ) );
         model.put( MARK_PERMISSION_CREATE_GROUP, bPermissionCreateGroup );
         model.put( MARK_PERMISSION_DELETE_GROUP, bPermissionDeleteGroupModel );
-
+        model.put( MARK_PERMISSION_MANAGE_ADVANCED_PARAMETERS, bPermissionAdvancedParameter );
+        
         model.put( MARK_NB_ITEMS_PER_PAGE, EMPTY_STRING + _nItemsPerPageGroup );
         model.put( MARK_PAGINATOR, paginator );
         model.put( MARK_GROUP_LIST, paginator.getPageItems(  ) );

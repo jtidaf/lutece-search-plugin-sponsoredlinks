@@ -1,18 +1,16 @@
-<div class="sponsoredlinks -lutece-border-radius">
 <p>#i18n{sponsoredlinks.result_set.title}</p>
-	<#list result_set as result>
+<#list result_set as result>
 	<div>
-	    <a href="${result.url?xhtml}">${result.title}</a> |
-	    <em>#i18n{portal.search.search_results.labelTypeOfDocument} : ${result.targetType}</em> |
-	    <#if result.date?has_content>
-	            ${result.date?date?string.short}
-	    </#if>
+		<a href="${result.url?xhtml}">${result.title}</a> |
+		<em>#i18n{portal.search.search_results.labelTypeOfDocument} : ${result.targetType}</em> |
+		<#if result.date?has_content>
+			 ${result.date?date?string.short}
+		</#if>
 	</div>
 	<#if result.summary?has_content>
-	<div>${result.summary}</div>
+		<div>${result.summary}</div>
 	</#if>
 	<#if result_has_next>
-	<div>&nbsp;</div>
+		<div>&nbsp;</div>
 	</#if>
-	</#list>
-</div>
+</#list>

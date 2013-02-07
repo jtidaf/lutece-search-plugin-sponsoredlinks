@@ -1,45 +1,51 @@
-<div class="row-fluid" >
-    
-    <legend>#i18n{sponsoredlinks.create_template.tableLabel}</legend>
-    
-    <form class="form-horizontal" method="post"  name="create_group" id="create_group" action="jsp/admin/plugins/sponsoredlinks/DoCreateTemplate.jsp">
-	<fieldset> 
-        
-            <div class="control-group">
-		<label class="control-label" for="description" >#i18n{sponsoredlinks.create_template.labelDescription} * : </label> 
-            <div class="controls">
-	<input type="text" id="description" name="description" size="60" maxlength="50" />
-		</div>
-	</div>
-        
-        <div class="sponsoredlinks-form-entry">
-            <div class="control-group">
-		<label class="control-label" for="id_insertservice">#i18n{sponsoredlinks.modify_template.labelInsertService} * : </label>
-            <ul>
-            <#list insertservice_list as insertservice>
-            	<li><div class="controls">
-	<input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}" />
-		</div>
-	</div>&nbsp;${insertservice.label}</li>
-            	<#assign selectionBean = insertservice.selectionActionBean />
-            	<#if selectionBean.subCategories?size &gt; 0>
-            		<#list selectionBean.subCategories as subCategory>
-            		<li><div class="controls">
-	<input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}/${subCategory.code}" />
-		</div>
-	</div>&nbsp;${insertservice.label} : ${subCategory.name}</li>
-            		</#list>
-            	</#if>
-            </#list>
-            </ul>
-        </div>  
-           
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.modify_group.buttonValidate}</button>
-	
-            <button class="btn btn-primary" type="submit" >#i18n{sponsoredlinks.modify_group.buttonCancel}</button>
-	
-             
-    </fieldset>
-</form>
-    
+<div class="row-fluid">
+	<div class="span12">
+		<fieldset> 
+        <legend>#i18n{sponsoredlinks.create_template.tableLabel}</legend>
+        <form class="form-horizontal" method="post"  name="create_group" id="create_group" action="jsp/admin/plugins/sponsoredlinks/DoCreateTemplate.jsp">
+			<div class="control-group">
+			<label class="control-label" for="description" >#i18n{sponsoredlinks.create_template.labelDescription} * : </label> 
+				<div class="controls">
+					<input type="text" id="description" name="description" class="input-normal" maxlength="50" />
+				</div>
+			</div>
+			<div class="control-group">
+			<label class="control-label" for="id_insertservice">#i18n{sponsoredlinks.modify_template.labelInsertService} * : </label>
+				<div class="controls">
+				<ul>
+				<#list insertservice_list as insertservice>
+					<li>
+						<label class="radio">
+							<input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}" />
+							&nbsp;${insertservice.label}
+						</label>
+					</li>
+					<#assign selectionBean = insertservice.selectionActionBean />
+					<#if selectionBean.subCategories?size &gt; 0>
+					<ul>
+						<#list selectionBean.subCategories as subCategory>
+						<li>
+							<label class="radio">
+								<input type="radio" id="id_insertservice" name="id_insertservice" value="${insertservice.id}/${subCategory.code}" />
+								${insertservice.label} : ${subCategory.name}
+							</label>
+						</li>
+						</#list>
+						 </ul>
+					</#if>
+				</#list>
+				</ul>
+				</div>  
+			</div>  
+			<div class="form-actions">   
+				<button class="btn btn-primary btn-small" type="submit" >
+					<i class="icon-ok icon-white"></i>&nbsp;#i18n{sponsoredlinks.modify_group.buttonValidate}
+				</button>
+				<a class="btn btn-small" href="jsp/admin/plugins/sponsoredlinks/ManageGroup.jsp" >
+					<i class="icon-remove-circle"></i>&nbsp;#i18n{sponsoredlinks.modify_group.buttonCancel}
+				</a>
+			</div>  
+		</form>
+		</fieldset>
+    </div>
 </div>
