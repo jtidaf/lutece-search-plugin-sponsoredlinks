@@ -2,7 +2,7 @@
 -- Dumping data for table core_admin_right
 --
 INSERT INTO core_admin_right (id_right,name,level_right,admin_url,description,is_updatable,plugin_name,id_feature_group,icon_url,documentation_url) VALUES 
-('SPONSOREDLINKS_MANAGEMENT','sponsoredlinks.adminFeature.sponsoredlinks_management.name',2,'jsp/admin/plugins/sponsoredlinks/ManageSponsoredLinks.jsp','sponsoredlinks.adminFeature.sponsoredlinks_management.description',0,'sponsoredlinks','APPLICATIONS','images/admin/skin/plugins/sponsoredlinks/sponsoredlinks.png','jsp/admin/documentation/AdminDocumentation.jsp?doc=admin-sponsoredlinks');
+('SPONSOREDLINKS_MANAGEMENT','sponsoredlinks.adminFeature.sponsoredlinks_management.name',2,'jsp/admin/plugins/sponsoredlinks/ManageGroup.jsp','sponsoredlinks.adminFeature.sponsoredlinks_management.description',0,'sponsoredlinks','APPLICATIONS','images/admin/skin/plugins/sponsoredlinks/sponsoredlinks.png','jsp/admin/documentation/AdminDocumentation.jsp?doc=admin-sponsoredlinks');
 
 --
 -- Dumping data for table core_user_right
