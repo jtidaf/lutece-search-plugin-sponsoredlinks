@@ -1,16 +1,15 @@
+<div class="well well-small">
 <p>#i18n{sponsoredlinks.result_set.title}</p>
 <#list result_set as result>
-	<div>
-		<a href="${result.url?xhtml}">${result.title}</a> |
-		<em>#i18n{portal.search.search_results.labelTypeOfDocument} : ${result.targetType}</em> |
+	<p>
+		<a href="${result.url?xhtml}">[ ${result.targetType} ] ${result.title}
 		<#if result.date?has_content>
-			 ${result.date?date?string.short}
+			<em class="pull-right">${result.date?date?string.short}</em>
 		</#if>
-	</div>
-	<#if result.summary?has_content>
-		<div>${result.summary}</div>
-	</#if>
-	<#if result_has_next>
-		<div>&nbsp;</div>
-	</#if>
+		<#if result.summary?has_content>
+			<br><strong>${result.summary}</strong>
+		</#if>
+		</a>	
+	</p>
 </#list>
+</div>
