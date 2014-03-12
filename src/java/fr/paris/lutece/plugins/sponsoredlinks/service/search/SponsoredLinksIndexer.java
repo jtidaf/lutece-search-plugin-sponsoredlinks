@@ -51,15 +51,8 @@ import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
-import org.apache.commons.lang.StringUtils;
-
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-
 import java.io.IOException;
-
 import java.security.InvalidParameterException;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -67,11 +60,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+
 
 /**
- *
+ * 
  * Indexer Service for SponsoredLinks group of tags
- *
+ * 
  */
 public class SponsoredLinksIndexer implements SearchIndexer
 {
@@ -82,16 +82,16 @@ public class SponsoredLinksIndexer implements SearchIndexer
     public static final String INDEX_TYPE_SPONSOREDLINKS = "sponsoredlinks";
 
     /** id key for sets */
-    public static final String SET_SHORT_NAME = AppPropertiesService.getProperty( "sponsoredlinks.indexer.short_name.set",
-            "set" );
+    public static final String SET_SHORT_NAME = AppPropertiesService.getProperty(
+            "sponsoredlinks.indexer.short_name.set", "set" );
 
     /** id key for links */
-    public static final String LINK_SHORT_NAME = AppPropertiesService.getProperty( "sponsoredlinks.indexer.short_name.link",
-            "ord" );
+    public static final String LINK_SHORT_NAME = AppPropertiesService.getProperty(
+            "sponsoredlinks.indexer.short_name.link", "ord" );
 
     /** id key for groups */
-    public static final String GROUP_SHORT_NAME = AppPropertiesService.getProperty( "sponsoredlinks.indexer.short_name.group",
-            "grp" );
+    public static final String GROUP_SHORT_NAME = AppPropertiesService.getProperty(
+            "sponsoredlinks.indexer.short_name.group", "grp" );
 
     //Regex for doc UID
     private static final String SPONSOREDLINK_ID_REGEX = "(\\d+)_" + SET_SHORT_NAME + ":(\\d+)_" + LINK_SHORT_NAME;
@@ -105,29 +105,28 @@ public class SponsoredLinksIndexer implements SearchIndexer
 
     /**
      * Returns the indexer service description
-     *
+     * 
      * @return The indexer service description
      */
-    public String getDescription(  )
+    public String getDescription( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_DESCRIPTION );
     }
 
     /**
-    * {@inheritDoc}
-    */
-    public List<Document> getDocuments( String strId )
-        throws IOException, InterruptedException, SiteMessageException
+     * {@inheritDoc}
+     */
+    public List<Document> getDocuments( String strId ) throws IOException, InterruptedException, SiteMessageException
     {
-        ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<Document>(  );
+        ArrayList<org.apache.lucene.document.Document> listDocuments = new ArrayList<Document>( );
         Plugin plugin = PluginService.getPlugin( SponsoredLinksPlugin.PLUGIN_NAME );
 
         Matcher matcher = _pattern.matcher( strId );
 
-        if ( !matcher.matches(  ) )
+        if ( !matcher.matches( ) )
         {
-            AppLogService.error( new InvalidParameterException( strId +
-                    "is not a valid id for sponsoredlinks document" ) );
+            AppLogService
+                    .error( new InvalidParameterException( strId + "is not a valid id for sponsoredlinks document" ) );
 
             return listDocuments;
         }
@@ -146,9 +145,9 @@ public class SponsoredLinksIndexer implements SearchIndexer
 
         SponsoredLink link = null;
 
-        for ( SponsoredLink currentLink : set.getSponsoredLinkList(  ) )
+        for ( SponsoredLink currentLink : set.getSponsoredLinkList( ) )
         {
-            if ( currentLink.getOrder(  ) == nLinkOrder )
+            if ( currentLink.getOrder( ) == nLinkOrder )
             {
                 link = currentLink;
 
@@ -163,7 +162,7 @@ public class SponsoredLinksIndexer implements SearchIndexer
             return listDocuments;
         }
 
-        SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( set.getGroupId(  ), plugin );
+        SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( set.getGroupId( ), plugin );
         SponsoredLinkTemplate template = SponsoredLinkTemplateHome.findByPrimaryKey( nLinkOrder, plugin );
 
         org.apache.lucene.document.Document docGroup = getDocument( group, link, set, template );
@@ -175,7 +174,7 @@ public class SponsoredLinksIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-    public String getName(  )
+    public String getName( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_NAME );
     }
@@ -183,7 +182,7 @@ public class SponsoredLinksIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-    public String getVersion(  )
+    public String getVersion( )
     {
         return AppPropertiesService.getProperty( PROPERTY_INDEXER_VERSION );
     }
@@ -191,22 +190,23 @@ public class SponsoredLinksIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-    public void indexDocuments(  ) throws IOException, InterruptedException, SiteMessageException
+    public void indexDocuments( ) throws IOException, InterruptedException, SiteMessageException
     {
         Plugin plugin = PluginService.getPlugin( SponsoredLinksPlugin.PLUGIN_NAME );
 
         Collection<SponsoredLinkSet> listSets = SponsoredLinkSetHome.findAll( plugin );
-        ArrayList<SponsoredLinkTemplate> listTemplate = (ArrayList<SponsoredLinkTemplate>) SponsoredLinkTemplateHome.findAll( plugin );
+        ArrayList<SponsoredLinkTemplate> listTemplate = (ArrayList<SponsoredLinkTemplate>) SponsoredLinkTemplateHome
+                .findAll( plugin );
 
         for ( SponsoredLinkSet currentSet : listSets )
         {
-            SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( currentSet.getId(  ), plugin );
-            SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( set.getGroupId(  ), plugin );
+            SponsoredLinkSet set = SponsoredLinkSetHome.findByPrimaryKey( currentSet.getId( ), plugin );
+            SponsoredLinkGroup group = SponsoredLinkGroupHome.findByPrimaryKey( set.getGroupId( ), plugin );
 
-            for ( SponsoredLink link : set.getSponsoredLinkList(  ) )
+            for ( SponsoredLink link : set.getSponsoredLinkList( ) )
             {
                 org.apache.lucene.document.Document document = getDocument( group, link, set,
-                        listTemplate.get( link.getOrder(  ) - 1 ) );
+                        listTemplate.get( link.getOrder( ) - 1 ) );
                 IndexationService.write( document );
             }
         }
@@ -215,14 +215,14 @@ public class SponsoredLinksIndexer implements SearchIndexer
     /**
      * {@inheritDoc}
      */
-    public boolean isEnable(  )
+    public boolean isEnable( )
     {
         boolean bReturn = false;
         String strEnable = AppPropertiesService.getProperty( PROPERTY_INDEXER_ENABLE );
 
-        if ( ( strEnable != null ) &&
-                ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString(  ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) ) &&
-                PluginService.isPluginEnable( SponsoredLinksPlugin.PLUGIN_NAME ) )
+        if ( ( strEnable != null )
+                && ( strEnable.equalsIgnoreCase( Boolean.TRUE.toString( ) ) || strEnable.equals( ENABLE_VALUE_TRUE ) )
+                && PluginService.isPluginEnable( SponsoredLinksPlugin.PLUGIN_NAME ) )
         {
             bReturn = true;
         }
@@ -231,30 +231,36 @@ public class SponsoredLinksIndexer implements SearchIndexer
     }
 
     /**
-     * Builds an indexable document from the specified sponsored link (stores ids indexes tags)
-     * @param group the SponsoredLinkGroup to containing the tag to index and an id to store
-     * @param link the link containing the html link to parse and store and its order in the set
-     * @param set the set containing the id to concat to link order to form the id of the doc
-     * @param template the template from which one can resolve the type of document has to be stored
+     * Builds an indexable document from the specified sponsored link (stores
+     * ids indexes tags)
+     * @param group the SponsoredLinkGroup to containing the tag to index and an
+     *            id to store
+     * @param link the link containing the html link to parse and store and its
+     *            order in the set
+     * @param set the set containing the id to concat to link order to form the
+     *            id of the doc
+     * @param template the template from which one can resolve the type of
+     *            document has to be stored
      * @return the built Document
      */
     private Document getDocument( SponsoredLinkGroup group, SponsoredLink link, SponsoredLinkSet set,
-        SponsoredLinkTemplate template )
+            SponsoredLinkTemplate template )
     {
         // make a new, empty document
-        Document doc = new Document(  );
+        Document doc = new Document( );
+
+        FieldType ft = new FieldType( StringField.TYPE_STORED );
+        ft.setOmitNorms( false );
 
         // Add the uid as a field, so that index can be incrementally maintained.
         // Use an UnIndexed field, so that the uid is just stored with the 
         //question/answer, but is not searchable.
-        String strUID = set.getId(  ) + "_" + SET_SHORT_NAME + ":" + link.getOrder(  ) + "_" + LINK_SHORT_NAME;
-        doc.add( new Field( SearchItem.FIELD_UID, strUID, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+        String strUID = set.getId( ) + "_" + SET_SHORT_NAME + ":" + link.getOrder( ) + "_" + LINK_SHORT_NAME;
+        doc.add( new Field( SearchItem.FIELD_UID, strUID, ft ) );
 
-        doc.add( new Field( SearchItem.FIELD_TYPE, INDEX_TYPE_SPONSOREDLINKS, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
-        doc.add( new Field( SearchItem.FIELD_TITLE, link.getLinkAttribute( SponsoredLink.CONTENT ), Field.Store.YES,
-                Field.Index.NOT_ANALYZED ) );
-        doc.add( new Field( SearchItem.FIELD_URL, link.getLinkAttribute( SponsoredLink.HREF ), Field.Store.YES,
-                Field.Index.NOT_ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_TYPE, INDEX_TYPE_SPONSOREDLINKS, ft ) );
+        doc.add( new Field( SearchItem.FIELD_TITLE, link.getLinkAttribute( SponsoredLink.CONTENT ), ft ) );
+        doc.add( new Field( SearchItem.FIELD_URL, link.getLinkAttribute( SponsoredLink.HREF ), ft ) );
 
         String strSummary = link.getLinkAttribute( SponsoredLink.ALT );
 
@@ -265,38 +271,37 @@ public class SponsoredLinksIndexer implements SearchIndexer
 
         if ( StringUtils.isNotBlank( strSummary ) )
         {
-            doc.add( new Field( SearchItem.FIELD_SUMMARY, strSummary, Field.Store.YES, Field.Index.NOT_ANALYZED ) );
+            doc.add( new Field( SearchItem.FIELD_SUMMARY, strSummary, ft ) );
         }
 
-        doc.add( new Field( SearchItem.FIELD_CONTENTS, group.getTags(  ), Field.Store.NO, Field.Index.ANALYZED ) );
+        doc.add( new Field( SearchItem.FIELD_CONTENTS, group.getTags( ), TextField.TYPE_NOT_STORED ) );
 
         //specific field for sponsored links
-        doc.add( new Field( SponsoredLinksSearchItem.FIELD_TARGET_TYPE, template.getDescription(  ), Field.Store.YES,
-                Field.Index.ANALYZED ) );
+        doc.add( new Field( SponsoredLinksSearchItem.FIELD_TARGET_TYPE, template.getDescription( ),
+                TextField.TYPE_STORED ) );
 
-        String strGroupId = group.getId(  ) + "_" + GROUP_SHORT_NAME;
-        doc.add( new Field( SponsoredLinksSearchItem.FIELD_GROUP_UID, strGroupId, Field.Store.YES,
-                Field.Index.NOT_ANALYZED ) );
+        String strGroupId = group.getId( ) + "_" + GROUP_SHORT_NAME;
+        doc.add( new Field( SponsoredLinksSearchItem.FIELD_GROUP_UID, strGroupId, ft ) );
 
         //return the document	
         return doc;
     }
-    
+
     /**
      * 
-     *{@inheritDoc}
+     * {@inheritDoc}
      */
-	public List<String> getListType()
-	{
-		return Collections.emptyList();
-	}
+    public List<String> getListType( )
+    {
+        return Collections.emptyList( );
+    }
 
-	/**
-	 * 
-	 *{@inheritDoc}
-	 */
-	public String getSpecificSearchAppUrl()
-	{
-		return "";
-	}
+    /**
+     * 
+     * {@inheritDoc}
+     */
+    public String getSpecificSearchAppUrl( )
+    {
+        return "";
+    }
 }

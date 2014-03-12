@@ -39,24 +39,24 @@ import fr.paris.lutece.portal.service.search.LuceneSearchEngine;
 import fr.paris.lutece.portal.service.search.SearchItem;
 import fr.paris.lutece.portal.service.util.AppLogService;
 
-import org.apache.commons.lang.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.misc.ChainedFilter;
-import org.apache.lucene.queryParser.QueryParser;
+import org.apache.lucene.queries.ChainedFilter;
+import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.CachingWrapperFilter;
 import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -65,24 +65,25 @@ import java.util.List;
 public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEngine
 {
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     public List<SponsoredLinksSearchItem> getSearchResults( String strQuery )
     {
-        List<SponsoredLinksSearchItem> listResults = new ArrayList<SponsoredLinksSearchItem>(  );
-        Searcher searcher = null;
+        List<SponsoredLinksSearchItem> listResults = new ArrayList<SponsoredLinksSearchItem>( );
+        IndexSearcher searcher = null;
         Filter filter = null;
         Query query = null;
 
         try
         {
-            searcher = new IndexSearcher( IndexationService.getDirectoryIndex(  ), true );
+            IndexReader ir = DirectoryReader.open( IndexationService.getDirectoryIndex( ) );
+            searcher = new IndexSearcher( ir );
 
             //filter on content
             if ( StringUtils.isNotBlank( strQuery ) )
             {
                 QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
-                        SearchItem.FIELD_CONTENTS, IndexationService.getAnalyser(  ) );
+                        SearchItem.FIELD_CONTENTS, IndexationService.getAnalyser( ) );
                 query = parser.parse( ( strQuery != null ) ? strQuery : "" );
             }
 
@@ -90,7 +91,7 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             Filter[] filters = null;
 
             Query queryTypeSponsoredLink = new TermQuery( new Term( SearchItem.FIELD_TYPE,
-                        SponsoredLinksIndexer.INDEX_TYPE_SPONSOREDLINKS ) );
+                    SponsoredLinksIndexer.INDEX_TYPE_SPONSOREDLINKS ) );
             filters = new Filter[1];
 
             filters[filters.length - 1] = new CachingWrapperFilter( new QueryWrapperFilter( queryTypeSponsoredLink ) );
@@ -107,12 +108,10 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
                 SponsoredLinksSearchItem si = new SponsoredLinksSearchItem( document );
                 listResults.add( si );
             }
-
-            searcher.close(  );
         }
         catch ( Exception e )
         {
-            AppLogService.error( e.getMessage(  ), e );
+            AppLogService.error( e.getMessage( ), e );
         }
 
         return listResults;
