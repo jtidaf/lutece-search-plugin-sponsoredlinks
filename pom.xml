@@ -45,8 +45,8 @@
         <jiraComponentId>10490</jiraComponentId>
     </properties>
     <scm>
-        <connection>scm:svn:http://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-sponsoredlinks</connection>
-        <developerConnection>scm:svn:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-sponsoredlinks</developerConnection>
-        <url>http://dev.lutece.paris.fr/viewvc/lutece/portal/trunk/plugins/cms/plugin-sponsoredlinks</url>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-cms-plugin-sponsoredlinks.git</connection>
+        <developerConnection>scm:git:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-sponsoredlinks</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-cms-plugin-sponsoredlinks.git</url>
     </scm>
 </project>
