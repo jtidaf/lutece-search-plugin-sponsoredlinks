@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     
     <parent>
-        <artifactId>lutece-plugins-pom</artifactId>
-        <groupId>fr.paris.lutece.plugins</groupId>
-        <version>3.7</version>
+        <artifactId>lutece-global-pom</artifactId>
+        <groupId>fr.paris.lutece.tools</groupId>
+        <version>3.0</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
@@ -15,19 +15,19 @@
     
     <repositories>
         <repository>
-		    <id>lutece</id>
-		    <name>luteceRepository</name>
-		    <url>http://dev.lutece.paris.fr/maven_repository</url>
-		    <layout>default</layout>
-	  	</repository>
-	  	<repository>
-	      	<id>luteceSnapshot</id>
-	        <name>luteceSnapshot</name>
-	        <url>http://dev.lutece.paris.fr/snapshot_repository</url>
-	       	<snapshots>
-	           	<enabled>true</enabled>
-	        </snapshots>
-    	</repository>
+            <id>lutece</id>
+            <name>luteceRepository</name>
+            <url>http://dev.lutece.paris.fr/maven_repository</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>luteceSnapshot</id>
+            <name>luteceSnapshot</name>
+            <url>http://dev.lutece.paris.fr/snapshot_repository</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
     
     <dependencies>
@@ -41,12 +41,14 @@
     
     <properties>
         <componentName>sponsoredlinks</componentName>
-		<jiraProjectName>SPONSOREDLINKS</jiraProjectName>
+        <jiraProjectName>SPONSOREDLINKS</jiraProjectName>
         <jiraComponentId>10490</jiraComponentId>
     </properties>
+    
     <scm>
-        <connection>scm:git:https://github.com/lutece-platform/lutece-cms-plugin-sponsoredlinks.git</connection>
-        <developerConnection>scm:git:https://dev.lutece.paris.fr/svn/lutece/portal/trunk/plugins/cms/plugin-sponsoredlinks</developerConnection>
-        <url>https://github.com/lutece-platform/lutece-cms-plugin-sponsoredlinks.git</url>
+        <connection>scm:git:https://github.com/lutece-platform/lutece-search-plugin-sponsoredlinks.git</connection>
+        <developerConnection>scm:git:https://github.com/lutece-platform/lutece-search-plugin-sponsoredlinks.git</developerConnection>
+        <url>https://github.com/lutece-platform/lutece-search-plugin-sponsoredlinks.git</url>
     </scm>
+    
 </project>
