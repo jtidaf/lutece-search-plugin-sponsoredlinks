@@ -47,13 +47,11 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queries.ChainedFilter;
 import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.CachingWrapperFilter;
-import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.BooleanClause;
+import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
@@ -71,7 +69,7 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
     {
         List<SponsoredLinksSearchItem> listResults = new ArrayList<SponsoredLinksSearchItem>( );
         IndexSearcher searcher = null;
-        Filter filter = null;
+        Query filter = null;
         Query query = null;
 
         try
@@ -82,22 +80,25 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             //filter on content
             if ( StringUtils.isNotBlank( strQuery ) )
             {
-                QueryParser parser = new QueryParser( IndexationService.LUCENE_INDEX_VERSION,
+                QueryParser parser = new QueryParser(
                         SearchItem.FIELD_CONTENTS, IndexationService.getAnalyser( ) );
                 query = parser.parse( ( strQuery != null ) ? strQuery : "" );
             }
 
             //filter on sponsoredlink type
-            Filter[] filters = null;
+            Query[] filters = null;
 
             Query queryTypeSponsoredLink = new TermQuery( new Term( SearchItem.FIELD_TYPE,
                     SponsoredLinksIndexer.INDEX_TYPE_SPONSOREDLINKS ) );
-            filters = new Filter[1];
+            filters = new Query[1];
 
-            filters[filters.length - 1] = new CachingWrapperFilter( new QueryWrapperFilter( queryTypeSponsoredLink ) );
-            filter = new ChainedFilter( filters, ChainedFilter.AND );
+            filters[filters.length - 1] = queryTypeSponsoredLink;
 
-            TopDocs topDocs = searcher.search( query, filter, LuceneSearchEngine.MAX_RESPONSES );
+            BooleanQuery.Builder bQueryBuilder = new BooleanQuery.Builder( );
+            bQueryBuilder.add( query, BooleanClause.Occur.SHOULD );
+            bQueryBuilder.add( filter, BooleanClause.Occur.FILTER );
+
+            TopDocs topDocs = searcher.search( bQueryBuilder.build( ), LuceneSearchEngine.MAX_RESPONSES );
 
             ScoreDoc[] hits = topDocs.scoreDocs;
 
