@@ -95,7 +95,7 @@ public class SponsoredLinksLuceneSearchEngine implements SponsoredLinksSearchEng
             filters[filters.length - 1] = queryTypeSponsoredLink;
 
             BooleanQuery.Builder bQueryBuilder = new BooleanQuery.Builder( );
-            bQueryBuilder.add( query, BooleanClause.Occur.SHOULD );
+            bQueryBuilder.add( query, BooleanClause.Occur.MUST );
             bQueryBuilder.add( filter, BooleanClause.Occur.FILTER );
 
             TopDocs topDocs = searcher.search( bQueryBuilder.build( ), LuceneSearchEngine.MAX_RESPONSES );
